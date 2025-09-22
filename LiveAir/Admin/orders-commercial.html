@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Commercial Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group" open>
+        <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link nav-active"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+
+    <section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Commercial Orders</h2>
+      <table class="w-full bg-white rounded shadow overflow-hidden">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-2">Order ID</th>
+            <th class="p-2">Client</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody">
+          <!-- Sample rows (works for any number of rows) -->
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1001">C-1001</td>
+            <td class="p-2">ACME Labs</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1002">C-1002</td>
+            <td class="p-2">BioCorp</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1003">C-1003</td>
+            <td class="p-2">MediHealth Pvt Ltd</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1004">C-1004</td>
+  <td class="p-2">OxyLife Suppliers</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1005">C-1005</td>
+  <td class="p-2">CareWell Hospital</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1006">C-1006</td>
+  <td class="p-2">Nova Labs</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1007">C-1007</td>
+  <td class="p-2">GreenMedics</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1008">C-1008</td>
+  <td class="p-2">Apollo Diagnostics</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Tracking Modal -->
+  <div id="trackingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-[520px] max-h-[90vh] overflow-y-auto">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 id="trackingTitle" class="font-bold text-lg">Tracking</h3>
+        <button onclick="closeTrackingModal()" class="text-gray-600 hover:text-black">✕</button>
+      </div>
+      <div id="trackingSteps" class="p-5"></div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Step list (exact order = dropdown)
+    const STEPS = [
+      { key: 'ordered',  label: 'Placed',        status: {text:'Ordered',          cls:'bg-blue-100 text-blue-700'} },
+      { key: 'progPend', label: 'In Progress',   status: {text:'Pending',          cls:'bg-yellow-100 text-yellow-800'} },
+      { key: 'rtdPend',  label: 'Ready To Dispatch', status: {text:'Pending',     cls:'bg-yellow-100 text-yellow-800'} },
+      { key: 'dispatch', label: 'Dispatch',   status: {text:'On the Way',       cls:'bg-indigo-100 text-indigo-700'} },
+      { key: 'outDel',   label: 'On the Way', status: {text:'Out for Delivery', cls:'bg-purple-100 text-purple-700'} },
+      { key: 'delivered',label: 'Delivered',               status: {text:'Delivered',        cls:'bg-green-100 text-green-700'} },
+      { key: 'paid',     label: 'Paid',                    status: {text:'Paid',             cls:'bg-emerald-100 text-emerald-700'} },
+      { key: 'return',   label: 'Replace',        status: {text:'Return/Replace',   cls:'bg-red-100 text-red-700'} }
+    ];
+
+    // In-memory progress per order (index of STEPS). Defaults to 0 if not set.
+    const orderProgress = {
+      'C-1001': 1, // e.g. already "In Progress → Pending"
+      'C-1002': 3, // "Dispatch → On the Way"
+      'C-1003': 4  // "On the Way → Out for Delivery"
+    };
+
+    // Build the dropdown HTML once
+    function buildDropdown(selectedIndex = 0) {
+      const opts = STEPS.map((s, idx) =>
+        `<option value="${idx}" ${idx===selectedIndex?'selected':''}>${s.label}</option>`
+      ).join('');
+      return `<select class="border p-2 rounded status-select">${opts}</select>`;
+    }
+    // Define full step sequence
+const trackingSteps = [
+  { value: "ordered", label: "Placed → Ordered" },
+  { value: "pending", label: "In Progress → Pending" },
+  { value: "ready", label: "Ready To Dispatch → Pending" },
+  { value: "onway", label: "Dispatch → On the Way" },
+  { value: "outdelivery", label: "On the Way → Out for Delivery" },
+  { value: "delivered", label: "Delivered" },
+  { value: "paid", label: "Paid" },
+  { value: "replace", label: "Replace → Return" }
+];
+
+// Handle order link click
+document.querySelectorAll(".order-link").forEach(link => {
+  link.addEventListener("click", () => {
+    const orderId = link.dataset.id;
+    const row = link.closest("tr");
+    const currentStatus = row.querySelector(".actions-cell select").value;
+
+    // Find index of current status
+    const currentIndex = trackingSteps.findIndex(s => s.value === currentStatus);
+
+    // Build log with connected solid line up to current, dotted for rest
+    const logsHTML = trackingSteps.map((step, i) => {
+      const active = i <= currentIndex;
+      return `
+        <div class="relative flex items-center">
+          <div class="flex flex-col items-center mr-2">
+            <div class="w-3 h-3 rounded-full ${active ? "bg-green-500" : "bg-gray-400"}"></div>
+            ${i < trackingSteps.length - 1 
+              ? `<div class="w-px h-6 ${active ? "bg-green-500" : "border-dashed border-gray-300 border"}"></div>` 
+              : ""}
+          </div>
+          <div class="p-2 border rounded ${active ? "bg-green-50 border-green-300" : "bg-gray-50 border-gray-200"} w-full">
+            ${step.label}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // Fill modal
+    document.getElementById("trackingTitle").textContent = `Tracking Log: ${orderId}`;
+    document.getElementById("trackingLogs").innerHTML = logsHTML;
+    document.getElementById("trackingModal").classList.remove("hidden");
+    document.getElementById("trackingModal").classList.add("flex");
+  });
+});
+
+    // Apply dropdown + status to all rows
+    document.querySelectorAll('#orderTableBody tr').forEach(row => {
+      const orderId = row.querySelector('.order-link')?.dataset.id;
+      const statusCell = row.querySelector('.status-cell');
+      const actionsCell = row.querySelector('.actions-cell');
+
+      const current = Number.isInteger(orderProgress[orderId]) ? orderProgress[orderId] : 0;
+      actionsCell.innerHTML = buildDropdown(current);
+      setStatusBadge(statusCell, current);
+
+      // Change handler
+      actionsCell.querySelector('.status-select').addEventListener('change', (e) => {
+        const idx = parseInt(e.target.value, 10);
+        orderProgress[orderId] = idx;
+        setStatusBadge(statusCell, idx);
+      });
+    });
+
+    // Click Order ID to open tracking modal
+    document.querySelectorAll('.order-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const orderId = link.dataset.id;
+        const idx = Number.isInteger(orderProgress[orderId]) ? orderProgress[orderId] : 0;
+        openTrackingModal(orderId, idx);
+      });
+    });
+
+    // Set status badge in table
+    function setStatusBadge(cell, stepIndex) {
+      const s = STEPS[stepIndex].status;
+      cell.innerHTML = `<span class="px-2 py-1 rounded text-xs ${s.cls}">${s.text}</span>`;
+    }
+
+    // Render stepper with solid connectors up to selected step, dotted for the rest
+    function renderStepper(currentIndex) {
+      return STEPS.map((step, i) => {
+        const isDone = i < currentIndex;     // completed before current
+        const isCurrent = i === currentIndex;
+        const showConnector = i < STEPS.length - 1;
+
+        // Dot styles
+        const dot = isDone
+          ? 'bg-blue-600 border-blue-600'
+          : (isCurrent ? 'bg-white border-blue-600' : 'bg-white border-gray-300');
+
+        // Connector to next item
+        const connector = showConnector
+          ? (i < currentIndex ? 'border-blue-600' : 'border-gray-300 border-dashed')
+          : 'border-transparent';
+
+        return `
+          <div class="relative pl-10">
+            <!-- vertical connector -->
+            <div class="absolute left-[13px] top-5 ${showConnector ? 'bottom-0' : ''} border-l-2 ${connector}"></div>
+
+            <!-- dot -->
+            <div class="absolute left-2 top-2 w-4 h-4 rounded-full border-2 ${dot}"></div>
+
+            <!-- label + optional small status -->
+            <div class="pb-5">
+              <div class="text-sm font-medium ${isDone || isCurrent ? 'text-gray-900' : 'text-gray-500'}">${step.label}</div>
+              ${isCurrent ? `<div class="text-xs mt-1 inline-block px-2 py-0.5 rounded ${STEPS[i].status.cls}">${STEPS[i].status.text}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal controls
+    function openTrackingModal(orderId, currentIndex) {
+      document.getElementById('trackingTitle').textContent = `Tracking Log: ${orderId}`;
+      document.getElementById('trackingSteps').innerHTML = renderStepper(currentIndex);
+      const modal = document.getElementById('trackingModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeTrackingModal() {
+      const modal = document.getElementById('trackingModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

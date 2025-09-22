@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>User Management — LiveAir</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- LEFT SIDEBAR (copied from your design) -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><span>Clients</span></a>
+      <details class="group">
+        <summary class="nav-link"><span>My Orders</span></summary>
+        <div class="pl-6 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><span>Alerts</span></a>
+
+      <!-- Administration group -->
+      <div style="margin-top:8px"></div>
+      <div class="small-muted" style="padding-left:6px; padding-top:6px">Administration</div>
+      <a href="user-management.html" class="nav-link nav-active"><span>User Management</span></a>
+      <a href="audit-log.html" class="nav-link"><span>Audit Log</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="header">
+      <div>
+        <h2 class="font-bold text-lg" style="margin:0">User Management</h2>
+        <div class="small-muted">Manage users, roles and assignments</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded">🔔</button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Top tabs -->
+      <div class="tabs" role="tablist" aria-label="Management tabs">
+        <button class="tab-btn active" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="roles">Role Management</button>
+      </div>
+
+      <!-- USERS TAB -->
+      <section id="tab-users" class="tab-panel">
+
+        <!-- Stats -->
+        <div class="stats-grid" aria-hidden="false">
+          <div class="stat-card">
+            <div class="small-muted">Total Users</div>
+            <h3 id="statTotal">0</h3>
+          </div>
+          <div class="stat-card">
+            <div class="small-muted">Active</div>
+            <h3 id="statActive">0</h3>
+          </div>
+          <div class="stat-card">
+            <div class="small-muted">Pending</div>
+            <h3 id="statPending">0</h3>
+          </div>
+          <div class="stat-card">
+            <div class="small-muted">Inactive</div>
+            <h3 id="statInactive">0</h3>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <input id="userSearch" class="search" placeholder="Search name, email, employee ID..." />
+          <select id="filterRole"><option value="">All Roles</option></select>
+          <select id="filterStatus">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <select id="filterDept"><option value="">All Departments</option></select>
+          <div style="flex:1"></div>
+          <button id="btnNewUser" class="btn primary">+ New User</button>
+        </div>
+
+        <!-- Users table -->
+        <div style="margin-top:8px">
+          <table aria-describedby="users table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Emp ID</th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Roles</th>
+                <th>Status</th>
+                <th style="width:170px">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ROLES TAB -->
+      <section id="tab-roles" class="tab-panel" style="display:none; margin-top:12px">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <strong>Roles</strong>
+            <div class="small-muted">Create and manage roles and assign permissions.</div>
+          </div>
+          <div>
+            <button id="btnNewRole" class="btn primary">+ New Role</button>
+          </div>
+        </div>
+
+        <div class="roles-grid" id="rolesGrid"></div>
+
+      </section>
+
+    </div> <!-- /content -->
+  </main>
+
+  <!-- Modal Backdrop -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" id="modalWindow"></div>
+  </div>
+
+<script>
+/* -------------------------
+  User Management — Dynamic roles + sample data
+  Persists to localStorage keys:
+    ent_users_v1, ent_roles_v1, ent_depts_v1, ent_audit_v1
+------------------------- */
+
+const STORAGE = { USERS:'ent_users_v1', ROLES:'ent_roles_v1', DEPTS:'ent_depts_v1', AUDIT:'ent_audit_v1' };
+const uid = () => Math.random().toString(36).slice(2,9);
+const nowISO = () => new Date().toISOString();
+
+function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+function load(k){ const s = localStorage.getItem(k); return s ? JSON.parse(s) : null; }
+
+/* seed sample data if empty */
+function seed(){
+  if (!load(STORAGE.DEPTS)) save(STORAGE.DEPTS, ['Operations','Service','Sales','HR','Finance','IT']);
+  if (!load(STORAGE.ROLES)) {
+    const base = [
+      { id: uid(), key:'super_admin', title:'Super Admin', description:'Full system access', permissions:['user:*','role:*','audit:*'] },
+      { id: uid(), key:'admin', title:'Admin', description:'User & client management', permissions:['user:manage','role:view','reports:view'] },
+      { id: uid(), key:'manager', title:'Manager', description:'Manage team & orders', permissions:['order:manage','team:manage'] },
+      { id: uid(), key:'delivery_boy', title:'Delivery Boy', description:'Delivery tasks', permissions:['order:view','delivery:manage'] },
+      { id: uid(), key:'technician', title:'Technician', description:'Service & repair', permissions:['service:manage'] }
+    ];
+    save(STORAGE.ROLES, base);
+    logAudit('seed.roles','system',{ seeded: base.map(r=>r.key) });
+  }
+  if (!load(STORAGE.USERS)) {
+    const roles = load(STORAGE.ROLES);
+    const users = [
+      { id: uid(), name:'System Super', email:'superadmin@example.com', empId:'EMP0001', department:'IT', managerId:null, roles:[roles.find(r=>r.key==='super_admin').id], status:'active', notes:'Default super admin', createdAt: nowISO() },
+      { id: uid(), name:'Anu Sharma', email:'anu.sharma@example.com', empId:'EMP0002', department:'Operations', managerId:null, roles:[roles.find(r=>r.key==='manager')?.id], status:'active', notes:'Ops manager', createdAt: nowISO() },
+      { id: uid(), name:'Ravi Kumar', email:'ravi.kumar@example.com', empId:'EMP0003', department:'Service', managerId:null, roles:[roles.find(r=>r.key==='technician')?.id], status:'active', notes:'Field tech', createdAt: nowISO() }
+    ];
+    save(STORAGE.USERS, users);
+    logAudit('seed.users','system',{ seeded: users.map(u=>u.email) });
+  }
+  if (!load(STORAGE.AUDIT)) save(STORAGE.AUDIT, []);
+}
+seed();
+
+/* app state mirrors storage */
+let ROLES = load(STORAGE.ROLES) || [];
+let USERS = load(STORAGE.USERS) || [];
+let DEPTS = load(STORAGE.DEPTS) || [];
+let AUDIT = load(STORAGE.AUDIT) || [];
+
+/* UI refs */
+const tabs = document.querySelectorAll('.tab-btn');
+const tabUsers = document.getElementById('tab-users');
+const tabRoles = document.getElementById('tab-roles');
+const usersTbody = document.getElementById('usersTbody');
+const rolesGrid = document.getElementById('rolesGrid');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalWindow = document.getElementById('modalWindow');
+
+const statTotal = document.getElementById('statTotal');
+const statActive = document.getElementById('statActive');
+const statPending = document.getElementById('statPending');
+const statInactive = document.getElementById('statInactive');
+
+const userSearch = document.getElementById('userSearch');
+const filterRole = document.getElementById('filterRole');
+const filterStatus = document.getElementById('filterStatus');
+const filterDept = document.getElementById('filterDept');
+const btnNewUser = document.getElementById('btnNewUser');
+const btnNewRole = document.getElementById('btnNewRole');
+
+/* Tabs switching */
+tabs.forEach(btn => btn.addEventListener('click', () => {
+  tabs.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const t = btn.dataset.tab;
+  if (t === 'users') { tabUsers.style.display='block'; tabRoles.style.display='none'; }
+  else { tabUsers.style.display='none'; tabRoles.style.display='block'; }
+}));
+
+/* helpers */
+function persist(){
+  save(STORAGE.USERS, USERS);
+  save(STORAGE.ROLES, ROLES);
+  save(STORAGE.DEPTS, DEPTS);
+  AUDIT = load(STORAGE.AUDIT) || AUDIT;
+}
+function logAudit(action, actor='system', meta={}) {
+  const ev = { id: uid(), ts: nowISO(), action, actor, meta, ip: '127.0.0.1' };
+  AUDIT.unshift(ev);
+  save(STORAGE.AUDIT, AUDIT);
+}
+
+/* render functions */
+function renderStats(){
+  statTotal.textContent = USERS.length;
+  statActive.textContent = USERS.filter(u=>u.status==='active').length;
+  statPending.textContent = USERS.filter(u=>u.status==='pending').length;
+  statInactive.textContent = USERS.filter(u=>u.status==='inactive').length;
+}
+function populateFilters(){
+  filterRole.innerHTML = '<option value="">All Roles</option>';
+  ROLES.forEach(r => filterRole.insertAdjacentHTML('beforeend', `<option value="${r.id}">${escapeHtml(r.title)}</option>`));
+  filterDept.innerHTML = '<option value="">All Departments</option>';
+  DEPTS.forEach(d => filterDept.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`));
+}
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+function renderUsers(){
+  usersTbody.innerHTML = '';
+  const q = (userSearch.value || '').toLowerCase().trim();
+  const roleFilter = filterRole.value;
+  const statusFilter = filterStatus.value;
+  const deptFilter = filterDept.value;
+
+  const filtered = USERS.filter(u => {
+    if (q) {
+      const hay = `${u.name} ${u.email} ${u.empId}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (roleFilter && !(u.roles||[]).includes(roleFilter)) return false;
+    if (statusFilter && u.status !== statusFilter) return false;
+    if (deptFilter && u.department !== deptFilter) return false;
+    return true;
+  });
+
+  for (const u of filtered){
+    const manager = USERS.find(x=>x.id===u.managerId);
+    const rolesHtml = (u.roles||[]).map(rid => {
+      const r = ROLES.find(x=>x.id===rid); return r ? `<span class="badge">${escapeHtml(r.title)}</span>` : '';
+    }).join(' ');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(u.name)}</strong><div class="small-muted">${escapeHtml(u.email)}</div></td>
+      <td>${escapeHtml(u.email)}</td>
+      <td>${escapeHtml(u.empId||'')}</td>
+      <td>${escapeHtml(u.department||'')}</td>
+      <td>${escapeHtml(manager ? manager.name : '')}</td>
+      <td>${rolesHtml}</td>
+      <td>${escapeHtml(u.status)}</td>
+      <td class="inline-actions">
+        <button class="btn ghost" data-action="edit" data-id="${u.id}">Edit</button>
+        <button class="btn" data-action="view" data-id="${u.id}">View</button>
+        <button class="btn danger" data-action="delete" data-id="${u.id}">Delete</button>
+      </td>
+    `;
+    usersTbody.appendChild(tr);
+  }
+
+  // attach handlers
+  usersTbody.querySelectorAll('button[data-action]').forEach(b => {
+    const id = b.dataset.id;
+    const action = b.dataset.action;
+    b.onclick = () => {
+      if (action === 'edit') openUserModal(id);
+      if (action === 'view') openUserView(id);
+      if (action === 'delete') deleteUser(id);
+    };
+  });
+}
+
+function renderRoles(){
+  rolesGrid.innerHTML = '';
+  for (const r of ROLES){
+    const div = document.createElement('div');
+    div.className = 'role-card';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:start">
+        <div>
+          <div style="font-weight:700">${escapeHtml(r.title)}</div>
+          <div class="small-muted" style="margin-top:6px">${escapeHtml(r.description||'')}</div>
+          <div style="margin-top:8px" class="small-muted">Permissions: ${(r.permissions||[]).slice(0,6).join(', ')}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn ghost" data-role="${r.id}" data-action="edit-role">Edit</button>
+          <button class="btn danger" data-role="${r.id}" data-action="del-role">Delete</button>
+        </div>
+      </div>
+    `;
+    rolesGrid.appendChild(div);
+  }
+
+  // handlers
+  rolesGrid.querySelectorAll('button[data-action="edit-role"]').forEach(b => b.addEventListener('click', e => openRoleModal(b.dataset.role)));
+  rolesGrid.querySelectorAll('button[data-action="del-role"]').forEach(b => b.addEventListener('click', e => deleteRole(b.dataset.role)));
+}
+
+/* -------------------------
+  CRUD: Users & Roles
+------------------------- */
+
+function openModal(html){
+  modalWindow.innerHTML = html;
+  modalBackdrop.style.display = 'flex';
+  modalBackdrop.setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  modalBackdrop.style.display = 'none';
+  modalBackdrop.setAttribute('aria-hidden','true');
+  modalWindow.innerHTML = '';
+}
+
+/* User: Create / Edit */
+function openUserModal(userId = null){
+  const editing = USERS.find(u=>u.id===userId) || null;
+  const deptOptions = DEPTS.map(d => `<option value="${escapeHtml(d)}" ${editing?.department===d ? 'selected':''}>${escapeHtml(d)}</option>`).join('');
+  const mgrOptions = USERS.map(u => `<option value="${u.id}" ${editing?.managerId===u.id ? 'selected':''}>${escapeHtml(u.name)}</option>`).join('');
+  const roleChecks = ROLES.map(r => `<label style="margin-right:8px"><input type="checkbox" data-role="${r.id}" ${editing && (editing.roles||[]).includes(r.id) ? 'checked':''}/> ${escapeHtml(r.title)}</label>`).join('');
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>${editing ? 'Edit User' : 'Create User'}</h3>
+      <button id="closeModalBtn" class="btn ghost">Close</button>
+    </div>
+    <div class="form-grid">
+      <div>
+        <label class="small-muted">Name</label>
+        <input id="f_name" type="text" value="${escapeHtml(editing?.name||'')}" />
+      </div>
+      <div>
+        <label class="small-muted">Email</label>
+        <input id="f_email" type="email" value="${escapeHtml(editing?.email||'')}" />
+      </div>
+      <div>
+        <label class="small-muted">Employee ID</label>
+        <input id="f_emp" type="text" value="${escapeHtml(editing?.empId||'')}" />
+      </div>
+      <div>
+        <label class="small-muted">Department</label>
+        <select id="f_dept"><option value="">--</option>${deptOptions}</select>
+      </div>
+      <div>
+        <label class="small-muted">Reporting Manager</label>
+        <select id="f_mgr"><option value="">--</option>${mgrOptions}</select>
+      </div>
+      <div>
+        <label class="small-muted">Status</label>
+        <select id="f_status">
+          <option value="active" ${editing?.status==='active' ? 'selected':''}>Active</option>
+          <option value="pending" ${editing?.status==='pending' ? 'selected':''}>Pending</option>
+          <option value="inactive" ${editing?.status==='inactive' ? 'selected':''}>Inactive</option>
+        </select>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label class="small-muted">Assign Roles</label>
+        <div>${roleChecks || '<div class="small-muted">No roles defined</div>'}</div>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label class="small-muted">Notes</label>
+        <textarea id="f_notes">${escapeHtml(editing?.notes||'')}</textarea>
+      </div>
+
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px">
+        <button id="cancelUser" class="btn ghost">Cancel</button>
+        <button id="saveUser" class="btn primary">${editing ? 'Save changes' : 'Create User'}</button>
+      </div>
+    </div>
+  `);
+
+  document.getElementById('closeModalBtn').onclick = closeModal;
+  document.getElementById('cancelUser').onclick = closeModal;
+  document.getElementById('saveUser').onclick = () => {
+    const name = document.getElementById('f_name').value.trim();
+    const email = document.getElementById('f_email').value.trim();
+    const empId = document.getElementById('f_emp').value.trim();
+    const department = document.getElementById('f_dept').value || '';
+    const managerId = document.getElementById('f_mgr').value || null;
+    const status = document.getElementById('f_status').value;
+    const notes = document.getElementById('f_notes').value.trim();
+    const selectedRoles = Array.from(modalWindow.querySelectorAll('input[data-role]:checked')).map(cb => cb.dataset.role);
+
+    if (!name || !email) { alert('Name and email are required'); return; }
+
+    if (editing) {
+      // update
+      USERS = USERS.map(u => u.id === editing.id ? ({ ...u, name, email, empId, department, managerId, status, notes, roles: selectedRoles }) : u);
+      logAudit('user.update','system',{ id: editing.id, email });
+    } else {
+      // create
+      const newUser = { id: uid(), createdAt: nowISO(), name, email, empId, department, managerId, status, notes, roles: selectedRoles };
+      USERS.unshift(newUser);
+      logAudit('user.create','system',{ email });
+    }
+    persist();
+    refreshAll();
+    closeModal();
+  };
+}
+
+/* view user read-only */
+function openUserView(userId){
+  const u = USERS.find(x=>x.id===userId);
+  if (!u) return alert('User not found');
+  const manager = USERS.find(x=>x.id===u.managerId);
+  const rolesHtml = (u.roles||[]).map(rid => { const r = ROLES.find(x=>x.id===rid); return r ? `<span class="badge">${escapeHtml(r.title)}</span>` : ''; }).join(' ');
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>View User</h3>
+      <button id="closeView" class="btn ghost">Close</button>
+    </div>
+    <div class="form-grid">
+      <div><label class="small-muted">Name</label><div class="muted-block">${escapeHtml(u.name)}</div></div>
+      <div><label class="small-muted">Email</label><div class="muted-block">${escapeHtml(u.email)}</div></div>
+      <div><label class="small-muted">Employee ID</label><div class="muted-block">${escapeHtml(u.empId||'')}</div></div>
+      <div><label class="small-muted">Department</label><div class="muted-block">${escapeHtml(u.department||'')}</div></div>
+      <div><label class="small-muted">Manager</label><div class="muted-block">${escapeHtml(manager ? manager.name : '')}</div></div>
+      <div style="grid-column:1/-1"><label class="small-muted">Roles</label>${rolesHtml}</div>
+      <div style="grid-column:1/-1"><label class="small-muted">Notes</label><div class="muted-block">${escapeHtml(u.notes||'')}</div></div>
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end"><button id="closeView2" class="btn ghost">Close</button></div>
+    </div>
+  `);
+  modalWindow.querySelectorAll('#closeView, #closeView2').forEach(el => el.onclick = closeModal);
+}
+
+/* delete user */
+function deleteUser(userId){
+  const u = USERS.find(x=>x.id===userId);
+  if (!u) return;
+  if (!confirm(`Delete user ${u.name || u.email}? This action cannot be undone.`)) return;
+  USERS = USERS.filter(x=>x.id !== userId);
+  persist();
+  logAudit('user.delete','system',{ id: userId, email: u.email });
+  refreshAll();
+}
+
+/* Role modals */
+function openRoleModal(roleId = null){
+  const editing = ROLES.find(r=>r.id===roleId) || null;
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>${editing ? 'Edit Role' : 'Create Role'}</h3>
+      <button id="closeRole" class="btn ghost">Close</button>
+    </div>
+    <div>
+      <label class="small-muted">Key (system)</label>
+      <input id="r_key" type="text" value="${escapeHtml(editing?.key||'')}" />
+      <label class="small-muted">Title</label>
+      <input id="r_title" type="text" value="${escapeHtml(editing?.title||'')}" />
+      <label class="small-muted">Description</label>
+      <input id="r_desc" type="text" value="${escapeHtml(editing?.description||'')}" />
+      <label class="small-muted" style="margin-top:8px">Permissions (comma separated)</label>
+      <input id="r_perms" type="text" value="${escapeHtml((editing?.permissions||[]).join(', '))}" />
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+        <button id="cancelRole" class="btn ghost">Cancel</button>
+        <button id="saveRole" class="btn primary">${editing ? 'Save' : 'Create'}</button>
+      </div>
+    </div>
+  `);
+  document.getElementById('closeRole').onclick = closeModal;
+  document.getElementById('cancelRole').onclick = closeModal;
+  document.getElementById('saveRole').onclick = () => {
+    const key = document.getElementById('r_key').value.trim();
+    const title = document.getElementById('r_title').value.trim();
+    const description = document.getElementById('r_desc').value.trim();
+    const perms = document.getElementById('r_perms').value.split(',').map(s=>s.trim()).filter(Boolean);
+    if (!key || !title) { alert('Key and title required'); return; }
+    if (editing) {
+      ROLES = ROLES.map(r => r.id===editing.id ? ({ ...r, key, title, description, permissions: perms }) : r);
+      logAudit('role.update','system',{ key, title });
+    } else {
+      const newRole = { id: uid(), key, title, description, permissions: perms };
+      ROLES.unshift(newRole);
+      logAudit('role.create','system',{ key, title });
+    }
+    persist();
+    refreshAll();
+    closeModal();
+  };
+}
+
+/* delete role */
+function deleteRole(roleId){
+  const r = ROLES.find(x=>x.id===roleId);
+  if (!r) return;
+  if (!confirm(`Delete role ${r.title || r.key}? This will be removed from all users.`)) return;
+  // remove from users
+  USERS = USERS.map(u => ({ ...u, roles: (u.roles||[]).filter(rr => rr !== roleId) }));
+  ROLES = ROLES.filter(x=>x.id!==roleId);
+  persist();
+  logAudit('role.delete','system',{ key: r.key });
+  refreshAll();
+}
+
+/* -------------------------
+  Utility: refresh UI from storage
+------------------------- */
+function refreshAll(){
+  ROLES = load(STORAGE.ROLES) || [];
+  USERS = load(STORAGE.USERS) || [];
+  DEPTS = load(STORAGE.DEPTS) || [];
+  AUDIT = load(STORAGE.AUDIT) || [];
+  renderStats();
+  populateFilters();
+  renderUsers();
+  renderRoles();
+}
+refreshAll();
+
+/* event wiring */
+userSearch.addEventListener('input', renderUsers);
+filterRole.addEventListener('change', renderUsers);
+filterStatus.addEventListener('change', renderUsers);
+filterDept.addEventListener('change', renderUsers);
+btnNewUser.addEventListener('click', ()=> openUserModal(null));
+btnNewRole.addEventListener('click', ()=> openRoleModal(null));
+modalBackdrop.addEventListener('click', (e)=> { if (e.target === modalBackdrop) closeModal(); });
+document.addEventListener('keydown', (e)=> { if (e.key === 'Escape') closeModal(); });
+
+/* expose debug utilities */
+window.__UM = {
+  USERS, ROLES, DEPTS, AUDIT,
+  reload: refreshAll,
+  seedData: seed
+};
+</script>
+</body>
+</html>

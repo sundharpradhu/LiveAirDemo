@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Delivery Payments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="Orders.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>Orders</span></a>
+      <a href="Payments.html" class="nav-link nav-active"><i data-lucide="credit-card" class="w-5 h-5"></i><span>Payments</span></a>
+      <a href="Tracking.html" class="nav-link"><i data-lucide="map-pin" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+       </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <div>
+        <h1 class="font-bold text-lg">Payment Management</h1>
+        <p class="text-sm text-gray-600">Track and collect payments</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors" onclick="submitDailyReport()">
+          <i data-lucide="file-text" class="w-4 h-4 mr-2 inline"></i>
+          Submit Daily Report
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+        </button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">JD</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="wallet" class="w-6 h-6"></i>
+            </div>
+            <span class="text-green-200 text-sm font-medium">Today</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">$720</h3>
+          <p class="text-green-100 text-sm">Total Collected</p>
+          <div class="mt-3 flex items-center text-sm text-green-200">
+            <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+            <span>6 transactions</span>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="clock" class="w-6 h-6"></i>
+            </div>
+            <span class="text-orange-200 text-sm font-medium">Pending</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">$480</h3>
+          <p class="text-orange-100 text-sm">Pending COD</p>
+          <div class="mt-3 flex items-center text-sm text-orange-200">
+            <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
+            <span>3 orders</span>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="smartphone" class="w-6 h-6"></i>
+            </div>
+            <span class="text-blue-200 text-sm font-medium">Online</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">$1500</h3>
+          <p class="text-blue-100 text-sm">Online Payments</p>
+          <div class="mt-3 flex items-center text-sm text-blue-200">
+            <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+            <span>Already processed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment List -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+          <h2 class="text-lg font-semibold text-gray-900">Payment Transactions</h2>
+          <p class="text-sm text-gray-600 mt-1">Click on a payment to manage or view receipt</p>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <!-- Pending Payment 1 -->
+          <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors" onclick="openPaymentModal('ORD-2024-001','Ravi Kumar','pending',120)">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="clock" class="w-6 h-6 text-orange-600"></i>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-semibold text-gray-900">ORD-2024-001</h3>
+                    <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">COD</span>
+                  </div>
+                  <p class="text-gray-600">Ravi Kumar - Oxygen Cylinder</p>
+                  <p class="text-sm text-gray-500">+91-9876543210</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-bold text-gray-900">$120</div>
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                  Pending Collection
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Online Payment -->
+          <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors" onclick="openPaymentModal('ORD-2024-002','Metro Hospital','paid',1500)">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-semibold text-gray-900">ORD-2024-002</h3>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">ONLINE</span>
+                  </div>
+                  <p class="text-gray-600">Metro Hospital - Ventilator</p>
+                  <p class="text-sm text-gray-500">+91-9876543211</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-bold text-gray-900">$1,500</div>
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Paid Online
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Payment 2 -->
+          <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors" onclick="openPaymentModal('ORD-2024-004','City Hospital','pending',800)">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="clock" class="w-6 h-6 text-orange-600"></i>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-semibold text-gray-900">ORD-2024-004</h3>
+                    <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">COD</span>
+                  </div>
+                  <p class="text-gray-600">City Hospital - Medical Equipment</p>
+                  <p class="text-sm text-gray-500">+91-9876543214</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-bold text-gray-900">$800</div>
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                  Pending Collection
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-3xl m-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">💳 Complete Payment</h2>
+        <button class="text-gray-500 hover:text-gray-700" onclick="closePaymentModal()">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Order Information -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-bold text-xl text-gray-900" id="modalOrderId">ORD-2024-001</p>
+            <p class="text-gray-600" id="modalCustomer">Customer: Ravi Kumar</p>
+            <p class="text-sm text-gray-500 mt-1" id="modalProduct">Oxygen Cylinder</p>
+          </div>
+          <div class="text-right">
+            <p class="text-3xl font-bold text-green-600" id="modalAmount">$120</p>
+            <p class="text-sm text-gray-500">Amount Due</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-4">Select Payment Method</label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button class="payment-method border-2 border-gray-200 rounded-xl p-4 hover:border-green-500 hover:bg-green-50 transition-all text-center" onclick="selectPayment('Cash')" data-method="cash">
+            <i data-lucide="banknote" class="w-8 h-8 text-green-600 mx-auto mb-2"></i>
+            <p class="text-sm font-medium text-gray-700">💵 Cash</p>
+          </button>
+          <button class="payment-method border-2 border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:bg-blue-50 transition-all text-center" onclick="selectPayment('Card')" data-method="card">
+            <i data-lucide="credit-card" class="w-8 h-8 text-blue-600 mx-auto mb-2"></i>
+            <p class="text-sm font-medium text-gray-700">💳 Card</p>
+          </button>
+          <button class="payment-method border-2 border-gray-200 rounded-xl p-4 hover:border-purple-500 hover:bg-purple-50 transition-all text-center" onclick="selectPayment('UPI')" data-method="upi">
+            <i data-lucide="smartphone" class="w-8 h-8 text-purple-600 mx-auto mb-2"></i>
+            <p class="text-sm font-medium text-gray-700">📱 UPI/QR</p>
+          </button>
+          <button class="payment-method border-2 border-gray-200 rounded-xl p-4 hover:border-orange-500 hover:bg-orange-50 transition-all text-center" onclick="selectPayment('Credit')" data-method="credit">
+            <i data-lucide="clock" class="w-8 h-8 text-orange-600 mx-auto mb-2"></i>
+            <p class="text-sm font-medium text-gray-700">🔄 Credit</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- QR Code Section -->
+      <div id="qrBox" class="hidden mb-6">
+        <div class="border-2 border-dashed border-purple-300 rounded-xl p-6 text-center bg-purple-50">
+          <p class="font-semibold mb-4">📱 Scan QR Code to Pay</p>
+          <div class="w-40 h-40 bg-white border rounded-xl mx-auto mb-4 flex items-center justify-center shadow-sm">
+            <div class="text-center">
+              <div class="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center">
+                <i data-lucide="qr-code" class="w-16 h-16 text-white"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-sm text-purple-700">Customer can scan this QR code using any UPI app</p>
+        </div>
+      </div>
+
+      <!-- Replacement Section -->
+      <div class="mb-6">
+        <label class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+          <input type="checkbox" id="replaceCylinder" class="rounded" onchange="toggleReplacement()"/>
+          <span>Replace empty cylinder?</span>
+        </label>
+        <div id="replacementOptions" class="hidden mt-3">
+          <input id="replacementNote" class="w-full border border-gray-300 rounded-lg p-3 text-sm" placeholder="Replacement details (cylinder type, serial number, etc.)"/>
+        </div>
+      </div>
+
+      <!-- Customer Signature -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-3">Customer Signature</label>
+        <div class="border-2 border-gray-200 rounded-xl">
+          <canvas id="signaturePad" width="600" height="200" class="w-full bg-gray-50 rounded-lg cursor-crosshair"></canvas>
+          <div class="flex justify-between items-center p-3 bg-gray-100 rounded-b-xl">
+            <p class="text-xs text-gray-500">Ask customer to sign above</p>
+            <div class="flex space-x-2">
+              <button onclick="clearSignature()" class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                <i data-lucide="eraser" class="w-3 h-3 mr-1 inline"></i>Clear
+              </button>
+              <button onclick="saveSignature()" class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                <i data-lucide="save" class="w-3 h-3 mr-1 inline"></i>Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-4">
+        <button onclick="savePayment()" class="flex-1 bg-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-700 transition-colors">
+          <i data-lucide="check-circle" class="w-5 h-5 mr-2 inline"></i>
+          Save & Generate Receipt
+        </button>
+        <button onclick="closePaymentModal()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Receipt Modal -->
+  <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md m-4">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-900">🧾 Payment Receipt</h3>
+        <button onclick="closeReceiptModal()" class="text-gray-500 hover:text-gray-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <div id="receiptContent" class="space-y-3 mb-6 text-sm">
+        <!-- Receipt content will be populated by JavaScript -->
+      </div>
+      
+      <div class="flex gap-3">
+        <button onclick="downloadReceiptPDF()" class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+          <i data-lucide="download" class="w-4 h-4 mr-2 inline"></i>
+          Download PDF
+        </button>
+        <button onclick="closeReceiptModal()" class="px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    let selectedMode = "";
+    let currentPayment = {};
+    let signaturePad;
+    let isDrawing = false;
+
+    // Initialize signature pad
+    function initSignaturePad() {
+      const canvas = document.getElementById('signaturePad');
+      const ctx = canvas.getContext('2d');
+      
+      // Mouse events
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+      
+      // Touch events for mobile
+      canvas.addEventListener('touchstart', handleTouch);
+      canvas.addEventListener('touchmove', handleTouch);
+      canvas.addEventListener('touchend', stopDrawing);
+      
+      function startDrawing(e) {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+      
+      function draw(e) {
+        if (!isDrawing) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#374151';
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+      
+      function stopDrawing() {
+        isDrawing = false;
+        ctx.beginPath();
+      }
+      
+      function handleTouch(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        if (e.type === 'touchstart') {
+          isDrawing = true;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+        } else if (e.type === 'touchmove' && isDrawing) {
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = '#374151';
+          ctx.lineTo(x, y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    function openPaymentModal(orderId, customer, status, amount) {
+      if (status === "pending") {
+        currentPayment = { orderId, customer, amount };
+        
+        document.getElementById("modalOrderId").textContent = orderId;
+        document.getElementById("modalCustomer").textContent = "Customer: " + customer;
+        document.getElementById("modalAmount").textContent = "$" + amount;
+        
+        const products = {
+          'ORD-2024-001': 'Oxygen Cylinder',
+          'ORD-2024-002': 'Ventilator',
+          'ORD-2024-004': 'Medical Equipment'
+        };
+        document.getElementById("modalProduct").textContent = products[orderId] || 'Medical Equipment';
+        
+        document.getElementById("paymentModal").classList.remove("hidden");
+        
+        // Initialize signature pad after modal is shown
+        setTimeout(initSignaturePad, 100);
+      } else {
+        // Show existing receipt for paid orders
+        viewExistingReceipt(orderId, customer, amount, "Online Payment", new Date().toLocaleString());
+      }
+    }
+
+    function closePaymentModal() { 
+      document.getElementById("paymentModal").classList.add("hidden");
+      resetPaymentForm();
+    }
+
+    function resetPaymentForm() {
+      selectedMode = "";
+      document.querySelectorAll('.payment-method').forEach(btn => {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'border-blue-500', 'bg-blue-50', 
+                           'border-purple-500', 'bg-purple-50', 'border-orange-500', 'bg-orange-50');
+        btn.classList.add('border-gray-200');
+      });
+      document.getElementById("qrBox").classList.add("hidden");
+      document.getElementById("replaceCylinder").checked = false;
+      document.getElementById("replacementOptions").classList.add("hidden");
+      clearSignature();
+    }
+
+    function selectPayment(mode) {
+      selectedMode = mode;
+      
+      // Reset all buttons
+      document.querySelectorAll('.payment-method').forEach(btn => {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'border-blue-500', 'bg-blue-50', 
+                           'border-purple-500', 'bg-purple-50', 'border-orange-500', 'bg-orange-50');
+        btn.classList.add('border-gray-200');
+      });
+      
+      // Highlight selected method
+      const selectedBtn = document.querySelector(`[data-method="${mode.toLowerCase()}"]`);
+      const colors = {
+        'cash': ['border-green-500', 'bg-green-50'],
+        'card': ['border-blue-500', 'bg-blue-50'],
+        'upi': ['border-purple-500', 'bg-purple-50'],
+        'credit': ['border-orange-500', 'bg-orange-50']
+      };
+      
+      if (selectedBtn && colors[mode.toLowerCase()]) {
+        selectedBtn.classList.remove('border-gray-200');
+        selectedBtn.classList.add(...colors[mode.toLowerCase()]);
+      }
+      
+      // Show QR code for UPI
+      document.getElementById("qrBox").classList.toggle("hidden", mode !== "UPI");
+    }
+
+    function toggleReplacement() {
+      const checked = document.getElementById("replaceCylinder").checked;
+      document.getElementById("replacementOptions").classList.toggle("hidden", !checked);
+    }
+
+    function clearSignature() {
+      const canvas = document.getElementById("signaturePad");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveSignature() {
+      alert("Signature saved successfully!");
+    }
+
+    function savePayment() {
+      if (!selectedMode) {
+        alert("Please select a payment method");
+        return;
+      }
+      
+      const orderId = currentPayment.orderId;
+      const customer = currentPayment.customer;
+      const amount = currentPayment.amount;
+      const date = new Date().toLocaleString();
+      const replacement = document.getElementById("replaceCylinder").checked;
+      const replacementNote = document.getElementById("replacementNote").value;
+      
+      closePaymentModal();
+      
+      // Show receipt
+      viewReceipt(orderId, customer, selectedMode, date, amount, replacement, replacementNote);
+      
+      alert(`Payment collected successfully!\n\nOrder: ${orderId}\nAmount: $${amount}\nMethod: ${selectedMode}\nCustomer: ${customer}\n\nReceipt generated and ready for download.`);
+    }
+
+    function viewReceipt(orderId, customer, mode, date, amount, replacement, replacementNote) {
+      currentPayment = { orderId, customer, mode, date, amount, replacement, replacementNote };
+      
+      const content = `
+        <div class="text-center border-b pb-4 mb-4">
+          <h4 class="font-bold text-lg text-gray-900">LiveAir Medical</h4>
+          <p class="text-sm text-gray-600">Payment Receipt</p>
+          <p class="text-xs text-gray-500">GST: 07AABCU9603R1ZN</p>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Receipt #:</span>
+            <span class="font-medium">${orderId}-${Date.now().toString().slice(-4)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Order ID:</span>
+            <span class="font-medium">${orderId}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Customer:</span>
+            <span class="font-medium">${customer}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Amount:</span>
+            <span class="font-bold text-green-600">$${amount}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Payment Method:</span>
+            <span class="font-medium">${mode}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Date & Time:</span>
+            <span class="font-medium">${date}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Status:</span>
+            <span class="font-medium text-green-600">✅ Paid</span>
+          </div>
+          ${replacement ? `<div class="flex justify-between">
+            <span class="text-gray-600">Replacement:</span>
+            <span class="font-medium">Yes</span>
+          </div>` : ''}
+          ${replacementNote ? `<div class="mt-2">
+            <span class="text-gray-600 text-sm">Note:</span>
+            <p class="text-sm text-gray-800 mt-1">${replacementNote}</p>
+          </div>` : ''}
+        </div>
+        <div class="border-t pt-4 mt-4 text-center">
+          <p class="text-xs text-gray-500">Thank you for choosing LiveAir Medical!</p>
+        </div>
+      `;
+        document.getElementById("receiptContent").innerHTML = content;          
+        document.getElementById("receiptModal").classList.remove("hidden");
+    }
+    function viewExistingReceipt(orderId, customer, amount, mode, date) {
+      const content = `
+        <div class="text-center border-b pb-4 mb-4">
+          <h4 class="font-bold text-lg text-gray-900">LiveAir Medical</h4>
+          <p class="text-sm text-gray-600">Payment Receipt</p>
+          <p class="text-xs text-gray-500">GST: 07AABCU9603R1ZN</p>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Receipt #:</span>
+            <span class="font-medium">${orderId}-${Date.now().toString().slice(-4)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Order ID:</span>
+            <span class="font-medium">${orderId}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Customer:</span>
+            <span class="font-medium">${customer}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Amount:</span>
+            <span class="font-bold text-green-600">$${amount}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Payment Method:</span>
+            <span class="font-medium">${mode}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Date & Time:</span>
+            <span class="font-medium">${date}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Status:</span>
+            <span class="font-medium text-green-600">✅ Paid</span>
+          </div>
+        </div>
+        <div class="border-t pt-4 mt-4 text-center">
+          <p class="text-xs text-gray-500">Thank you for choosing LiveAir Medical!</p>
+        </div>
+      `;
+      document.getElementById("receiptContent").innerHTML = content;          
+      document.getElementById("receiptModal").classList.remove("hidden");
+    }
+    function closeReceiptModal() {
+      document.getElementById("receiptModal").classList.add("hidden");
+      document.getElementById("receiptContent").innerHTML = "";
+      currentPayment = {};
+    }
+    function downloadReceiptPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const receiptHTML = document.getElementById("receiptContent").innerHTML;
+      doc.html(receiptHTML, {
+        callback: function (doc) {
+          doc.save(`Receipt_${currentPayment.orderId}.pdf`);
+        },
+        x: 10,
+        y: 10
+      });
+    }
+    function submitDailyReport() {
+      alert("Daily report submitted successfully!");
+    }
+    function showNotifications() {
+      alert("No new notifications.");
+    }
+    function showProfile() {
+      alert("Profile details would be shown here.");
+    }
+  </script>
+</body>
+</html>

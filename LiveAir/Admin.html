@@ -1,0 +1,3373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Alerts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+    <aside class="w-64 bg-white shadow-lg flex flex-col">
+      <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+      <nav class="flex-1 p-4 space-y-1">
+        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+        <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+        <details class="group" open>
+          <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+          <div class="pl-8 py-1 space-y-1">
+            <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+            <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+          </div>
+        </details>
+        <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+        <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+        <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+        <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+        <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+        <a href="alerts.html" class="nav-link nav-active"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+      </nav>
+      <div class="p-4 small">© 2025 LiveAir</div>
+    </aside>
+    
+  <main class="flex-1 flex flex-col">
+    
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+    
+    <section class="p-6 overflow-y-auto flex-1">
+  <h2 class="text-2xl font-bold mb-8">Alerts</h2>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <!-- Card 1 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-red-500 to-rose-600 text-white"
+      onclick="showAlertDetails('Low stock alert', 'The stock for Product A is below the threshold of 20 units.', 'Active')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Low Stock Alert</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-red-600">
+          Active
+        </span>
+      </div>
+      <p class="text-base">Stock for <span class="font-semibold">Product A</span> dropped below 20 units.</p>
+    </div>
+
+    <!-- Card 2 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-green-500 to-emerald-600 text-white"
+      onclick="showAlertDetails('Due date reminder', 'Client B has a due date approaching.', 'Enabled')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="calendar" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Due Date Reminder</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-green-600">
+          Enabled
+        </span>
+      </div>
+      <p class="text-base">Client <span class="font-semibold">B</span> has a due date approaching soon.</p>
+    </div>
+
+    <!-- Card 3 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
+      onclick="showAlertDetails('Urgent delivery', 'Urgent delivery for Order #12345.', 'Enabled')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="truck" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Urgent Delivery</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-blue-600">
+          Enabled
+        </span>
+      </div>
+      <p class="text-base">Urgent delivery required for <span class="font-semibold">Order #12345</span>.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  </main>
+
+  <!-- Modal -->
+  <div id="alertModal" class="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50 hidden">
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+      <h3 class="text-lg font-semibold mb-4">Alert Details</h3>
+      <div id="modalContent">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+  <section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Products</h2>
+      
+      <!-- Asset stats -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-white p-4 rounded shadow text-center">Total<br><b id="totalAssets">500</b></div>
+        <div class="bg-white p-4 rounded shadow text-center">In Stock<br><b>300</b></div>
+        <div class="bg-white p-4 rounded shadow text-center">With Customers<br><b>150</b></div>
+        <div class="bg-white p-4 rounded shadow text-center">Refill<br><b>30</b></div>
+        <div class="bg-white p-4 rounded shadow text-center">Repair<br><b>20</b></div>
+      </div>
+      
+      <!-- Add asset -->
+      <div class="mt-6 bg-white p-4 rounded shadow">
+        <h3 class="font-semibold mb-2">Add Asset</h3>
+        <form id="assetForm" class="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <input class="border p-2 rounded" name="assetName" placeholder="Asset Name" required />
+          <input class="border p-2 rounded" name="serialNumber" placeholder="Serial Number" required />
+          <input type="number" class="border p-2 rounded" name="volume" placeholder="Volume" />
+          <input type="number" class="border p-2 rounded" name="weight" placeholder="Weight" />
+          <input class="border p-2 rounded" name="dimensions" placeholder="Dimensions (HxD)" />
+          <input class="border p-2 rounded" name="notes" placeholder="Notes" />
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded md:col-span-3">Add</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Popup -->
+  <div id="successPopup" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded shadow text-center">
+      <h3 class="text-lg font-bold mb-2">Asset Added</h3>
+      <p id="popupMessage" class="mb-4"></p>
+      <button onclick="closePopup()" class="bg-blue-600 text-white px-4 py-2 rounded">OK</button>
+    </div>
+  </div>
+
+  <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Clients</h2>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="button" onclick="openUploadModal()">Import CSV</button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow">
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input class="border p-2 rounded" placeholder="Organization Name" />
+          <input class="border p-2 rounded" placeholder="Contact Person" />
+          <input type="email" class="border p-2 rounded" placeholder="Email" />
+          <input type="tel" class="border p-2 rounded" placeholder="Phone" />
+          <button type="button" 
+        class="bg-blue-600 text-white px-4 py-2 rounded md:col-span-2" 
+        onclick="openClientModal()">
+  Add Client
+</button>
+          <!-- Create Client Modal -->
+<div id="clientModal" class="modal-overlay">
+  <div class="modal-container max-w-xl w-full">
+    <div class="modal-header">
+      <div class="modal-title">📝 Create Client</div>
+      <button class="close-btn" onclick="closeClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="clientForm" class="space-y-4">
+        <input type="text" placeholder="Organization Name" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Contact Person" class="w-full border p-2 rounded" required>
+        <input type="email" placeholder="Email Address" class="w-full border p-2 rounded" required>
+        <input type="tel" placeholder="Phone Number" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Address" class="w-full border p-2 rounded">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="City" class="border p-2 rounded">
+          <input type="text" placeholder="State / Province" class="border p-2 rounded">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="Country" class="border p-2 rounded">
+          <input type="text" placeholder="GST / Tax ID" class="border p-2 rounded">
+        </div>
+        <textarea placeholder="Notes" class="w-full border p-2 rounded"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <form id="clientForm" class="space-y-4">
+  <!-- form fields here -->
+  <div class="flex justify-end gap-3 pt-4">
+    <button class="btn btn-secondary" type="button" onclick="closeClientModal()">Cancel</button>
+    <button class="btn btn-primary" type="submit">Save Client</button>
+  </div>
+</form>
+    </div>
+  </div>
+</div>
+<!-- Upload Modal -->
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-container">
+            <!-- Header -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    📁 Import Files
+                </div>
+                <button class="close-btn" onclick="closeUploadModal()">
+                    ×
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" 
+                           id="fileInput" 
+                           class="file-input" 
+                           accept=".csv,.xlsx,.xls" 
+                           multiple
+                           onchange="handleFileSelect(event)">
+                    
+                    <div class="upload-icon" id="uploadIcon">📁</div>
+                    
+                    <div class="upload-text" id="uploadText">
+                        Drag & drop your files here
+                    </div>
+                    
+                    <div class="upload-subtext">
+                        or <strong>click to browse</strong> from your device
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <div class="btn btn-primary" style="pointer-events: none;">
+                            📂 Choose Files
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supported Formats -->
+                <div class="supported-formats">
+                    <h4>📋 Supported File Formats</h4>
+                    <div class="format-list">
+                        <span class="format-tag">CSV</span>
+                        <span class="format-tag">XLSX</span>
+                        <span class="format-tag">XLS</span>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 12px; color: #6b7280;">
+                        Maximum file size: 10MB per file
+                    </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressText">Uploading...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+
+                <!-- File Preview -->
+                <div class="file-preview" id="filePreview">
+                    <h4 style="margin-bottom: 16px; color: #374151;">📄 Selected Files</h4>
+                    <div id="fileList">
+                        <!-- Files will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage">
+                    <!-- Error messages will appear here -->
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <!-- Success messages will appear here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <div class="footer-info">
+                    <span id="fileCount">0 files selected</span> • 
+                    <span id="totalSize">0 KB</span>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn btn-secondary" onclick="clearFiles()">
+                        🗑️ Clear All
+                    </button>
+                    <button class="btn btn-primary" id="uploadBtn" onclick="uploadFiles()" disabled>
+                        <span id="uploadBtnText">⬆️ Upload Files</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Delivery Assignment -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Delivery Assignment</h2>
+        
+        <div class="flex gap-3">
+          <button id="assignSelectedBtn" class="px-3 py-1 bg-green-500 text-white rounded hidden mb-3">
+  Assign Selected
+</button>
+          <button onclick="openModal()" class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
+            + Add Delivery Boy
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending message -->
+      <div class="mb-3">
+        <p id="pendingMsg" class="text-gray-600 italic">Loading...</p>
+      </div>
+
+      <table class="w-full bg-white rounded shadow overflow-hidden">
+  <thead>
+    <tr class="bg-gray-100 text-left">
+            <th class="p-2"><input type="checkbox" id="selectAll"></th>
+            <th class="p-2">Order ID</th>
+            <th class="p-2">Client Name</th>
+            <th class="p-2">Location</th>
+            <th class="p-2">Delivery Date</th>
+            <th class="p-2">Priority</th>
+            <th class="p-2">Assigned To</th>
+            <th class="p-2">Action</th>
+          </tr>
+  </thead>
+  <tbody>
+    <tr class="border-t">
+      <td class="p-2"><input type="checkbox" class="row-select"></td>
+      <td class="p-2">C-1001</td>
+      <td class="p-2">Acme Corp</td>
+      <td class="p-2">Chennai</td>
+      <td class="p-2 delivery-date">-</td>
+      <td class="p-2 priority-cell">-</td>
+      <td class="p-2">
+        <select class="border rounded px-2 py-1 assigned-to">
+          <option>Ravi</option>
+          <option>Ashok</option>
+          <option>Gowtham</option>
+          <option>Manoj</option>
+          <option>Karthik</option>
+        </select>
+      </td>
+      <td class="p-2"><button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button></td>
+    </tr>
+    <tr class="border-t">
+      <td class="p-2"><input type="checkbox" class="row-select"></td>
+      <td class="p-2">C-1002</td>
+      <td class="p-2">Priya</td>
+      <td class="p-2">Coimbatore</td>
+      <td class="p-2 delivery-date">-</td>
+      <td class="p-2 priority-cell">-</td>
+      <td class="p-2">
+        <select class="border rounded px-2 py-1 assigned-to">
+          <option>Ashok (DLV-13)</option>
+          <option>Ravi (DLV-12)</option>
+          <option>Gowtham (DLV-14)</option>
+          <option>Manoj (DLV-15)</option>
+          <option>Karthik (DLV-16)</option>
+        </select>
+      </td>
+      <td class="p-2"><button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button></td>
+    </tr>
+    <tr class="border-t">
+      <td class="p-2"><input type="checkbox" class="row-select"></td>
+      <td class="p-2">C-1003</td>
+      <td class="p-2">Senthil</td>
+      <td class="p-2">Madurai</td>
+      <td class="p-2 delivery-date">-</td>
+      <td class="p-2 priority-cell">-</td>
+      <td class="p-2">
+        <select class="border rounded px-2 py-1 assigned-to">
+          <option>Gowtham (DLV-14)</option>
+          <option>Ravi (DLV-12)</option>
+          <option>Ashok (DLV-13)</option>
+          <option>Manoj (DLV-15)</option>
+          <option>Karthik (DLV-16)</option>
+        </select>
+      </td>
+      <td class="p-2"><button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button></td>
+    </tr>
+  </tbody>
+</table>
+
+
+      <!-- "No pending" card (optional) -->
+      <div id="noPendingCard" class="mt-4 p-4 bg-gray-50 border rounded hidden">
+        <p class="text-gray-500">No pending deliveries for today.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for Adding Delivery Boy -->
+  <div id="deliveryBoyModal" class="hidden fixed inset-0 flex justify-center items-center z-50">
+    <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeModal()"></div>
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+      <h3 class="text-lg font-bold mb-4">Add Delivery Boy</h3>
+      <form id="deliveryBoyForm" class="space-y-3">
+        <input type="text" placeholder="Full Name" class="w-full border rounded px-3 py-2" required />
+        <input type="text" placeholder="Phone Number" class="w-full border rounded px-3 py-2" required />
+        <input type="text" placeholder="Vehicle Number" class="w-full border rounded px-3 py-2" required />
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Assign Modal -->
+  <div id="assignModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+  <div class="bg-white p-6 rounded shadow-lg w-96">
+    <h2 class="text-lg font-bold mb-4">Assign Delivery</h2>
+
+    <label class="block mb-2">Start Date</label>
+    <input type="date" id="startDate" class="border rounded w-full px-2 py-1 mb-3">
+
+    <label class="block mb-2">End Date (Delivery Date)</label>
+    <input type="date" id="endDate" class="border rounded w-full px-2 py-1 mb-3">
+
+    <label class="block mb-2">Priority</label>
+    <select id="priority" class="border rounded w-full px-2 py-1 mb-3">
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+
+    <div class="flex justify-end gap-2">
+      <button onclick="closeAssignModal()" class="px-3 py-1 border rounded">Cancel</button>
+      <button id="saveAssign" class="px-3 py-1 bg-blue-500 text-white rounded">Save</button>
+    </div>
+  </div>
+</div>
+
+
+  <script>
+    // Function to show the modal with alert details
+    function showAlertDetails(title, description, status) {
+      // Close any open modal
+      closeModal();
+
+      // Set the modal content
+      const modalContent = `
+        <div><strong>Title:</strong> ${title}</div>
+        <div><strong>Description:</strong> ${description}</div>
+        <div><strong>Status:</strong> <span class="${status === 'Active' ? 'text-red-600' : 'text-green-600'}">${status}</span></div>
+      `;
+      document.getElementById('modalContent').innerHTML = modalContent;
+
+      // Display the modal
+      document.getElementById('alertModal').classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      document.getElementById('alertModal').classList.add('hidden');
+    }
+  </script>
+
+  
+  <script>
+  lucide.createIcons();
+
+  let assetCounter = 501; // start from last number
+
+  document.getElementById("assetForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const assetName = form.assetName.value.trim();
+    const assetId = "AS-" + assetCounter++;
+
+    // update total count
+    const totalElem = document.getElementById("totalAssets");
+    totalElem.textContent = parseInt(totalElem.textContent) + 1;
+
+    // show popup with both Asset ID & Name
+    document.getElementById("popupMessage").innerHTML = 
+      `<b>${assetName}</b> has been added successfully.<br/>New Asset ID: <b>${assetId}</b>`;
+
+    document.getElementById("successPopup").classList.remove("hidden");
+    document.getElementById("successPopup").classList.add("flex");
+
+    form.reset();
+  });
+
+  function closePopup() {
+    document.getElementById("successPopup").classList.add("hidden");
+    document.getElementById("successPopup").classList.remove("flex");
+  }
+</script>
+
+
+
+<script>
+  function openClientModal() {
+    document.getElementById('clientModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeClientModal() {
+    document.getElementById('clientModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  document.getElementById('clientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('✅ Client created successfully!');
+    closeClientModal();
+  });
+</script>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  
+  <script>
+    
+    // Modal Functions
+    function openUploadModal() {
+        document.getElementById('uploadModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeUploadModal() {
+        document.getElementById('uploadModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        resetModal();
+    }
+
+    function resetModal() {
+        selectedFiles = [];
+        document.getElementById('fileInput').value = '';
+        document.getElementById('filePreview').classList.remove('active');
+        document.getElementById('uploadProgress').classList.remove('active');
+        document.getElementById('errorMessage').classList.remove('active');
+        document.getElementById('successMessage').classList.remove('active');
+        document.getElementById('fileList').innerHTML = '';
+        updateFileCounter();
+        updateUploadButton();
+    }
+
+    // Safe DOM handling
+    document.addEventListener("DOMContentLoaded", () => {
+        const uploadArea = document.getElementById('uploadArea');
+        if (!uploadArea) return; // Prevents error if element is missing
+
+        // Drag and Drop Functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+            document.getElementById('uploadIcon').textContent = '📥';
+            document.getElementById('uploadText').textContent = 'Drop files here to upload';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+            document.getElementById('uploadIcon').textContent = '⬆️';
+            document.getElementById('uploadText').textContent = 'Drag & drop files or click to browse';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+    });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+                document.getElementById('uploadIcon').textContent = '📁';
+                document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            document.getElementById('uploadIcon').textContent = '📁';
+            document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            
+            const files = Array.from(e.dataTransfer.files);
+            processFiles(files);
+        });
+
+        // File Selection
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        function processFiles(files) {
+            hideMessages();
+            
+            const validFiles = [];
+            const errors = [];
+
+            files.forEach(file => {
+                // Check file type
+                const allowedTypes = ['.csv', '.xlsx', '.xls'];
+                const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+                
+                if (!allowedTypes.includes(fileExtension)) {
+                    errors.push(`${file.name}: Unsupported file type. Please use CSV, XLSX, or XLS files.`);
+                    return;
+                }
+
+                // Check file size (10MB limit)
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+                    return;
+                }
+
+                // Check if file already selected
+                if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    errors.push(`${file.name}: File already selected.`);
+                    return;
+                }
+
+                validFiles.push(file);
+            });
+
+            // Show errors if any
+            if (errors.length > 0) {
+                showError(errors.join('<br>'));
+            }
+
+            // Add valid files
+            if (validFiles.length > 0) {
+                selectedFiles.push(...validFiles);
+                displayFiles();
+                updateFileCounter();
+                updateUploadButton();
+                
+                if (errors.length === 0) {
+                    showSuccess(`${validFiles.length} file(s) added successfully!`);
+                }
+            }
+        }
+
+        function displayFiles() {
+            const fileList = document.getElementById('fileList');
+            const filePreview = document.getElementById('filePreview');
+            
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = createFileItem(file, index);
+                fileList.appendChild(fileItem);
+            });
+
+            if (selectedFiles.length > 0) {
+                filePreview.classList.add('active');
+            }
+        }
+
+        function createFileItem(file, index) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            let iconClass, iconText;
+
+            switch (fileExtension) {
+                case 'csv':
+                    iconClass = 'csv-icon';
+                    iconText = '📊';
+                    break;
+                case 'xlsx':
+                case 'xls':
+                    iconClass = 'excel-icon';
+                    iconText = '📗';
+                    break;
+                default:
+                    iconClass = 'error-icon';
+                    iconText = '❌';
+            }
+
+            fileItem.innerHTML = `
+                <div class="file-icon ${iconClass}">
+                    ${iconText}
+                </div>
+                <div class="file-details">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-meta">
+                        <div class="file-size">
+                            📏 ${formatFileSize(file.size)}
+                        </div>
+                        <div class="file-type">
+                            🏷️ ${fileExtension.toUpperCase()}
+                        </div>
+                        <div style="color: #6b7280;">
+                            📅 ${new Date().toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="action-btn preview-btn" onclick="previewFile(${index})">
+                        👁️ Preview
+                    </button>
+                    <button class="action-btn remove-btn" onclick="removeFile(${index})">
+                        🗑️ Remove
+                    </button>
+                </div>
+            `;
+
+            return fileItem;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayFiles();
+            updateFileCounter();
+            updateUploadButton();
+            
+            if (selectedFiles.length === 0) {
+                document.getElementById('filePreview').classList.remove('active');
+            }
+            
+            showSuccess('File removed successfully!');
+        }
+
+        function previewFile(index) {
+            const file = selectedFiles[index];
+            
+            // For demo purposes, show file info
+            alert(`File Preview:\n\nName: ${file.name}\nSize: ${formatFileSize(file.size)}\nType: ${file.type}\nLast Modified: ${new Date(file.lastModified).toLocaleString()}\n\nNote: In a real application, this would show file contents preview.`);
+        }
+
+        function clearFiles() {
+            if (selectedFiles.length === 0) return;
+            
+            if (confirm(`Are you sure you want to remove all ${selectedFiles.length} selected files?`)) {
+                selectedFiles = [];
+                document.getElementById('filePreview').classList.remove('active');
+                updateFileCounter();
+                updateUploadButton();
+                showSuccess('All files cleared successfully!');
+            }
+        }
+
+        function updateFileCounter() {
+            const fileCount = selectedFiles.length;
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            
+            document.getElementById('fileCount').textContent = `${fileCount} file${fileCount !== 1 ? 's' : ''} selected`;
+            document.getElementById('totalSize').textContent = formatFileSize(totalSize);
+        }
+
+        function updateUploadButton() {
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = selectedFiles.length === 0;
+        }
+
+        // Upload Functionality
+        function uploadFiles() {
+            if (selectedFiles.length === 0) {
+                showError('Please select at least one file to upload.');
+                return;
+            }
+
+            hideMessages();
+            showUploadProgress();
+            
+            // Simulate upload process
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        hideUploadProgress();
+                        showSuccess(`Successfully uploaded ${selectedFiles.length} file(s)! 🎉`);
+                        
+                        // In a real application, you would process the files here
+                        console.log('Uploaded files:', selectedFiles);
+                        
+                        // Reset after success
+                        setTimeout(() => {
+                            closeUploadModal();
+                        }, 2000);
+                    }, 500);
+                }
+                
+                updateProgress(progress);
+            }, 200);
+        }
+
+        function showUploadProgress() {
+            document.getElementById('uploadProgress').classList.add('active');
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtnText').innerHTML = '<span class="loading"></span> Uploading...';
+        }
+
+        function hideUploadProgress() {
+            document.getElementById('uploadProgress').classList.remove('active');
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadBtnText').innerHTML = '⬆️ Upload Files';
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            
+            if (percent < 50) {
+                progressText.textContent = 'Uploading files...';
+            } else if (percent < 80) {
+                progressText.textContent = 'Processing files...';
+            } else if (percent < 95) {
+                progressText.textContent = 'Almost done...';
+            } else {
+                progressText.textContent = 'Finalizing upload...';
+            }
+        }
+
+        // Message Functions
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.innerHTML = '❌ ' + message;
+            errorElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.innerHTML = '✅ ' + message;
+            successElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 3000);
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('uploadModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('uploadModal')) {
+                closeUploadModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('uploadModal').classList.contains('active')) {
+                closeUploadModal();
+            }
+        });
+
+        // Prevent default drag behaviors on the entire page
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    </script>
+     
+
+  <script>
+    lucide.createIcons();
+
+    function openModal() {
+      document.getElementById("deliveryBoyModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("deliveryBoyModal").classList.add("hidden");
+    }
+
+    // Success banner function
+    function showSuccessBanner() {
+      let banner = document.getElementById("successBanner");
+      banner.classList.remove("hidden");
+      setTimeout(()=> banner.classList.add("hidden"), 3000);
+    }
+
+    // Handle form submit
+    document.getElementById("deliveryBoyForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      closeModal();
+      showSuccessBanner();
+    });
+
+    // Assign / Reassign Button Toggle
+    document.querySelectorAll(".assign-btn").forEach(btn => {
+      btn.addEventListener("click", function(){
+        this.textContent = "Assigned";
+        this.classList.remove("bg-blue-500");
+        this.classList.add("bg-green-600");
+      });
+    });
+
+    // Status Badge Colors
+    document.querySelectorAll(".status-badge").forEach(badge => {
+      const status = badge.getAttribute("data-status");
+      let baseClass = "px-2 py-1 rounded text-sm";
+      if(status === "In Progress") badge.className = baseClass + " bg-yellow-100 text-yellow-700 status-badge";
+      if(status === "Dispatched") badge.className = baseClass + " bg-blue-100 text-blue-700 status-badge";
+      if(status === "Yet To Start") badge.className = baseClass + " bg-gray-300 text-gray-800 status-badge";
+      if(status === "Assigned") badge.className = baseClass + " bg-green-100 text-green-700 status-badge";
+    });
+  </script>
+  
+
+<script>
+  const modal = document.getElementById("assignModal");
+  const saveBtn = document.getElementById("saveAssign");
+  const assignSelectedBtn = document.getElementById("assignSelectedBtn");
+  const noPendingMsg = document.getElementById("noPendingMsg");
+  let selectedRows = [];
+
+  // Open modal (single row)
+  document.querySelectorAll(".assign-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      selectedRows = [this.closest("tr")];
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    });
+  });
+
+  // Bulk assign button
+  assignSelectedBtn.addEventListener("click", function () {
+    selectedRows = Array.from(document.querySelectorAll(".row-select:checked")).map(cb => cb.closest("tr"));
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  // Save changes
+  saveBtn.addEventListener("click", function () {
+    const endDate = document.getElementById("endDate").value;
+    const priority = document.getElementById("priority").value;
+
+    selectedRows.forEach(row => {
+      // update delivery date
+      row.querySelector(".delivery-date").textContent = endDate;
+
+      // update priority badge
+      let badge = "";
+      if (priority === "High") badge = `<span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm">High</span>`;
+      if (priority === "Medium") badge = `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">Medium</span>`;
+      if (priority === "Low") badge = `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Low</span>`;
+      row.querySelector(".priority-cell").innerHTML = badge;
+      
+
+      // update button
+      const btn = row.querySelector(".assign-btn");
+      btn.textContent = "Assigned";
+      btn.classList.remove("bg-blue-500");
+      btn.classList.add("bg-green-500");
+      btn.disabled = true;
+    });
+modal.classList.add("hidden");
+    updatePendingMessage();
+
+    closeAssignModal();
+  });
+
+  function closeAssignModal() {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+
+  // Handle checkboxes & Assign Selected visibility
+  const checkboxes = document.querySelectorAll(".row-select");
+  const selectAll = document.getElementById("selectAll");
+
+  function toggleAssignSelected() {
+    const checked = document.querySelectorAll(".row-select:checked").length;
+    assignSelectedBtn.classList.toggle("hidden", checked < 2);
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener("change", toggleAssignSelected));
+  selectAll.addEventListener("change", function () {
+    checkboxes.forEach(cb => (cb.checked = this.checked));
+    toggleAssignSelected();
+  });
+
+
+  // Pending message
+    function updatePendingMessage() {
+      const rows = document.querySelectorAll("tbody tr");
+      let pending = 0;
+      rows.forEach(row => {
+        const btn = row.querySelector(".assign-btn");
+        const assigned = btn && btn.textContent.trim() === "Assigned";
+        if (!assigned) pending++;
+      });
+      const msg = document.getElementById("pendingMsg");
+      if (pending === 0) msg.textContent = "No pending orders for delivery.";
+      else msg.textContent = pending === 1 ? "1 orders pending assignment for delivery." : `${pending} orders pending assignment for delivery..`;
+    }
+
+    // Init
+    updatePendingMessage();
+  </script>
+</script>
+<section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Clients</h2>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="button" onclick="openUploadModal()">Import CSV</button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow">
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input class="border p-2 rounded" placeholder="Organization Name" />
+          <input class="border p-2 rounded" placeholder="Contact Person" />
+          <input type="email" class="border p-2 rounded" placeholder="Email" />
+          <input type="tel" class="border p-2 rounded" placeholder="Phone" />
+          <button type="button" 
+        class="bg-blue-600 text-white px-4 py-2 rounded md:col-span-2" 
+        onclick="openClientModal()">
+  Add Client
+</button>
+          <!-- Create Client Modal -->
+<div id="clientModal" class="modal-overlay">
+  <div class="modal-container max-w-xl w-full">
+    <div class="modal-header">
+      <div class="modal-title">📝 Create Client</div>
+      <button class="close-btn" onclick="closeClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="clientForm" class="space-y-4">
+        <input type="text" placeholder="Organization Name" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Contact Person" class="w-full border p-2 rounded" required>
+        <input type="email" placeholder="Email Address" class="w-full border p-2 rounded" required>
+        <input type="tel" placeholder="Phone Number" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Address" class="w-full border p-2 rounded">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="City" class="border p-2 rounded">
+          <input type="text" placeholder="State / Province" class="border p-2 rounded">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="Country" class="border p-2 rounded">
+          <input type="text" placeholder="GST / Tax ID" class="border p-2 rounded">
+        </div>
+        <textarea placeholder="Notes" class="w-full border p-2 rounded"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <form id="clientForm" class="space-y-4">
+  <!-- form fields here -->
+  <div class="flex justify-end gap-3 pt-4">
+    <button class="btn btn-secondary" type="button" onclick="closeClientModal()">Cancel</button>
+    <button class="btn btn-primary" type="submit">Save Client</button>
+  </div>
+</form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openClientModal() {
+    document.getElementById('clientModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeClientModal() {
+    document.getElementById('clientModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  document.getElementById('clientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('✅ Client created successfully!');
+    closeClientModal();
+  });
+</script>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <<!-- Upload Modal -->
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-container">
+            <!-- Header -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    📁 Import Files
+                </div>
+                <button class="close-btn" onclick="closeUploadModal()">
+                    ×
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" 
+                           id="fileInput" 
+                           class="file-input" 
+                           accept=".csv,.xlsx,.xls" 
+                           multiple
+                           onchange="handleFileSelect(event)">
+                    
+                    <div class="upload-icon" id="uploadIcon">📁</div>
+                    
+                    <div class="upload-text" id="uploadText">
+                        Drag & drop your files here
+                    </div>
+                    
+                    <div class="upload-subtext">
+                        or <strong>click to browse</strong> from your device
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <div class="btn btn-primary" style="pointer-events: none;">
+                            📂 Choose Files
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supported Formats -->
+                <div class="supported-formats">
+                    <h4>📋 Supported File Formats</h4>
+                    <div class="format-list">
+                        <span class="format-tag">CSV</span>
+                        <span class="format-tag">XLSX</span>
+                        <span class="format-tag">XLS</span>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 12px; color: #6b7280;">
+                        Maximum file size: 10MB per file
+                    </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressText">Uploading...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+
+                <!-- File Preview -->
+                <div class="file-preview" id="filePreview">
+                    <h4 style="margin-bottom: 16px; color: #374151;">📄 Selected Files</h4>
+                    <div id="fileList">
+                        <!-- Files will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage">
+                    <!-- Error messages will appear here -->
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <!-- Success messages will appear here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <div class="footer-info">
+                    <span id="fileCount">0 files selected</span> • 
+                    <span id="totalSize">0 KB</span>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn btn-secondary" onclick="clearFiles()">
+                        🗑️ Clear All
+                    </button>
+                    <button class="btn btn-primary" id="uploadBtn" onclick="uploadFiles()" disabled>
+                        <span id="uploadBtnText">⬆️ Upload Files</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+        let selectedFiles = [];
+        let isDragging = false;
+
+        // Modal Functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            resetModal();
+        }
+
+        function resetModal() {
+            selectedFiles = [];
+            document.getElementById('fileInput').value = '';
+            document.getElementById('filePreview').classList.remove('active');
+            document.getElementById('uploadProgress').classList.remove('active');
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+            document.getElementById('fileList').innerHTML = '';
+            updateFileCounter();
+            updateUploadButton();
+        }
+
+        // Drag and Drop Functionality
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+            document.getElementById('uploadIcon').textContent = '📥';
+            document.getElementById('uploadText').textContent = 'Drop files here to upload';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+                document.getElementById('uploadIcon').textContent = '📁';
+                document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            document.getElementById('uploadIcon').textContent = '📁';
+            document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            
+            const files = Array.from(e.dataTransfer.files);
+            processFiles(files);
+        });
+
+        // File Selection
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        function processFiles(files) {
+            hideMessages();
+            
+            const validFiles = [];
+            const errors = [];
+
+            files.forEach(file => {
+                // Check file type
+                const allowedTypes = ['.csv', '.xlsx', '.xls'];
+                const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+                
+                if (!allowedTypes.includes(fileExtension)) {
+                    errors.push(`${file.name}: Unsupported file type. Please use CSV, XLSX, or XLS files.`);
+                    return;
+                }
+
+                // Check file size (10MB limit)
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+                    return;
+                }
+
+                // Check if file already selected
+                if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    errors.push(`${file.name}: File already selected.`);
+                    return;
+                }
+
+                validFiles.push(file);
+            });
+
+            // Show errors if any
+            if (errors.length > 0) {
+                showError(errors.join('<br>'));
+            }
+
+            // Add valid files
+            if (validFiles.length > 0) {
+                selectedFiles.push(...validFiles);
+                displayFiles();
+                updateFileCounter();
+                updateUploadButton();
+                
+                if (errors.length === 0) {
+                    showSuccess(`${validFiles.length} file(s) added successfully!`);
+                }
+            }
+        }
+
+        function displayFiles() {
+            const fileList = document.getElementById('fileList');
+            const filePreview = document.getElementById('filePreview');
+            
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = createFileItem(file, index);
+                fileList.appendChild(fileItem);
+            });
+
+            if (selectedFiles.length > 0) {
+                filePreview.classList.add('active');
+            }
+        }
+
+        function createFileItem(file, index) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            let iconClass, iconText;
+
+            switch (fileExtension) {
+                case 'csv':
+                    iconClass = 'csv-icon';
+                    iconText = '📊';
+                    break;
+                case 'xlsx':
+                case 'xls':
+                    iconClass = 'excel-icon';
+                    iconText = '📗';
+                    break;
+                default:
+                    iconClass = 'error-icon';
+                    iconText = '❌';
+            }
+
+            fileItem.innerHTML = `
+                <div class="file-icon ${iconClass}">
+                    ${iconText}
+                </div>
+                <div class="file-details">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-meta">
+                        <div class="file-size">
+                            📏 ${formatFileSize(file.size)}
+                        </div>
+                        <div class="file-type">
+                            🏷️ ${fileExtension.toUpperCase()}
+                        </div>
+                        <div style="color: #6b7280;">
+                            📅 ${new Date().toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="action-btn preview-btn" onclick="previewFile(${index})">
+                        👁️ Preview
+                    </button>
+                    <button class="action-btn remove-btn" onclick="removeFile(${index})">
+                        🗑️ Remove
+                    </button>
+                </div>
+            `;
+
+            return fileItem;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayFiles();
+            updateFileCounter();
+            updateUploadButton();
+            
+            if (selectedFiles.length === 0) {
+                document.getElementById('filePreview').classList.remove('active');
+            }
+            
+            showSuccess('File removed successfully!');
+        }
+
+        function previewFile(index) {
+            const file = selectedFiles[index];
+            
+            // For demo purposes, show file info
+            alert(`File Preview:\n\nName: ${file.name}\nSize: ${formatFileSize(file.size)}\nType: ${file.type}\nLast Modified: ${new Date(file.lastModified).toLocaleString()}\n\nNote: In a real application, this would show file contents preview.`);
+        }
+
+        function clearFiles() {
+            if (selectedFiles.length === 0) return;
+            
+            if (confirm(`Are you sure you want to remove all ${selectedFiles.length} selected files?`)) {
+                selectedFiles = [];
+                document.getElementById('filePreview').classList.remove('active');
+                updateFileCounter();
+                updateUploadButton();
+                showSuccess('All files cleared successfully!');
+            }
+        }
+
+        function updateFileCounter() {
+            const fileCount = selectedFiles.length;
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            
+            document.getElementById('fileCount').textContent = `${fileCount} file${fileCount !== 1 ? 's' : ''} selected`;
+            document.getElementById('totalSize').textContent = formatFileSize(totalSize);
+        }
+
+        function updateUploadButton() {
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = selectedFiles.length === 0;
+        }
+
+        // Upload Functionality
+        function uploadFiles() {
+            if (selectedFiles.length === 0) {
+                showError('Please select at least one file to upload.');
+                return;
+            }
+
+            hideMessages();
+            showUploadProgress();
+            
+            // Simulate upload process
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        hideUploadProgress();
+                        showSuccess(`Successfully uploaded ${selectedFiles.length} file(s)! 🎉`);
+                        
+                        // In a real application, you would process the files here
+                        console.log('Uploaded files:', selectedFiles);
+                        
+                        // Reset after success
+                        setTimeout(() => {
+                            closeUploadModal();
+                        }, 2000);
+                    }, 500);
+                }
+                
+                updateProgress(progress);
+            }, 200);
+        }
+
+        function showUploadProgress() {
+            document.getElementById('uploadProgress').classList.add('active');
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtnText').innerHTML = '<span class="loading"></span> Uploading...';
+        }
+
+        function hideUploadProgress() {
+            document.getElementById('uploadProgress').classList.remove('active');
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadBtnText').innerHTML = '⬆️ Upload Files';
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            
+            if (percent < 50) {
+                progressText.textContent = 'Uploading files...';
+            } else if (percent < 80) {
+                progressText.textContent = 'Processing files...';
+            } else if (percent < 95) {
+                progressText.textContent = 'Almost done...';
+            } else {
+                progressText.textContent = 'Finalizing upload...';
+            }
+        }
+
+        // Message Functions
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.innerHTML = '❌ ' + message;
+            errorElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.innerHTML = '✅ ' + message;
+            successElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 3000);
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('uploadModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('uploadModal')) {
+                closeUploadModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('uploadModal').classList.contains('active')) {
+                closeUploadModal();
+            }
+        });
+
+        // Prevent default drag behaviors on the entire page
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    </script>
+     <!-- Dashboard Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <!-- Top Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <a href="invoices.html" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-blue-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="file-text" class="w-5 h-5 mr-2 text-blue-500"></i>Invoices
+          </h2>
+          <p class="text-gray-600 mt-2">Paid: <b>12</b> | Pending: <b>3</b></p>
+        </a>
+
+        <a href="orders-commercial.html" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-green-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-green-500"></i>Orders
+          </h2>
+          <p class="text-gray-600 mt-2">Completed: <b>20</b> | In-Progress: <b>5</b> | Pending: <b>2</b></p>
+        </a>
+
+        <a href="assets.html#low-stock" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-red-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-red-500"></i>Low Stock
+          </h2>
+          <p class="text-gray-600 mt-2"><span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm">5 cylinders low</span></p>
+        </a>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-indigo-500"></i>Order Trends
+          </h2>
+          <canvas id="ordersChart" height="140"></canvas>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center">
+            <i data-lucide="bar-chart" class="w-5 h-5 mr-2 text-blue-500"></i>Invoice Status
+          </h2>
+          <canvas id="invoicesBarChart" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Orders Chart
+    const ctx = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Orders',
+          data: [12, 19, 14, 17, 22, 18],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99,102,241,0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#6366f1'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { display: false } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Invoices Bar Chart
+    const invoicesBarCtx = document.getElementById('invoicesBarChart').getContext('2d');
+    new Chart(invoicesBarCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Paid', 'Pending'],
+        datasets: [{
+          label: 'Invoices',
+          data: [12, 3],
+          backgroundColor: ['#3b82f6', '#f59e42'],
+          borderRadius: 8,
+          barThickness: 32
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const menuBtn = document.getElementById('menuBtn');
+    const homeLink = document.getElementById('homeLink');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    }
+
+    menuBtn.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    homeLink.addEventListener('click', (e) => {
+      e.preventDefault(); // prevent navigating away
+      openSidebar();
+    });
+  </script>
+   <!-- Main Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Invoices & Payments</h2>
+        <div class="flex gap-3">
+          <button onclick="openUploadModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition-all duration-300 flex items-center gap-2">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            Import CSV
+          </button>
+          <button onclick="openGenerateInvoiceModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-all duration-300 flex items-center gap-2">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Generate Invoice
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-green-100 rounded-lg">
+              <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Paid Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹2,45,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-yellow-100 rounded-lg">
+              <i data-lucide="clock" class="w-6 h-6 text-yellow-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Pending Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹85,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-red-100 rounded-lg">
+              <i data-lucide="alert-circle" class="w-6 h-6 text-red-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Overdue Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹32,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-blue-100 rounded-lg">
+              <i data-lucide="file-text" class="w-6 h-6 text-blue-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Total Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">156</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoices Table -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Invoices</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table id="invoiceTable" class="w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice No</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1001</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Acme Corporation</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹45,000</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-15</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1001')">
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1001')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1001')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1001')">Send</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1002</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Apollo Industries</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹78,500</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-14</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1002')">
+                    <option value="Pending">Pending</option>
+                    <option value="Paid" selected>Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1002')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1002')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1002')">Send</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1003</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Tech Solutions Ltd</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹32,000</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-10</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1003')">
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue" selected>Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1003')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1003')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1003')">Send</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Invoice Modal -->
+  <div id="invoiceModal" class="invoice-modal">
+    <div class="invoice-container">
+      <div class="invoice-box">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+          <div class="company-logo">
+            <div class="logo-icon">LA</div>
+            <div class="company-info">
+              <div class="company-name">LiveAir</div>
+              <div class="company-tagline">Cylinder Delivery Service</div>
+            </div>
+          </div>
+          <h1 class="invoice-title">INVOICE</h1>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+          <div class="invoice-info">
+            <div class="info-title">Company Information</div>
+            <div class="info-item">
+              <span class="info-label">Address:</span>
+              <span class="info-value">123 Business Avenue, City, State 12345</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone:</span>
+              <span class="info-value">(555) 123-4567</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">admin@liveair.com</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">GSTIN:</span>
+              <span class="info-value">12AABCC1234F1Z5</span>
+            </div>
+          </div>
+
+          <div class="billing-info">
+            <div class="info-title">Invoice Details</div>
+            <div class="info-item">
+              <span class="info-label">Invoice #:</span>
+              <span class="info-value" id="modalInvoiceNumber">INV-1001</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date:</span>
+              <span class="info-value" id="modalInvoiceDate">2025-01-15</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Due Date:</span>
+              <span class="info-value" id="modalDueDate">2025-02-15</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status:</span>
+              <span class="info-value" id="modalInvoiceStatus">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing To -->
+        <div class="billing-info" style="margin-bottom: 30px;">
+          <div class="info-title">Billed To:</div>
+          <div class="info-item">
+            <span class="info-label">Company:</span>
+            <span class="info-value" id="modalClientName">Acme Corporation</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Address:</span>
+            <span class="info-value" id="modalClientAddress">456 Client Street, Business District</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value" id="modalClientEmail">client@acme.com</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Phone:</span>
+            <span class="info-value" id="modalClientPhone">(555) 987-6543</span>
+          </div>
+        </div>
+
+        <!-- Invoice Table -->
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="modalInvoiceItems">
+            <tr>
+              <td>CO2 Cylinder</td>
+              <td>20 LBS CO2 Gas Cylinder with delivery</td>
+              <td>2</td>
+              <td>₹30,000.00</td>
+            </tr>
+            <tr>
+              <td>Delivery Service</td>
+              <td>Express delivery and installation</td>
+              <td>1</td>
+              <td>₹5,000.00</td>
+              <td>₹5,000.00</td>
+            </tr>
+            <tr>
+              <td>Nitrogen Cylinder</td>
+              <td>50 LBS Nitrogen Gas Cylinder</td>
+              <td>1</td>
+              <td>₹10,000.00</td>
+              <td>₹10,000.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Total Section -->
+        <div class="total-section">
+          <div class="total-details">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="modalSubtotal">₹45,000.00</span>
+            </div>
+            <div class="total-row">
+              <span>Tax (18% GST):</span>
+              <span id="modalTax">₹8,100.00</span>
+            </div>
+            <div class="total-row">
+              <span>Delivery Charges:</span>
+              <span id="modalDelivery">₹500.00</span>
+            </div>
+            <div class="total-row final">
+              <span>Total Amount:</span>
+              <span id="modalTotal">₹53,600.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+          <div class="terms-title">Terms and Conditions:</div>
+          <div class="terms-text">
+            • Payment is due within 30 days of invoice date.<br>
+            • Late payments may incur additional charges.<br>
+            • All cylinders remain property of LiveAir until full payment.<br>
+            • Any disputes must be reported within 7 days of delivery.
+          </div>
+        </div>
+
+        <!-- Invoice Footer -->
+        <div class="invoice-footer">
+          <p><strong>Thank you for choosing LiveAir!</strong></p>
+          <p>For any queries, contact us at support@liveair.com or (555) 123-4567</p>
+        </div>
+      </div>
+
+      <!-- Modal Actions -->
+      <div class="modal-actions">
+        <div>
+          <button class="action-btn btn-secondary" onclick="closeInvoiceModal()">
+            <i data-lucide="x" class="w-4 h-4"></i>
+            Close
+          </button>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="action-btn btn-primary" onclick="downloadInvoicePDF()">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Download PDF
+          </button>
+          <button class="action-btn btn-success" onclick="sendInvoiceEmail()">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            Send Email
+          </button>
+          <button class="action-btn btn-primary" onclick="printInvoice()">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Upload Modal -->
+  <div id="uploadModal" class="upload-modal">
+    <div class="upload-container">
+      <!-- Upload Header -->
+      <div class="upload-header">
+        <div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 12px;">
+          <i data-lucide="upload" class="w-6 h-6"></i>
+          Import Invoice Data
+        </div>
+        <button onclick="closeUploadModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; font-size: 24px; cursor: pointer; padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          ×
+        </button>
+      </div>
+
+      <!-- Upload Body -->
+      <div style="padding: 32px 24px;">
+        <!-- Upload Area -->
+        <div class="upload-area" id="uploadArea">
+          <input type="file" 
+                 id="fileInput" 
+                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" 
+                 accept=".csv,.xlsx,.xls" 
+                 multiple
+                 onchange="handleFileSelect(event)">
+          
+          <div style="font-size: 48px; color: #6b7280; margin-bottom: 16px;" id="uploadIcon">📁</div>
+          
+          <div style="font-size: 18px; font-weight: 500; color: #374151; margin-bottom: 8px;" id="uploadText">
+            Drag & drop your files here
+          </div>
+          
+          <div style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+            or <strong>click to browse</strong> from your device
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <div class="action-btn btn-primary" style="pointer-events: none;">
+              📂 Choose Files
+            </div>
+          </div>
+        </div>
+
+        <!-- Supported Formats -->
+        <div style="margin: 24px 0; padding: 20px; background: #f0f9ff; border-radius: 8px; border: 1px solid #0ea5e9;">
+          <h4 style="color: #0c4a6e; margin-bottom: 12px; font-size: 16px; font-weight: 600;">📋 Supported File Formats</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">CSV</span>
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">XLSX</span>
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">XLS</span>
+          </div>
+          <div style="font-size: 12px; color: #6b7280;">
+            Maximum file size: 10MB per file
+          </div>
+        </div>
+
+        <!-- File Preview -->
+        <div id="filePreview" style="margin-top: 24px; display: none;">
+          <h4 style="margin-bottom: 16px; color: #374151;">📄 Selected Files</h4>
+          <div id="fileList">
+            <!-- Files will be displayed here -->
+          </div>
+        </div>
+
+        <!-- Upload Progress -->
+        <div id="uploadProgress" style="margin-top: 16px; display: none;">
+          <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+            <div id="progressFill" style="height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); transition: width 0.3s ease; width: 0%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 14px; color: #6b7280;">
+            <span id="progressText">Uploading...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="errorMessage" style="background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 8px; border: 1px solid #fecaca; margin-top: 16px; display: none; font-size: 14px;">
+          <!-- Error messages will appear here -->
+        </div>
+
+        <div id="successMessage" style="background: #f0fdf4; color: #16a34a; padding: 12px 16px; border-radius: 8px; border: 1px solid #bbf7d0; margin-top: 16px; display: none; font-size: 14px;">
+          <!-- Success messages will appear here -->
+        </div>
+      </div>
+
+      <!-- Upload Footer -->
+      <div style="padding: 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f9fafb;">
+        <div style="font-size: 12px; color: #6b7280;">
+          <span id="fileCount">0 files selected</span> • 
+          <span id="totalSize">0 KB</span>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="action-btn btn-secondary" onclick="clearFiles()">
+            🗑️ Clear All
+          </button>
+          <button class="action-btn btn-primary" id="uploadBtn" onclick="uploadFiles()" disabled>
+            <span id="uploadBtnText">⬆️ Upload Files</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Global variables
+    let selectedFiles = [];
+
+    // Sample invoice data
+    const invoiceData = {
+      'INV-1001': {
+        number: 'INV-1001',
+        client: 'Acme Corporation',
+        clientAddress: '456 Client Street, Business District',
+        clientEmail: 'client@acme.com',
+        clientPhone: '(555) 987-6543',
+        date: '2025-01-15',
+        dueDate: '2025-02-15',
+        status: 'Pending',
+        items: [
+          { item: 'CO2 Cylinder', description: '20 LBS CO2 Gas Cylinder with delivery', quantity: 2, rate: 15000, amount: 30000 },
+          { item: 'Delivery Service', description: 'Express delivery and installation', quantity: 1, rate: 5000, amount: 5000 },
+          { item: 'Nitrogen Cylinder', description: '50 LBS Nitrogen Gas Cylinder', quantity: 1, rate: 10000, amount: 10000 }
+        ],
+        subtotal: 45000,
+        tax: 8100,
+        delivery: 500,
+        total: 53600
+      },
+      'INV-1002': {
+        number: 'INV-1002',
+        client: 'Apollo Industries',
+        clientAddress: '789 Industry Road, Manufacturing Zone',
+        clientEmail: 'contact@apollo.com',
+        clientPhone: '(555) 876-5432',
+        date: '2025-01-14',
+        dueDate: '2025-02-14',
+        status: 'Paid',
+        items: [
+          { item: 'Oxygen Cylinder', description: '40 LBS Medical Oxygen Cylinder', quantity: 3, rate: 20000, amount: 60000 },
+          { item: 'Installation', description: 'Professional installation service', quantity: 1, rate: 8000, amount: 8000 }
+        ],
+        subtotal: 68000,
+        tax: 12240,
+        delivery: 750,
+        total: 80990
+      },
+      'INV-1003': {
+        number: 'INV-1003',
+        client: 'Tech Solutions Ltd',
+        clientAddress: '321 Tech Park, Innovation District',
+        clientEmail: 'billing@techsolutions.com',
+        clientPhone: '(555) 765-4321',
+        date: '2025-01-10',
+        dueDate: '2025-02-10',
+        status: 'Overdue',
+        items: [
+          { item: 'Argon Cylinder', description: '25 LBS Argon Gas for welding', quantity: 2, rate: 12000, amount: 24000 },
+          { item: 'Regulator', description: 'High-pressure gas regulator', quantity: 2, rate: 4000, amount: 8000 }
+        ],
+        subtotal: 32000,
+        tax: 5760,
+        delivery: 400,
+        total: 38160
+      }
+    };
+
+    // Invoice Functions
+    function viewInvoice(invoiceId) {
+      const invoice = invoiceData[invoiceId];
+      if (!invoice) {
+        alert('Invoice data not found');
+        return;
+      }
+
+      // Populate modal with invoice data
+      document.getElementById('modalInvoiceNumber').textContent = invoice.number;
+      document.getElementById('modalInvoiceDate').textContent = invoice.date;
+      document.getElementById('modalDueDate').textContent = invoice.dueDate;
+      document.getElementById('modalInvoiceStatus').textContent = invoice.status;
+      document.getElementById('modalClientName').textContent = invoice.client;
+      document.getElementById('modalClientAddress').textContent = invoice.clientAddress;
+      document.getElementById('modalClientEmail').textContent = invoice.clientEmail;
+      document.getElementById('modalClientPhone').textContent = invoice.clientPhone;
+
+      // Populate invoice items
+      const itemsContainer = document.getElementById('modalInvoiceItems');
+      itemsContainer.innerHTML = '';
+      
+      invoice.items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.item}</td>
+          <td>${item.description}</td>
+          <td>${item.quantity}</td>
+          <td>₹${item.rate.toLocaleString()}.00</td>
+          <td>₹${item.amount.toLocaleString()}.00</td>
+        `;
+        itemsContainer.appendChild(row);
+      });
+
+      // Populate totals
+      document.getElementById('modalSubtotal').textContent = `₹${invoice.subtotal.toLocaleString()}.00`;
+      document.getElementById('modalTax').textContent = `₹${invoice.tax.toLocaleString()}.00`;
+      document.getElementById('modalDelivery').textContent = `₹${invoice.delivery.toLocaleString()}.00`;
+      document.getElementById('modalTotal').textContent = `₹${invoice.total.toLocaleString()}.00`;
+
+      // Show modal
+      document.getElementById('invoiceModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('invoiceModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function openGenerateInvoiceModal() {
+      // For demo purposes, we'll just show a success message
+      showNotification('Invoice generation feature coming soon!', 'info');
+    }
+
+    function downloadInvoice(invoiceId) {
+      showNotification(`Downloading invoice ${invoiceId}...`, 'success');
+      // Simulate download
+      setTimeout(() => {
+        showNotification(`Invoice ${invoiceId} downloaded successfully!`, 'success');
+      }, 1500);
+    }
+
+    function sendInvoice(invoiceId) {
+      showNotification(`Sending invoice ${invoiceId} via email...`, 'info');
+      setTimeout(() => {
+        showNotification(`Invoice ${invoiceId} sent successfully!`, 'success');
+      }, 2000);
+    }
+
+    function downloadInvoicePDF() {
+      showNotification('Generating PDF...', 'info');
+      setTimeout(() => {
+        showNotification('PDF downloaded successfully!', 'success');
+        closeInvoiceModal();
+      }, 2000);
+    }
+
+    function sendInvoiceEmail() {
+      showNotification('Sending email...', 'info');
+      setTimeout(() => {
+        showNotification('Invoice sent via email successfully!', 'success');
+        closeInvoiceModal();
+      }, 2000);
+    }
+
+    function printInvoice() {
+      window.print();
+    }
+
+    function updatePaymentStatus(selectElement, invoiceId) {
+      const status = selectElement.value;
+      showNotification(`Invoice ${invoiceId} status updated to: ${status}`, 'success');
+      
+      // Update the invoice data
+      if (invoiceData[invoiceId]) {
+        invoiceData[invoiceId].status = status;
+      }
+      
+      // Update visual styling based on status
+      const row = selectElement.closest('tr');
+      row.classList.remove('bg-green-50', 'bg-yellow-50', 'bg-red-50');
+      
+      switch(status) {
+        case 'Paid':
+          row.classList.add('bg-green-50');
+          break;
+        case 'Pending':
+          row.classList.add('bg-yellow-50');
+          break;
+        case 'Overdue':
+          row.classList.add('bg-red-50');
+          break;
+      }
+    }
+
+    // File Upload Functions
+    function openUploadModal() {
+      document.getElementById('uploadModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('uploadModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      resetUploadModal();
+    }
+
+    function resetUploadModal() {
+      selectedFiles = [];
+      document.getElementById('fileInput').value = '';
+      document.getElementById('filePreview').style.display = 'none';
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('fileList').innerHTML = '';
+      updateFileCounter();
+      updateUploadButton();
+    }
+
+    // Drag and Drop functionality
+    const uploadArea = document.getElementById('uploadArea');
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+      document.getElementById('uploadIcon').textContent = '📥';
+      document.getElementById('uploadText').textContent = 'Drop files here to upload';
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      if (!uploadArea.contains(e.relatedTarget)) {
+        uploadArea.classList.remove('dragover');
+        document.getElementById('uploadIcon').textContent = '📁';
+        document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+      }
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      document.getElementById('uploadIcon').textContent = '📁';
+      document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+      
+      const files = Array.from(e.dataTransfer.files);
+      processFiles(files);
+    });
+
+    function handleFileSelect(event) {
+      const files = Array.from(event.target.files);
+      processFiles(files);
+    }
+
+    function processFiles(files) {
+      hideUploadMessages();
+      
+      const validFiles = [];
+      const errors = [];
+
+      files.forEach(file => {
+        // Check file type
+        const allowedTypes = ['.csv', '.xlsx', '.xls'];
+        const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedTypes.includes(fileExtension)) {
+          errors.push(`${file.name}: Unsupported file type. Please use CSV, XLSX, or XLS files.`);
+          return;
+        }
+
+        // Check file size (10MB limit)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+          return;
+        }
+
+        // Check if file already selected
+        if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+          errors.push(`${file.name}: File already selected.`);
+          return;
+        }
+
+        validFiles.push(file);
+      });
+
+      // Show errors if any
+      if (errors.length > 0) {
+        showUploadError(errors.join('<br>'));
+      }
+
+      // Add valid files
+      if (validFiles.length > 0) {
+        selectedFiles.push(...validFiles);
+        displayFiles();
+        updateFileCounter();
+        updateUploadButton();
+        
+        if (errors.length === 0) {
+          showUploadSuccess(`${validFiles.length} file(s) added successfully!`);
+        }
+      }
+    }
+
+    function displayFiles() {
+      const fileList = document.getElementById('fileList');
+      const filePreview = document.getElementById('filePreview');
+      
+      fileList.innerHTML = '';
+      
+      selectedFiles.forEach((file, index) => {
+        const fileItem = createFileItem(file, index);
+        fileList.appendChild(fileItem);
+      });
+
+      if (selectedFiles.length > 0) {
+        filePreview.style.display = 'block';
+      }
+    }
+
+    function createFileItem(file, index) {
+      const fileItem = document.createElement('div');
+      fileItem.style.cssText = 'display: flex; align-items: center; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; transition: all 0.3s ease;';
+
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      let iconText, iconStyle;
+
+      switch (fileExtension) {
+        case 'csv':
+          iconText = '📊';
+          iconStyle = 'background: #dcfce7; color: #16a34a;';
+          break;
+        case 'xlsx':
+        case 'xls':
+          iconText = '📗';
+          iconStyle = 'background: #fef3c7; color: #d97706;';
+          break;
+        default:
+          iconText = '❌';
+          iconStyle = 'background: #fecaca; color: #dc2626;';
+      }
+
+      fileItem.innerHTML = `
+        <div style="font-size: 32px; margin-right: 16px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 8px; ${iconStyle}">
+          ${iconText}
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; color: #1f2937; font-size: 16px; margin-bottom: 4px;">${file.name}</div>
+          <div style="display: flex; align-items: center; gap: 16px; font-size: 14px; color: #6b7280;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              📏 ${formatFileSize(file.size)}
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">
+              🏷️ ${fileExtension.toUpperCase()}
+            </div>
+            <div style="color: #6b7280;">
+              📅 ${new Date().toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="previewFile(${index})" style="padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe;">
+            👁️ Preview
+          </button>
+          <button onclick="removeFile(${index})" style="padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+            🗑️ Remove
+          </button>
+        </div>
+      `;
+
+      return fileItem;
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      displayFiles();
+      updateFileCounter();
+      updateUploadButton();
+      
+      if (selectedFiles.length === 0) {
+        document.getElementById('filePreview').style.display = 'none';
+      }
+      
+      showUploadSuccess('File removed successfully!');
+    }
+
+    function previewFile(index) {
+      const file = selectedFiles[index];
+      alert(`File Preview:\n\nName: ${file.name}\nSize: ${formatFileSize(file.size)}\nType: ${file.type}\nLast Modified: ${new Date(file.lastModified).toLocaleString()}\n\nNote: In a real application, this would show file contents preview.`);
+    }
+
+    function clearFiles() {
+      if (selectedFiles.length === 0) return;
+      
+      if (confirm(`Are you sure you want to remove all ${selectedFiles.length} selected files?`)) {
+        selectedFiles = [];
+        document.getElementById('filePreview').style.display = 'none';
+        updateFileCounter();
+        updateUploadButton();
+        showUploadSuccess('All files cleared successfully!');
+      }
+    }
+
+    function updateFileCounter() {
+      const fileCount = selectedFiles.length;
+      const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+      
+      document.getElementById('fileCount').textContent = `${fileCount} file${fileCount !== 1 ? 's' : ''} selected`;
+      document.getElementById('totalSize').textContent = formatFileSize(totalSize);
+    }
+
+    function updateUploadButton() {
+      const uploadBtn = document.getElementById('uploadBtn');
+      uploadBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function uploadFiles() {
+      if (selectedFiles.length === 0) {
+        showUploadError('Please select at least one file to upload.');
+        return;
+      }
+
+      hideUploadMessages();
+      showUploadProgress();
+      
+      // Simulate upload process
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+          
+          setTimeout(() => {
+            hideUploadProgress();
+            showUploadSuccess(`Successfully uploaded ${selectedFiles.length} file(s)! 🎉`);
+            
+            console.log('Uploaded files:', selectedFiles);
+            
+            setTimeout(() => {
+              closeUploadModal();
+            }, 2000);
+          }, 500);
+        }
+        
+        updateProgress(progress);
+      }, 200);
+    }
+
+    function showUploadProgress() {
+      document.getElementById('uploadProgress').style.display = 'block';
+      document.getElementById('uploadBtn').disabled = true;
+      document.getElementById('uploadBtnText').innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #2563eb; border-radius: 50%; animation: spin 1s linear infinite;"></span> Uploading...';
+    }
+
+    function hideUploadProgress() {
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('uploadBtn').disabled = false;
+      document.getElementById('uploadBtnText').innerHTML = '⬆️ Upload Files';
+    }
+
+    function updateProgress(percent) {
+      const progressFill = document.getElementById('progressFill');
+      const progressPercent = document.getElementById('progressPercent');
+      const progressText = document.getElementById('progressText');
+      
+      progressFill.style.width = percent + '%';
+      progressPercent.textContent = Math.round(percent) + '%';
+      
+      if (percent < 50) {
+        progressText.textContent = 'Uploading files...';
+      } else if (percent < 80) {
+        progressText.textContent = 'Processing files...';
+      } else if (percent < 95) {
+        progressText.textContent = 'Almost done...';
+      } else {
+        progressText.textContent = 'Finalizing upload...';
+      }
+    }
+
+    function showUploadError(message) {
+      const errorElement = document.getElementById('errorMessage');
+      errorElement.innerHTML = '❌ ' + message;
+      errorElement.style.display = 'block';
+      
+      setTimeout(() => {
+        hideUploadMessages();
+      }, 5000);
+    }
+
+    function showUploadSuccess(message) {
+      const successElement = document.getElementById('successMessage');
+      successElement.innerHTML = '✅ ' + message;
+      successElement.style.display = 'block';
+      
+      setTimeout(() => {
+        hideUploadMessages();
+      }, 3000);
+    }
+
+    function hideUploadMessages() {
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    // Notification System
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      `;
+
+      // Set background color based on type
+      switch(type) {
+        case 'success':
+          notification.style.background = '#10b981';
+          break;
+        case 'error':
+          notification.style.background = '#ef4444';
+          break;
+        case 'info':
+          notification.style.background = '#3b82f6';
+          break;
+        default:
+          notification.style.background = '#6b7280';
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      // Remove notification after 3 seconds
+      // setTimeout(() => {
+      //   notification.style.animation = 'slideOutRightsetTimeout(() => {
+      // Add slide-out animation
+      notification.classList.add('slide-out-right');
+
+      // Once animation completes, remove it from DOM
+      notification.addEventListener('animationend', () => {
+        notification.remove();
+      }, { once: true });
+
+     3000}
+  </script>
+<section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Commercial Orders</h2>
+      <table class="w-full bg-white rounded shadow overflow-hidden">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-2">Order ID</th>
+            <th class="p-2">Client</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody">
+          <!-- Sample rows (works for any number of rows) -->
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1001">C-1001</td>
+            <td class="p-2">ACME Labs</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1002">C-1002</td>
+            <td class="p-2">BioCorp</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1003">C-1003</td>
+            <td class="p-2">MediHealth Pvt Ltd</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1004">C-1004</td>
+  <td class="p-2">OxyLife Suppliers</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1005">C-1005</td>
+  <td class="p-2">CareWell Hospital</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1006">C-1006</td>
+  <td class="p-2">Nova Labs</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1007">C-1007</td>
+  <td class="p-2">GreenMedics</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+<tr class="border-t">
+  <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="C-1008">C-1008</td>
+  <td class="p-2">Apollo Diagnostics</td>
+  <td class="p-2 status-cell"></td>
+  <td class="p-2 actions-cell"></td>
+</tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Tracking Modal -->
+  <div id="trackingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-[520px] max-h-[90vh] overflow-y-auto">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 id="trackingTitle" class="font-bold text-lg">Tracking</h3>
+        <button onclick="closeTrackingModal()" class="text-gray-600 hover:text-black">✕</button>
+      </div>
+      <div id="trackingSteps" class="p-5"></div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Step list (exact order = dropdown)
+    const STEPS = [
+      { key: 'ordered',  label: 'Placed',        status: {text:'Ordered',          cls:'bg-blue-100 text-blue-700'} },
+      { key: 'progPend', label: 'In Progress',   status: {text:'Pending',          cls:'bg-yellow-100 text-yellow-800'} },
+      { key: 'rtdPend',  label: 'Ready To Dispatch', status: {text:'Pending',     cls:'bg-yellow-100 text-yellow-800'} },
+      { key: 'dispatch', label: 'Dispatch',   status: {text:'On the Way',       cls:'bg-indigo-100 text-indigo-700'} },
+      { key: 'outDel',   label: 'On the Way', status: {text:'Out for Delivery', cls:'bg-purple-100 text-purple-700'} },
+      { key: 'delivered',label: 'Delivered',               status: {text:'Delivered',        cls:'bg-green-100 text-green-700'} },
+      { key: 'paid',     label: 'Paid',                    status: {text:'Paid',             cls:'bg-emerald-100 text-emerald-700'} },
+      { key: 'return',   label: 'Replace',        status: {text:'Return/Replace',   cls:'bg-red-100 text-red-700'} }
+    ];
+
+    // In-memory progress per order (index of STEPS). Defaults to 0 if not set.
+    const orderProgress = {
+      'C-1001': 1, // e.g. already "In Progress → Pending"
+      'C-1002': 3, // "Dispatch → On the Way"
+      'C-1003': 4  // "On the Way → Out for Delivery"
+    };
+
+    // Build the dropdown HTML once
+    function buildDropdown(selectedIndex = 0) {
+      const opts = STEPS.map((s, idx) =>
+        `<option value="${idx}" ${idx===selectedIndex?'selected':''}>${s.label}</option>`
+      ).join('');
+      return `<select class="border p-2 rounded status-select">${opts}</select>`;
+    }
+    // Define full step sequence
+const trackingSteps = [
+  { value: "ordered", label: "Placed → Ordered" },
+  { value: "pending", label: "In Progress → Pending" },
+  { value: "ready", label: "Ready To Dispatch → Pending" },
+  { value: "onway", label: "Dispatch → On the Way" },
+  { value: "outdelivery", label: "On the Way → Out for Delivery" },
+  { value: "delivered", label: "Delivered" },
+  { value: "paid", label: "Paid" },
+  { value: "replace", label: "Replace → Return" }
+];
+
+// Handle order link click
+document.querySelectorAll(".order-link").forEach(link => {
+  link.addEventListener("click", () => {
+    const orderId = link.dataset.id;
+    const row = link.closest("tr");
+    const currentStatus = row.querySelector(".actions-cell select").value;
+
+    // Find index of current status
+    const currentIndex = trackingSteps.findIndex(s => s.value === currentStatus);
+
+    // Build log with connected solid line up to current, dotted for rest
+    const logsHTML = trackingSteps.map((step, i) => {
+      const active = i <= currentIndex;
+      return `
+        <div class="relative flex items-center">
+          <div class="flex flex-col items-center mr-2">
+            <div class="w-3 h-3 rounded-full ${active ? "bg-green-500" : "bg-gray-400"}"></div>
+            ${i < trackingSteps.length - 1 
+              ? `<div class="w-px h-6 ${active ? "bg-green-500" : "border-dashed border-gray-300 border"}"></div>` 
+              : ""}
+          </div>
+          <div class="p-2 border rounded ${active ? "bg-green-50 border-green-300" : "bg-gray-50 border-gray-200"} w-full">
+            ${step.label}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // Fill modal
+    document.getElementById("trackingTitle").textContent = `Tracking Log: ${orderId}`;
+    document.getElementById("trackingLogs").innerHTML = logsHTML;
+    document.getElementById("trackingModal").classList.remove("hidden");
+    document.getElementById("trackingModal").classList.add("flex");
+  });
+});
+
+    // Apply dropdown + status to all rows
+    document.querySelectorAll('#orderTableBody tr').forEach(row => {
+      const orderId = row.querySelector('.order-link')?.dataset.id;
+      const statusCell = row.querySelector('.status-cell');
+      const actionsCell = row.querySelector('.actions-cell');
+
+      const current = Number.isInteger(orderProgress[orderId]) ? orderProgress[orderId] : 0;
+      actionsCell.innerHTML = buildDropdown(current);
+      setStatusBadge(statusCell, current);
+
+      // Change handler
+      actionsCell.querySelector('.status-select').addEventListener('change', (e) => {
+        const idx = parseInt(e.target.value, 10);
+        orderProgress[orderId] = idx;
+        setStatusBadge(statusCell, idx);
+      });
+    });
+
+    // Click Order ID to open tracking modal
+    document.querySelectorAll('.order-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const orderId = link.dataset.id;
+        const idx = Number.isInteger(orderProgress[orderId]) ? orderProgress[orderId] : 0;
+        openTrackingModal(orderId, idx);
+      });
+    });
+
+    // Set status badge in table
+    function setStatusBadge(cell, stepIndex) {
+      const s = STEPS[stepIndex].status;
+      cell.innerHTML = `<span class="px-2 py-1 rounded text-xs ${s.cls}">${s.text}</span>`;
+    }
+
+    // Render stepper with solid connectors up to selected step, dotted for the rest
+    function renderStepper(currentIndex) {
+      return STEPS.map((step, i) => {
+        const isDone = i < currentIndex;     // completed before current
+        const isCurrent = i === currentIndex;
+        const showConnector = i < STEPS.length - 1;
+
+        // Dot styles
+        const dot = isDone
+          ? 'bg-blue-600 border-blue-600'
+          : (isCurrent ? 'bg-white border-blue-600' : 'bg-white border-gray-300');
+
+        // Connector to next item
+        const connector = showConnector
+          ? (i < currentIndex ? 'border-blue-600' : 'border-gray-300 border-dashed')
+          : 'border-transparent';
+
+        return `
+          <div class="relative pl-10">
+            <!-- vertical connector -->
+            <div class="absolute left-[13px] top-5 ${showConnector ? 'bottom-0' : ''} border-l-2 ${connector}"></div>
+
+            <!-- dot -->
+            <div class="absolute left-2 top-2 w-4 h-4 rounded-full border-2 ${dot}"></div>
+
+            <!-- label + optional small status -->
+            <div class="pb-5">
+              <div class="text-sm font-medium ${isDone || isCurrent ? 'text-gray-900' : 'text-gray-500'}">${step.label}</div>
+              ${isCurrent ? `<div class="text-xs mt-1 inline-block px-2 py-0.5 rounded ${STEPS[i].status.cls}">${STEPS[i].status.text}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal controls
+    function openTrackingModal(orderId, currentIndex) {
+      document.getElementById('trackingTitle').textContent = `Tracking Log: ${orderId}`;
+      document.getElementById('trackingSteps').innerHTML = renderStepper(currentIndex);
+      const modal = document.getElementById('trackingModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeTrackingModal() {
+      const modal = document.getElementById('trackingModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+  <section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Retail Orders</h2>
+      <table class="w-full bg-white rounded shadow overflow-hidden">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-2">Order ID</th>
+            <th class="p-2">Customer</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody">
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="R-2001">R-2001</td>
+            <td class="p-2">John Doe</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="R-2002">R-2002</td>
+            <td class="p-2">Mary Smith</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="R-2003">R-2003</td>
+            <td class="p-2">David Johnson</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="R-2004">R-2004</td>
+            <td class="p-2">Sophia Lee</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+          <tr class="border-t">
+            <td class="p-2 text-blue-600 cursor-pointer order-link" data-id="R-2005">R-2005</td>
+            <td class="p-2">James Brown</td>
+            <td class="p-2 status-cell"></td>
+            <td class="p-2 actions-cell"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Tracking Modal -->
+  <div id="trackingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-[520px] max-h-[90vh] overflow-y-auto">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 id="trackingTitle" class="font-bold text-lg">Tracking</h3>
+        <button onclick="closeTrackingModal()" class="text-gray-600 hover:text-black">✕</button>
+      </div>
+      <div id="trackingSteps" class="p-5"></div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const STEPS = [
+      { label: 'Placed',        status: {text:'Ordered',          cls:'bg-blue-100 text-blue-700'} },
+      { label: 'In Progress',   status: {text:'Pending',          cls:'bg-yellow-100 text-yellow-800'} },
+      { label: 'Ready To Dispatch', status: {text:'Pending',     cls:'bg-yellow-100 text-yellow-800'} },
+      { label: 'Dispatch',      status: {text:'On the Way',       cls:'bg-indigo-100 text-indigo-700'} },
+      { label: 'On the Way',    status: {text:'Out for Delivery', cls:'bg-purple-100 text-purple-700'} },
+      { label: 'Delivered',     status: {text:'Delivered',        cls:'bg-green-100 text-green-700'} },
+      { label: 'Paid',          status: {text:'Paid',             cls:'bg-emerald-100 text-emerald-700'} },
+      { label: 'Replace',       status: {text:'Return/Replace',   cls:'bg-red-100 text-red-700'} }
+    ];
+
+    const orderProgress = {};
+
+    function buildDropdown(selectedIndex = 0) {
+      return `<select class="border p-2 rounded status-select">
+        ${STEPS.map((s, i) => `<option value="${i}" ${i===selectedIndex?'selected':''}>${s.label}</option>`).join('')}
+      </select>`;
+    }
+
+    function setStatusBadge(cell, stepIndex) {
+      const s = STEPS[stepIndex].status;
+      cell.innerHTML = `<span class="px-2 py-1 rounded text-xs ${s.cls}">${s.text}</span>`;
+    }
+
+    function renderStepper(currentIndex) {
+      return STEPS.map((step, i) => {
+        const isDone = i < currentIndex;
+        const isCurrent = i === currentIndex;
+        const showConnector = i < STEPS.length - 1;
+
+        const dot = isDone ? 'bg-blue-600 border-blue-600'
+          : (isCurrent ? 'bg-white border-blue-600' : 'bg-white border-gray-300');
+
+        const connector = showConnector
+          ? (i < currentIndex ? 'border-blue-600' : 'border-gray-300 border-dashed')
+          : 'border-transparent';
+
+        return `
+          <div class="relative pl-10">
+            <div class="absolute left-[13px] top-5 ${showConnector ? 'bottom-0' : ''} border-l-2 ${connector}"></div>
+            <div class="absolute left-2 top-2 w-4 h-4 rounded-full border-2 ${dot}"></div>
+            <div class="pb-5">
+              <div class="text-sm font-medium ${isDone || isCurrent ? 'text-gray-900' : 'text-gray-500'}">${step.label}</div>
+              ${isCurrent ? `<div class="text-xs mt-1 inline-block px-2 py-0.5 rounded ${step.status.cls}">${step.status.text}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openTrackingModal(orderId, currentIndex) {
+      document.getElementById('trackingTitle').textContent = `Tracking Log: ${orderId}`;
+      document.getElementById('trackingSteps').innerHTML = renderStepper(currentIndex);
+      const modal = document.getElementById('trackingModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTrackingModal() {
+      const modal = document.getElementById('trackingModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    document.querySelectorAll('#orderTableBody tr').forEach(row => {
+      const orderId = row.querySelector('.order-link').dataset.id;
+      const statusCell = row.querySelector('.status-cell');
+      const actionsCell = row.querySelector('.actions-cell');
+
+      const current = orderProgress[orderId] ?? 0;
+      actionsCell.innerHTML = buildDropdown(current);
+      setStatusBadge(statusCell, current);
+
+      actionsCell.querySelector('.status-select').addEventListener('change', (e) => {
+        const idx = parseInt(e.target.value, 10);
+        orderProgress[orderId] = idx;
+        setStatusBadge(statusCell, idx);
+      });
+
+      row.querySelector('.order-link').addEventListener('click', () => {
+        const idx = orderProgress[orderId] ?? 0;
+        openTrackingModal(orderId, idx);
+      });
+    });
+  </script>
+  <!-- Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Service & Repair</h2>
+        <button onclick="openAddTechModal()" class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">+ Add Technician</button>
+      </div>
+      <div class="bg-white p-4 rounded shadow overflow-x-auto">
+        <table id="repairTable" class="w-full text-sm border">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-2 border">Log ID</th>
+              <th class="p-2 border">Client Name</th>
+              <th class="p-2 border">Location</th>
+              <th class="p-2 border">Equipment</th>
+              <th class="p-2 border">Issue Reported</th>
+              <th class="p-2 border">Priority</th>
+              <th class="p-2 border">Technician</th>
+              <th class="p-2 border">Date Reported</th>
+              <th class="p-2 border">Due Date</th>
+              <th class="p-2 border">Repair Status</th>
+              <th class="p-2 border">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2 border cursor-pointer log-id">L-101</td>
+              <td class="p-2 border">Acme Corp</td>
+              <td class="p-2 border">Chennai</td>
+              <td class="p-2 border">Oxygen Cylinder</td>
+              <td class="p-2 border">Valve leakage during refill</td>
+              <td class="p-2 border"><span class="px-2 py-1 rounded bg-red-100 text-red-600 text-xs font-semibold">High</span></td>
+              <td class="p-2 border">Karthik</td>
+              <td class="p-2 border">2025-08-25</td>
+              <td class="p-2 border due-date">-</td>
+              <td class="p-2 border">
+                <select class="repair-status border rounded px-2 py-1">
+                  <option selected>Pending</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </td>
+              <td class="p-2 border">
+                <button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-2 border cursor-pointer log-id">L-102</td>
+              <td class="p-2 border">Apollo</td>
+              <td class="p-2 border">Coimbatore</td>
+              <td class="p-2 border">Flow Regulator</td>
+              <td class="p-2 border">Pressure gauge not working</td>
+              <td class="p-2 border"><span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-semibold">Medium</span></td>
+              <td class="p-2 border">Manoj</td>
+              <td class="p-2 border">2025-08-28</td>
+              <td class="p-2 border due-date">-</td>
+              <td class="p-2 border">
+                <select class="repair-status border rounded px-2 py-1">
+                  <option selected>Pending</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </td>
+              </td>
+              <td class="p-2 border"><button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Bulk Assign -->
+        <button id="bulkAssignBtn" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded hidden">Assign Selected</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add Technician Modal -->
+  <div id="addTechModal" class="hidden fixed inset-0 flex justify-center items-center z-50">
+    <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeAddTechModal()"></div>
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+      <h3 class="text-lg font-bold mb-4">Add Technician</h3>
+      <form id="addTechForm" class="space-y-3">
+        <input type="text" id="newTechName" placeholder="Full Name" class="w-full border rounded px-3 py-2" required />
+        <input type="text" id="newTechContact" placeholder="Phone Number" class="w-full border rounded px-3 py-2" required />
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="closeAddTechModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Assign Modal -->
+  <div id="assignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded shadow w-96 relative">
+      <h3 class="text-lg font-bold mb-4">Assign Technician</h3>
+      <label class="block mb-2">Technician
+        <select id="techSelect" class="w-full border rounded px-2 py-1">
+          <option>Karthik</option>
+          <option>Manoj</option>
+          <option>Ashok</option>
+          <option>Gowtham</option>
+        </select>
+      </label>
+      <label class="block mb-4">Due Date
+        <input type="date" id="dueDateInput" class="w-full border rounded px-2 py-1">
+      </label>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeAssignModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+        <button id="saveAssignBtn" class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Log Details Modal -->
+  <div id="logDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded shadow w-96 relative">
+      <h3 class="text-lg font-bold mb-4">Log Details</h3>
+      <div id="logDetailsContent" class="text-sm space-y-1"></div>
+      <button onclick="closeLogDetail()" class="mt-4 px-4 py-2 bg-gray-300 rounded">Close</button>
+    </div>
+  </div>
+
+  <script>
+lucide.createIcons();
+
+// Open/close Add Technician Modal
+function openAddTechModal(){ document.getElementById('addTechModal').classList.remove('hidden'); }
+function closeAddTechModal(){ document.getElementById('addTechModal').classList.add('hidden'); }
+
+    // Add technician
+document.getElementById('addTechForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('newTechName').value.trim();
+  if(!name){ alert('Enter name'); return; }
+  const select = document.getElementById('techSelect');
+  const option = document.createElement('option');
+  option.value = name; option.textContent = name;
+  select.appendChild(option);
+  closeAddTechModal();
+});
+
+    // Assign button click
+    let currentRow = null;
+    document.querySelectorAll('.assign-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentRow = btn.closest('tr');
+        document.getElementById('assignModal').classList.remove('hidden');
+      });
+    });
+
+    document.getElementById('saveAssignBtn').addEventListener('click', () => {
+      const tech = document.getElementById('techSelect').value;
+      const dueDate = document.getElementById('dueDateInput').value;
+      if(currentRow){
+        currentRow.querySelector('td:nth-child(7)').textContent = tech;
+        currentRow.querySelector('.due-date').textContent = dueDate || '-';
+      }
+      closeAssignModal();
+    });
+
+    function closeAssignModal(){
+      document.getElementById('assignModal').classList.add('hidden');
+    }
+
+    // Log ID click -> show details
+    document.querySelectorAll('.log-id').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const row = cell.closest('tr');
+        const details = {
+          "Log ID": row.children[0].textContent,
+          "Client Name": row.children[1].textContent,
+          "Location": row.children[2].textContent,
+          "Equipment": row.children[3].textContent,
+          "Issue Reported": row.children[4].textContent,
+          "Priority": row.children[5].textContent,
+          "Technician": row.children[6].textContent,
+          "Date Reported": row.children[7].textContent,
+          "Due Date": row.children[8].textContent,
+          "Repair Status": row.children[9].querySelector('select').value
+        };
+        let html = '';
+        for(const key in details){
+          html += `<p><strong>${key}:</strong> ${details[key]}</p>`;
+        }
+        document.getElementById('logDetailsContent').innerHTML = html;
+        document.getElementById('logDetailModal').classList.remove('hidden');
+      });
+    });
+
+    function closeLogDetail(){
+      document.getElementById('logDetailModal').classList.add('hidden');
+    }
+  </script>
+  <!-- Tracking Section -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Tracking</h2>
+
+      <!-- Tabs -->
+      <div class="flex border-b mb-4">
+        <button id="tabOrder" class="px-4 py-2 font-semibold border-b-2 border-blue-600 text-blue-600">By Order ID</button>
+        <button id="tabAsset" class="px-4 py-2 font-semibold border-b-2 border-transparent text-gray-600 hover:text-blue-600">By Asset ID</button>
+      </div>
+
+      <!-- Order ID Search -->
+      <div id="orderSearch" class="bg-white p-4 rounded shadow">
+        <div class="flex gap-2 items-center">
+          <input id="orderInput" class="border p-2 rounded w-full md:w-1/2" placeholder="Enter Order ID (e.g. C-1001)" />
+          <button id="orderBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
+        </div>
+        <div id="orderResult" class="mt-4"></div>
+      </div>
+
+      <!-- Asset ID Search -->
+      <div id="assetSearch" class="bg-white p-4 rounded shadow hidden">
+        <div class="flex gap-2 items-center">
+          <input id="assetInput" class="border p-2 rounded w-full md:w-1/2" placeholder="Enter Asset ID (e.g. AS-501)" />
+          <button id="assetBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
+        </div>
+        <div id="assetResult" class="mt-4"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Dummy order tracking data
+    const ORDER_STATUS = {
+      "C-1001": 2, // Ready to Dispatch
+      "C-1002": 4, // Out for Delivery
+      "C-1003": 6  // Paid
+    };
+
+    const STEPS = ["Placed","In Progress","Ready To Dispatch","Dispatch","On the Way","Delivered","Paid","Replace"];
+
+    // Dummy asset mapping
+    const ASSET_DATA = {
+      "AS-501": { name: "Oxygen Cylinder", client: "ACME Labs", type: "Commercial" },
+      "AS-502": { name: "Nitrogen Tank", client: "GreenMedics", type: "Retail" }
+    };
+
+    // Tab switching
+    const tabOrder = document.getElementById("tabOrder");
+    const tabAsset = document.getElementById("tabAsset");
+    const orderSearch = document.getElementById("orderSearch");
+    const assetSearch = document.getElementById("assetSearch");
+
+    tabOrder.addEventListener("click", () => {
+      tabOrder.classList.add("border-blue-600","text-blue-600");
+      tabAsset.classList.remove("border-blue-600","text-blue-600");
+      assetSearch.classList.add("hidden");
+      orderSearch.classList.remove("hidden");
+    });
+
+    tabAsset.addEventListener("click", () => {
+      tabAsset.classList.add("border-blue-600","text-blue-600");
+      tabOrder.classList.remove("border-blue-600","text-blue-600");
+      orderSearch.classList.add("hidden");
+      assetSearch.classList.remove("hidden");
+    });
+
+    // Search by Order ID
+    document.getElementById("orderBtn").addEventListener("click", () => {
+      const orderId = document.getElementById("orderInput").value.trim();
+      const resultDiv = document.getElementById("orderResult");
+
+      if (!ORDER_STATUS[orderId]) {
+        resultDiv.innerHTML = `<p class="text-red-600">No order found for ID: ${orderId}</p>`;
+        return;
+      }
+
+      const currentIndex = ORDER_STATUS[orderId];
+      const stepsHtml = STEPS.map((s,i) => `
+        <div class="flex items-center">
+          <div class="w-3 h-3 rounded-full ${i<=currentIndex?'bg-green-500':'bg-gray-300'}"></div>
+          <span class="ml-2 ${i<=currentIndex?'text-green-700':'text-gray-500'}">${s}</span>
+        </div>
+      `).join("<div class='ml-2 h-4 border-l border-gray-300'></div>");
+
+      resultDiv.innerHTML = `
+        <h3 class="font-semibold mb-2">Tracking for ${orderId}</h3>
+        <div class="space-y-2">${stepsHtml}</div>
+      `;
+    });
+
+    // Search by Asset ID
+    document.getElementById("assetBtn").addEventListener("click", () => {
+      const assetId = document.getElementById("assetInput").value.trim();
+      const resultDiv = document.getElementById("assetResult");
+
+      if (!ASSET_DATA[assetId]) {
+        resultDiv.innerHTML = `<p class="text-red-600">No asset found for ID: ${assetId}</p>`;
+        return;
+      }
+
+      const asset = ASSET_DATA[assetId];
+      resultDiv.innerHTML = `
+        <h3 class="font-semibold mb-2">Asset Details</h3>
+        <div class="p-3 bg-gray-50 rounded border">
+          <p><b>Asset ID:</b> ${assetId}</p>
+          <p><b>Name:</b> ${asset.name}</p>
+          <p><b>Client/User:</b> ${asset.client}</p>
+          <p><b>Type:</b> ${asset.type}</p>
+        </div>
+      `;
+    });
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

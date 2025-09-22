@@ -1,0 +1,13 @@
+
+/* LiveAir shared styles */
+.gradient-bg { background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%); }
+.card-hover { transition: all 0.2s ease; }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,0.12); }
+.nav-link { display:flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:.5rem; }
+.nav-link:hover { background:#f3f4f6; }
+.nav-active { background:#dbeafe; color:#1d4ed8; font-weight:600; }
+.badge { font-size:.75rem; padding:.15rem .5rem; border-radius:999px; }
+.badge-red { background:#fee2e2; color:#b91c1c; }
+.badge-yellow { background:#fef3c7; color:#92400e; }
+.badge-green { background:#dcfce7; color:#166534; }
+.small { font-size: .85rem; color: #6b7280; }

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Payments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body class="bg-gray-100 flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 bg-blue-600 text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="home" class="w-5 h-5 mr-2"></i>Home</a>
+      <a href="orders.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i>Orders</a>
+      <a href="payments.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="file-text" class="w-5 h-5 mr-2"></i>Payments</a>
+      <a href="tracking.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="service.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Payments</h1>
+      <div class="flex items-center gap-3">
+        <button class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">D</div>
+      </div>
+    </header>
+
+    <!-- Payment List -->
+    <section class="p-6">
+      <p class="mb-4 text-gray-600">Click a payment to manage or view receipt.</p>
+      <ul class="space-y-3">
+        <li class="bg-white p-4 rounded shadow cursor-pointer hover:ring-2 hover:ring-blue-200" onclick="openPaymentModal('ORD-2024-001','Ravi Kumar','pending')">
+          <div class="flex justify-between">
+            <div><strong>ORD-2024-001</strong> — Ravi Kumar</div>
+            <span class="text-orange-600 font-semibold">Pending</span>
+          </div>
+        </li>
+        <li class="bg-white p-4 rounded shadow cursor-pointer hover:ring-2 hover:ring-blue-200" onclick="openPaymentModal('ORD-2024-002','Metro Hospital','paid')">
+          <div class="flex justify-between">
+            <div><strong>ORD-2024-002</strong> — Metro Hospital</div>
+            <span class="text-green-600 font-semibold">Paid</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+        <!-- Payment Modal -->
+  <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">💳 Complete Payment</h2>
+        <button class="text-gray-500 hover:text-black" onclick="closePaymentModal()">&times;</button>
+      </div>
+
+      <div class="border rounded p-4 mb-6 bg-gray-50">
+        <p><strong id="selOrderId">—</strong></p>
+        <p class="text-gray-500" id="selCustomer">Customer: —</p>
+      </div>
+
+
+        <!-- Payment Modes -->
+        <label class="font-medium">Select Payment Mode</label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 mb-6">
+          <button class="pay-option border rounded p-3 hover:bg-blue-50" onclick="selectPayment('Paid')">✅ Paid</button>
+          <button class="pay-option border rounded p-3 hover:bg-blue-50" onclick="selectPayment('COD')">💵 Cash</button>
+          <button class="pay-option border rounded p-3 hover:bg-blue-50" onclick="selectPayment('Credit')">📄 Credit</button>
+          <button class="pay-option border rounded p-3 hover:bg-blue-50" onclick="selectPayment('QR')">📱 QR</button>
+        </div>
+
+        <!-- QR Code -->
+      <div id="qrBox" class="hidden mb-6">
+        <div class="border rounded p-6 text-center bg-gray-50">
+          <p class="font-semibold mb-2">Scan to Pay</p>
+          <div class="bg-gray-200 h-40 flex items-center justify-center">QR CODE</div>
+        </div>
+      </div>
+
+        <!-- Replacement -->
+        <div class="mb-6">
+          <label class="font-medium">Replace empty cylinder?</label>
+          <input type="checkbox" id="replaceCylinder" class="ml-2" onchange="toggleReplacement()"/>
+          <div id="replacementOptions" class="hidden mt-3">
+            <input id="replacementNote" class="w-full border rounded p-2" placeholder="Replacement note (optional)"/>
+          </div>
+        </div>
+
+        <!-- Signature -->
+      <div class="mb-6">
+        <label class="font-medium">Client Signature</label>
+        <canvas id="signaturePad" width="500" height="120" class="border rounded w-full mt-2 bg-gray-50"></canvas>
+        <div class="flex gap-2 mt-2">
+          <button class="px-3 py-1 border rounded" onclick="clearSignature()">Clear</button>
+          <button class="px-3 py-1 bg-blue-600 text-white rounded" onclick="saveSignature()">Save Signature</button>
+        </div>
+      </div>
+
+        <!-- Actions -->
+      <div class="flex gap-4">
+        <button class="bg-green-600 text-white px-4 py-2 rounded" onclick="savePayment()">Save & Generate Receipt</button>
+        <button class="border px-4 py-2 rounded" onclick="closePaymentModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+      <!-- Receipts -->
+      <!-- <div class="bg-white rounded-xl shadow p-6 max-w-4xl mx-auto">
+        <h2 class="text-lg font-semibold mb-4">Previously Generated Receipts</h2>
+        <ul id="generatedList" class="space-y-3"></ul>
+      </div> -->
+    </section>
+  
+
+  <!-- Receipt Modal -->
+  <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-[420px]">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg">🧾 Payment Receipt</h3>
+        <button onclick="closeReceiptModal()" class="text-gray-500 hover:text-black">&times;</button>
+      </div>
+      <div id="receiptContent" class="text-sm space-y-2"></div>
+      <div class="mt-4 flex justify-between">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick="downloadReceipt()">Download PDF</button>
+        <button class="border px-4 py-2 rounded" onclick="closeReceiptModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedMode = "";
+    let currentReceipt = {};
+
+    function openPaymentModal(orderId, customer, status){
+      document.getElementById("paymentModal").style.display="flex";
+      if (status === "pending") {
+        document.getElementById("selOrderId").textContent = orderId;
+        document.getElementById("selCustomer").textContent = "Customer: " + customer;
+        document.getElementById("paymentModal").classList.remove("hidden");
+      } else {
+        viewReceipt(orderId, customer, "Paid", new Date().toLocaleString());
+      }
+    }
+    function closePaymentModal(){ document.getElementById("paymentModal").classList.add("hidden"); }
+
+    function selectPayment(mode) {
+      selectedMode = mode;
+      document.getElementById("qrBox").classList.toggle("hidden", mode !== "QR");
+    }
+    
+
+    function toggleReplacement() {
+      const checked = document.getElementById("replaceCylinder").checked;
+      document.getElementById("replacementOptions").classList.toggle("hidden", !checked);
+    }
+
+    function saveSignature() {
+      alert("Signature saved!");
+    }
+
+    function clearSignature() {
+      const pad = document.getElementById("signaturePad");
+      const ctx = pad.getContext("2d");
+      ctx.clearRect(0, 0, pad.width, pad.height);
+    }
+
+    function savePayment() {
+      const orderId = document.getElementById("selOrderId").textContent;
+      const customer = document.getElementById("selCustomer").textContent.replace("Customer: ", "");
+      const date = new Date().toLocaleString();
+      closePaymentModal();
+      viewReceipt(orderId, customer, selectedMode || "Paid", date);
+    }
+
+    function viewReceipt(orderId, customer, mode, date) {
+      currentReceipt = { orderId, customer, mode, date };
+      document.getElementById("receiptContent").innerHTML = `
+        <p><strong>Order ID:</strong> ${orderId}</p>
+        <p><strong>Customer:</strong> ${customer}</p>
+        <p><strong>Payment Mode:</strong> ${mode}</p>
+        <p><strong>Status:</strong> <span class="text-green-600 font-semibold">Paid</span></p>
+        <p><strong>Date:</strong> ${date}</p>
+      `;
+      document.getElementById("receiptModal").classList.remove("hidden");
+    }
+
+    function cancelPayment() {
+      alert("Payment cancelled!");
+    }
+
+    function viewReceipt(orderId, customer, mode, date) {
+      currentReceipt = { orderId, customer, mode, date };
+      const content = `
+        <p><strong>Order ID:</strong> ${orderId}</p>
+        <p><strong>Customer:</strong> ${customer}</p>
+        <p><strong>Payment Mode:</strong> ${mode}</p>
+        <p><strong>Status:</strong> <span class="text-green-600 font-semibold">Paid</span></p>
+        <p><strong>Date:</strong> ${date}</p>
+      `;
+      document.getElementById("receiptContent").innerHTML = content;
+      document.getElementById("receiptModal").classList.remove("hidden");
+    }
+
+    function closeReceiptModal() { document.getElementById("receiptModal").classList.add("hidden"); }
+
+    async function downloadReceipt() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("LiveAir - Payment Receipt", 20, 20);
+      doc.setFontSize(12);
+      doc.text(`Order ID: ${currentReceipt.orderId}`, 20, 40);
+      doc.text(`Customer: ${currentReceipt.customer}`, 20, 50);
+      doc.text(`Payment Mode: ${currentReceipt.mode}`, 20, 60);
+      doc.text(`Status: Paid`, 20, 70);
+      doc.text(`Date: ${currentReceipt.date}`, 20, 80);
+      doc.save(`${currentReceipt.orderId}_receipt.pdf`);
+    }
+    // Highlight active sidebar link
+  const currentPage = window.location.pathname.split("/").pop();
+  document.querySelectorAll("aside nav a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("bg-gray-200", "font-semibold");
+    }
+  });
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
+

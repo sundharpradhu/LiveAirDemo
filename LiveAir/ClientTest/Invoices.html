@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoices & Payments - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+            <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link nav-active"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Invoices & Payments</h1>
+      <div class="flex items-center gap-3">
+        <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+          Outstanding: $1,950
+        </div>
+        <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors" onclick="payAllPending()">
+          <i data-lucide="credit-card" class="w-4 h-4 mr-2 inline"></i>
+          Pay All
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Payment Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="filterInvoices('paid')">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="check-circle" class="w-8 h-8 text-green-100"></i>
+            <span class="text-green-100 text-sm font-medium">This Month</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">$120</h3>
+          <p class="text-green-100 text-sm">Paid Invoices</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="filterInvoices('pending')">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="clock" class="w-8 h-8 text-amber-100"></i>
+            <span class="text-amber-100 text-sm font-medium">Due Soon</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">$1,950</h3>
+          <p class="text-amber-100 text-sm">Pending Invoices</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="showNextDueDate()">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="calendar" class="w-8 h-8 text-blue-100"></i>
+            <span class="text-blue-100 text-sm font-medium">Next Due</span>
+          </div>
+          <h3 class="text-xl font-bold mb-1">Aug 30</h3>
+          <p class="text-blue-100 text-sm">Payment Date</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="showSpendingBreakdown()">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="trending-up" class="w-8 h-8 text-purple-100"></i>
+            <span class="text-purple-100 text-sm font-medium">Total</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">$2,070</h3>
+          <p class="text-purple-100 text-sm">All Time</p>
+        </div>
+      </div>
+
+      <!-- Filter and Actions -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+        <div class="flex space-x-2">
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium" onclick="filterInvoices('all')">All Invoices</button>
+          <button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300" onclick="filterInvoices('paid')">Paid</button>
+          <button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300" onclick="filterInvoices('pending')">Pending</button>
+          <button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300" onclick="filterInvoices('overdue')">Overdue</button>
+        </div>
+        <div class="flex space-x-3">
+          <button class="flex items-center space-x-2 px-4 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300" onclick="exportInvoices()">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export</span>
+          </button>
+          <button class="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg" onclick="setupAutoPayment()">
+            <i data-lucide="repeat" class="w-4 h-4"></i>
+            <span>Auto Pay</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Invoices List -->
+      <div class="space-y-4" id="invoicesList">
+        <!-- Invoice Card 1 - Paid -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden invoice-card paid" data-invoice="INV-001">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="file-text" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">Invoice #INV-001</h3>
+                  <p class="text-sm text-gray-600">Order #ORD-001 • Oxygen Cylinder</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                  Paid
+                </span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p class="text-sm text-gray-500">Invoice Date</p>
+                <p class="font-medium text-gray-900">Aug 20, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Due Date</p>
+                <p class="font-medium text-gray-900">Aug 23, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Amount</p>
+                <p class="font-bold text-gray-900">$120.00</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Payment Method</p>
+                <p class="font-medium text-gray-900">Credit Card</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                <span>Paid on Aug 23, 2024</span>
+              </div>
+              <div class="flex space-x-2">
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="downloadInvoice('INV-001')">
+                  <i data-lucide="download" class="w-4 h-4 mr-1 inline"></i>
+                  Download PDF
+                </button>
+                <button class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" onclick="viewInvoiceDetails('INV-001')">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice Card 2 - Pending -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden border-l-4 border-l-amber-500 invoice-card pending" data-invoice="INV-002">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="file-text" class="w-6 h-6 text-amber-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">Invoice #INV-002</h3>
+                  <p class="text-sm text-gray-600">Order #ORD-002 • Ventilator</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                  <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                  Pending
+                </span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p class="text-sm text-gray-500">Invoice Date</p>
+                <p class="font-medium text-gray-900">Aug 22, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Due Date</p>
+                <p class="font-medium text-amber-600">Aug 30, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Amount</p>
+                <p class="font-bold text-gray-900 text-xl">$1,500.00</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Days Left</p>
+                <p class="font-medium text-amber-600">5 days</p>
+              </div>
+            </div>
+
+            <div class="bg-amber-50 rounded-xl p-4 mb-4">
+              <div class="flex items-start space-x-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mt-0.5"></i>
+                <div>
+                  <p class="text-sm font-medium text-amber-800">Payment due in 5 days</p>
+                  <p class="text-sm text-amber-700">To avoid any service interruption, please settle this invoice before the due date.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <i data-lucide="credit-card" class="w-4 h-4"></i>
+                <span>Multiple payment options available</span>
+              </div>
+              <div class="flex space-x-2">
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="downloadInvoice('INV-002')">
+                  <i data-lucide="download" class="w-4 h-4 mr-1 inline"></i>
+                  Download
+                </button>
+                <button class="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors" onclick="payInvoice('INV-002', 1500)">
+                  <i data-lucide="credit-card" class="w-4 h-4 mr-1 inline"></i>
+                  Pay Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice Card 3 - Pending -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden border-l-4 border-l-amber-500 invoice-card pending" data-invoice="INV-003">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="file-text" class="w-6 h-6 text-amber-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">Invoice #INV-003</h3>
+                  <p class="text-sm text-gray-600">Order #ORD-003 • Medical Bed</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                  <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                  Pending
+                </span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p class="text-sm text-gray-500">Invoice Date</p>
+                <p class="font-medium text-gray-900">Aug 23, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Due Date</p>
+                <p class="font-medium text-amber-600">Sep 2, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Amount</p>
+                <p class="font-bold text-gray-900">$450.00</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Days Left</p>
+                <p class="font-medium text-amber-600">8 days</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <i data-lucide="truck" class="w-4 h-4"></i>
+                <span>Payment due after delivery</span>
+              </div>
+              <div class="flex space-x-2">
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="downloadInvoice('INV-003')">
+                  <i data-lucide="download" class="w-4 h-4 mr-1 inline"></i>
+                  Download
+                </button>
+                <button class="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors" onclick="payInvoice('INV-003', 450)">
+                  <i data-lucide="credit-card" class="w-4 h-4 mr-1 inline"></i>
+                  Pay Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Methods</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button class="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors" onclick="addPaymentMethod('card')">
+            <i data-lucide="credit-card" class="w-6 h-6 text-blue-600"></i>
+            <div class="text-left">
+              <p class="font-medium text-gray-900">Credit/Debit Card</p>
+              <p class="text-sm text-gray-600">Visa, Mastercard, Amex</p>
+            </div>
+          </button>
+          <button class="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors" onclick="addPaymentMethod('bank')">
+            <i data-lucide="building-2" class="w-6 h-6 text-green-600"></i>
+            <div class="text-left">
+              <p class="font-medium text-gray-900">Bank Transfer</p>
+              <p class="text-sm text-gray-600">Direct bank payment</p>
+            </div>
+          </button>
+          <button class="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors" onclick="addPaymentMethod('wallet')">
+            <i data-lucide="smartphone" class="w-6 h-6 text-purple-600"></i>
+            <div class="text-left">
+              <p class="font-medium text-gray-900">Digital Wallet</p>
+              <p class="text-sm text-gray-600">UPI, PayPal, etc.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+
+    function filterInvoices(filter) {
+      const cards = document.querySelectorAll('.invoice-card');
+      const buttons = document.querySelectorAll('[onclick^="filterInvoices"]');
+      
+      // Reset button styles
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      });
+      
+      // Highlight active button
+      event.target.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      event.target.classList.add('bg-blue-600', 'text-white');
+      
+      cards.forEach(card => {
+        if (filter === 'all') {
+          card.style.display = 'block';
+        } else {
+          card.style.display = card.classList.contains(filter) ? 'block' : 'none';
+        }
+      });
+    }
+
+    function payInvoice(invoiceId, amount) {
+      if (confirm(`Pay ${amount} for ${invoiceId}?`)) {
+        alert(`Processing payment of ${amount} for ${invoiceId}...\n\nPayment successful! You will receive a confirmation email shortly.`);
+        // In real implementation, integrate with payment gateway
+      }
+    }
+
+    function payAllPending() {
+      if (confirm('Pay all pending invoices totaling $1,950?')) {
+        alert('Processing payment for all pending invoices...\n\nPayment successful! All invoices have been paid. Confirmation emails will be sent shortly.');
+      }
+    }
+
+    function downloadInvoice(invoiceId) {
+      alert(`Downloading ${invoiceId}.pdf...\n\nThe invoice PDF will be downloaded to your device.`);
+      // In real implementation, trigger PDF download
+    }
+
+    function viewInvoiceDetails(invoiceId) {
+      alert(`Invoice Details for ${invoiceId}:\n\n• Order Information\n• Payment Terms\n• Item Breakdown\n• Tax Details\n• Delivery Information\n\nContact support for detailed breakdown.`);
+    }
+
+    function exportInvoices() {
+      const format = prompt('Export format:\n1. PDF\n2. Excel\n3. CSV\n\nEnter choice (1-3):');
+      const formats = {'1': 'PDF', '2': 'Excel', '3': 'CSV'};
+      if (formats[format]) {
+        alert(`Exporting invoices as ${formats[format]}...\n\nFile will be downloaded shortly.`);
+      }
+    }
+
+    function setupAutoPayment() {
+      if (confirm('Set up automatic payments?\n\nThis will automatically pay invoices on their due date using your default payment method.')) {
+        alert('Auto-payment setup complete!\n\n• Default payment method: Credit Card ending in 1234\n• Notifications: Enabled\n• Can be modified in account settings');
+      }
+    }
+
+    function addPaymentMethod(type) {
+      const methods = {
+        'card': 'Credit/Debit Card',
+        'bank': 'Bank Transfer', 
+        'wallet': 'Digital Wallet'
+      };
+      alert(`Add ${methods[type]}:\n\nYou will be redirected to the secure payment setup page to add your ${methods[type]} details.`);
+    }
+
+    function showNextDueDate() {
+      alert('Next Payment Due:\n\n• Invoice: INV-002\n• Amount: $1,500\n• Due Date: August 30, 2024\n• Days Remaining: 5\n\nSet up payment reminder?');
+    }
+
+    function showSpendingBreakdown() {
+      alert('Spending Summary:\n\n• Total Paid: $120\n• Total Pending: $1,950\n• Grand Total: $2,070\n\nMonthly Average: $690\nLast Payment: Aug 23, 2024');
+    }
+
+    function showAlerts() {
+      alert('Payment Alerts:\n• Payment due in 5 days for INV-002\n• Auto-payment scheduled for INV-003\n• Payment reminder sent for overdue invoices');
+    }
+
+    function showNotifications() {
+      alert('Payment Notifications:\n• Invoice INV-002 payment reminder\n• Auto-payment setup confirmation\n• Payment receipt for INV-001');
+    }
+
+    function showProfile() {
+      alert('Profile Options:\n• Payment Methods\n• Billing Address\n• Invoice Preferences\n• Auto-payment Settings\n• Account Settings\n• Logout');
+    }
+  </script>
+</body>
+</html>

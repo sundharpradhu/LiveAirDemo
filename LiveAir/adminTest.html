@@ -1,0 +1,2644 @@
+<!-- Alert Detail Modal -->
+  <div id="alertDetailModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-lg">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900" id="alertDetailTitle">Alert Details</h3>
+          <button onclick="closeAlertDetailModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="p-6">
+        <div class="mb-4">
+          <span class="text-sm text-gray-600">Priority:</span>
+          <span id="alertPriority" class="ml-2 px-2 py-1 rounded text-sm font-medium"></span>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="text-sm font-medium text-gray-700 mb-2">Description</h4>
+          <p id="alertDescription" class="text-gray-600"></p>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="text-sm font-medium text-gray-700 mb-2">Recommended Actions</h4>
+          <ul id="alertActions" class="text-sm text-gray-600 space-y-1">
+            <!-- Actions will be populated dynamically -->
+          </ul>
+        </div>
+      </div>
+      
+      <div class="flex justify-end gap-3 p-6 border-t border-gray-200">
+        <button onclick="closeAlertDetailModal()" class="btn btn-secondary">Close</button>
+        <button class="btn btn-primary" onclick="resolveAlert()">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          Mark as Resolved
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tracking Modal -->
+  <div id="trackingModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-2xl">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900" id="trackingModalTitle">Order Tracking</h3>
+          <button onclick="closeTrackingModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="p-6">
+        <div id="trackingSteps" class="space-y-4">
+          <!-- Tracking steps will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Modal -->
+  <div id="orderModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-3xl">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Create New Order</h3>
+          <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="orderForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Client</label>
+            <select name="client" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Select Client</option>
+              <option value="acme">ACME Corporation</option>
+              <option value="biocorp">BioCorp Industries</option>
+              <option value="apollo">Apollo Diagnostics</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Order Type</label>
+            <select name="type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="commercial">Commercial</option>
+              <option value="retail">Retail</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Product</label>
+            <select name="product" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Select Product</option>
+              <option value="oxygen">Oxygen Cylinder</option>
+              <option value="co2">CO2 Tank</option>
+              <option value="nitrogen">Nitrogen Cylinder</option>
+              <option value="argon">Argon Cylinder</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+            <input type="number" name="quantity" min="1" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Date</label>
+            <input type="date" name="deliveryDate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+            <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Address</label>
+            <textarea name="address" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Special Instructions</label>
+            <textarea name="instructions" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Any special handling or delivery instructions..."></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200">
+          <button type="button" onclick="closeAssetModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Add Asset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delivery Boy Modal -->
+  <div id="deliveryBoyModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-lg">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Add Delivery Boy</h3>
+          <button onclick="closeDeliveryBoyModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="deliveryBoyForm" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+            <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Type</label>
+            <select name="vehicleType" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="bike">Motorcycle</option>
+              <option value="van">Van</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Number</label>
+            <input type="text" name="vehicleNumber" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
+            <input type="text" name="license" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200">
+          <button type="button" onclick="closeDeliveryBoyModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Add Delivery Boy
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Technician Modal -->
+  <div id="technicianModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-lg">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Add Technician</h3>
+          <button onclick="closeTechnicianModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="technicianForm" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+            <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
+            <select name="specialization" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="cylinders">Gas Cylinders</option>
+              <option value="regulators">Pressure Regulators</option>
+              <option value="valves">Valves & Fittings</option>
+              <option value="general">General Maintenance</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Experience (Years)</label>
+            <input type="number" name="experience" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Certification</label>
+            <input type="text" name="certification" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="e.g., Certified Gas Equipment Technician">
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200">
+          <button type="button" onclick="closeTechnicianModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Add Technician
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Invoice Modal -->
+  <div id="invoiceModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Generate Invoice</h3>
+          <button onclick="closeInvoiceModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="invoiceForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Client</label>
+            <select name="client" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Select Client</option>
+              <option value="acme">ACME Corporation</option>
+              <option value="biocorp">BioCorp Industries</option>
+              <option value="apollo">Apollo Diagnostics</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
+            <select name="orderId" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Select Order (Optional)</option>
+              <option value="C-1001">C-1001</option>
+              <option value="C-1002">C-1002</option>
+              <option value="R-2001">R-2001</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Invoice Date</label>
+            <input type="date" name="invoiceDate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+            <input type="date" name="dueDate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <h4 class="text-lg font-medium text-gray-900 mb-4">Invoice Items</h4>
+          <div id="invoiceItems" class="space-y-4">
+            <div class="grid grid-cols-12 gap-3 items-end invoice-item">
+              <div class="col-span-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Item</label>
+                <input type="text" name="itemName[]" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Qty</label>
+                <input type="number" name="quantity[]" required min="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg" onchange="calculateItemTotal(this)">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Rate</label>
+                <input type="number" name="rate[]" required min="0" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg" onchange="calculateItemTotal(this)">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                <input type="number" name="amount[]" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+              </div>
+              <div class="col-span-2">
+                <button type="button" class="btn btn-secondary w-full" onclick="addInvoiceItem()">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Subtotal</label>
+            <input type="number" id="subtotal" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tax (%)</label>
+            <input type="number" id="taxRate" value="18" min="0" max="100" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg" onchange="calculateTotal()">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Total Amount</label>
+            <input type="number" id="totalAmount" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-bold">
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200">
+          <button type="button" onclick="closeInvoiceModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            Generate Invoice
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Sample data for tracking
+    const trackingData = {
+      'C-1001': {
+        steps: [
+          { status: 'completed', title: 'Order Placed', description: 'Order received and confirmed', timestamp: '2025-01-15 10:00 AM' },
+          { status: 'completed', title: 'Processing', description: 'Order is being prepared', timestamp: '2025-01-15 11:30 AM' },
+          { status: 'current', title: 'Ready for Dispatch', description: 'Order ready for pickup by delivery team', timestamp: '2025-01-15 02:00 PM' },
+          { status: 'pending', title: 'Out for Delivery', description: 'Package is on the way to destination' },
+          { status: 'pending', title: 'Delivered', description: 'Package delivered to customer' }
+        ]
+      },
+      'C-1002': {
+        steps: [
+          { status: 'completed', title: 'Order Placed', description: 'Order received and confirmed', timestamp: '2025-01-14 09:00 AM' },
+          { status: 'completed', title: 'Processing', description: 'Order is being prepared', timestamp: '2025-01-14 10:30 AM' },
+          { status: 'completed', title: 'Ready for Dispatch', description: 'Order ready for pickup', timestamp: '2025-01-14 01:00 PM' },
+          { status: 'completed', title: 'Out for Delivery', description: 'Package is on the way', timestamp: '2025-01-14 03:30 PM' },
+          { status: 'completed', title: 'Delivered', description: 'Package delivered successfully', timestamp: '2025-01-14 05:00 PM' }
+        ]
+      }
+    };
+    
+    // Page navigation
+    const navLinks = document.querySelectorAll('.nav-link[data-page]');
+    const pageContents = document.querySelectorAll('.page-content');
+    const pageTitle = document.getElementById('pageTitle');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetPage = link.dataset.page;
+        
+        // Update active nav
+        navLinks.forEach(l => l.classList.remove('nav-active'));
+        link.classList.add('nav-active');
+        
+        // Show target page
+        pageContents.forEach(page => {
+          if (page.id === targetPage) {
+            page.classList.remove('hidden');
+            // Update page title
+            pageTitle.textContent = link.querySelector('span').textContent;
+          } else {
+            page.classList.add('hidden');
+          }
+        });
+      });
+    });
+    
+    // Modal functions
+    function openClientModal() {
+      document.getElementById('clientModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeClientModal() {
+      document.getElementById('clientModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('clientForm').reset();
+    }
+    
+    function openImportModal() {
+      document.getElementById('importModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeImportModal() {
+      document.getElementById('importModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function openOrderModal() {
+      document.getElementById('orderModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeOrderModal() {
+      document.getElementById('orderModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('orderForm').reset();
+    }
+    
+    function openAssetModal() {
+      document.getElementById('assetModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeAssetModal() {
+      document.getElementById('assetModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('assetForm').reset();
+    }
+    
+    function openDeliveryBoyModal() {
+      document.getElementById('deliveryBoyModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeDeliveryBoyModal() {
+      document.getElementById('deliveryBoyModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('deliveryBoyForm').reset();
+    }
+    
+    function openTechnicianModal() {
+      document.getElementById('technicianModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeTechnicianModal() {
+      document.getElementById('technicianModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('technicianForm').reset();
+    }
+    
+    function openInvoiceModal() {
+      document.getElementById('invoiceModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Set default dates
+      const today = new Date().toISOString().split('T')[0];
+      const dueDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      document.querySelector('input[name="invoiceDate"]').value = today;
+      document.querySelector('input[name="dueDate"]').value = dueDate;
+    }
+    
+    function closeInvoiceModal() {
+      document.getElementById('invoiceModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('invoiceForm').reset();
+    }
+    
+    function openTrackingModal(orderId) {
+      const modal = document.getElementById('trackingModal');
+      const title = document.getElementById('trackingModalTitle');
+      const stepsContainer = document.getElementById('trackingSteps');
+      
+      title.textContent = `Tracking: ${orderId}`;
+      
+      const data = trackingData[orderId];
+      if (data) {
+        stepsContainer.innerHTML = data.steps.map((step, index) => `
+          <div class="flex items-start space-x-4">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center ${
+                step.status === 'completed' ? 'bg-green-500 text-white' :
+                step.status === 'current' ? 'bg-blue-500 text-white' :
+                'bg-gray-300 text-gray-600'
+              }">
+                ${step.status === 'completed' ? '<i data-lucide="check" class="w-5 h-5"></i>' :
+                  step.status === 'current' ? '<i data-lucide="clock" class="w-5 h-5"></i>' :
+                  '<i data-lucide="circle" class="w-5 h-5"></i>'}
+              </div>
+              ${index < data.steps.length - 1 ? `<div class="w-px h-12 ${step.status === 'completed' ? 'bg-green-500' : 'bg-gray-300'} mt-2"></div>` : ''}
+            </div>
+            <div class="flex-1 pb-8">
+              <h4 class="font-medium text-gray-900">${step.title}</h4>
+              <p class="text-sm text-gray-600 mt-1">${step.description}</p>
+              ${step.timestamp ? `<p class="text-xs text-gray-500 mt-2">${step.timestamp}</p>` : ''}
+            </div>
+          </div>
+        `).join('');
+        
+        lucide.createIcons();
+      } else {
+        stepsContainer.innerHTML = '<p class="text-gray-500">No tracking information available for this order.</p>';
+      }
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeTrackingModal() {
+      document.getElementById('trackingModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function openAlertDetail(title, description, priority) {
+      document.getElementById('alertDetailTitle').textContent = title;
+      document.getElementById('alertDescription').textContent = description;
+      
+      const priorityElement = document.getElementById('alertPriority');
+      priorityElement.textContent = priority;
+      priorityElement.className = `ml-2 px-2 py-1 rounded text-sm font-medium ${
+        priority === 'Critical' ? 'bg-red-100 text-red-800' :
+        priority === 'High' ? 'bg-orange-100 text-orange-800' :
+        priority === 'Warning' ? 'bg-yellow-100 text-yellow-800' :
+        priority === 'Medium' ? 'bg-blue-100 text-blue-800' :
+        priority === 'Low' ? 'bg-green-100 text-green-800' :
+        'bg-gray-100 text-gray-800'
+      }`;
+      
+      // Set recommended actions based on alert type
+      const actionsElement = document.getElementById('alertActions');
+      let actions = [];
+      
+      switch(title) {
+        case 'Low Stock Alert':
+          actions = ['Check inventory levels', 'Place order with suppliers', 'Update stock thresholds'];
+          break;
+        case 'Payment Due Reminder':
+          actions = ['Send payment reminders to clients', 'Follow up on overdue payments', 'Update payment terms if needed'];
+          break;
+        case 'Urgent Delivery Required':
+          actions = ['Assign available delivery personnel', 'Prioritize urgent orders', 'Contact clients for delivery confirmation'];
+          break;
+        default:
+          actions = ['Review the situation', 'Take appropriate action', 'Monitor for updates'];
+      }
+      
+      actionsElement.innerHTML = actions.map(action => `<li>• ${action}</li>`).join('');
+      
+      document.getElementById('alertDetailModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeAlertDetailModal() {
+      document.getElementById('alertDetailModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function resolveAlert() {
+      showNotification('Alert marked as resolved', 'success');
+      closeAlertDetailModal();
+    }
+    
+    // Tracking functions
+    function trackOrder() {
+      const orderId = document.getElementById('orderIdInput').value.trim();
+      if (!orderId) {
+        showNotification('Please enter an order ID', 'error');
+        return;
+      }
+      
+      const resultContainer = document.getElementById('orderTrackingResult');
+      const data = trackingData[orderId];
+      
+      if (data) {
+        openTrackingModal(orderId);
+        document.getElementById('orderIdInput').value = '';
+      } else {
+        resultContainer.innerHTML = `
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="flex">
+              <i data-lucide="alert-circle" class="w-5 h-5 text-red-400 mr-3 mt-0.5"></i>
+              <div>
+                <h3 class="text-sm font-medium text-red-800">Order not found</h3>
+                <p class="text-sm text-red-700 mt-1">No tracking information available for order ID: ${orderId}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+    
+    function trackAsset() {
+      const assetId = document.getElementById('assetIdInput').value.trim();
+      if (!assetId) {
+        showNotification('Please enter an asset ID', 'error');
+        return;
+      }
+      
+      const resultContainer = document.getElementById('assetTrackingResult');
+      
+      // Sample asset data
+      const assetData = {
+        'AS-501': {
+          name: 'Oxygen Cylinder - Large',
+          status: 'In Stock',
+          location: 'Warehouse A - Section B2',
+          lastMaintenance: '2024-12-15',
+          nextMaintenance: '2025-06-15'
+        }
+      };
+      
+      const asset = assetData[assetId];
+      
+      if (asset) {
+        resultContainer.innerHTML = `
+          <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Asset Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm font-medium text-gray-600">Asset ID</p>
+                <p class="text-gray-900">${assetId}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-600">Name</p>
+                <p class="text-gray-900">${asset.name}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-600">Status</p>
+                <span class="status-badge status-active">${asset.status}</span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-600">Location</p>
+                <p class="text-gray-900">${asset.location}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-600">Last Maintenance</p>
+                <p class="text-gray-900">${asset.lastMaintenance}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-600">Next Maintenance</p>
+                <p class="text-gray-900">${asset.nextMaintenance}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('assetIdInput').value = '';
+      } else {
+        resultContainer.innerHTML = `
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="flex">
+              <i data-lucide="alert-circle" class="w-5 h-5 text-red-400 mr-3 mt-0.5"></i>
+              <div>
+                <h3 class="text-sm font-medium text-red-800">Asset not found</h3>
+                <p class="text-sm text-red-700 mt-1">No information available for asset ID: ${assetId}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+    
+    // Tracking tab switching
+    const orderTrackingTab = document.getElementById('orderTrackingTab');
+    const assetTrackingTab = document.getElementById('assetTrackingTab');
+    const orderTrackingContent = document.getElementById('orderTrackingContent');
+    const assetTrackingContent = document.getElementById('assetTrackingContent');
+    
+    if (orderTrackingTab) {
+      orderTrackingTab.addEventListener('click', () => {
+        orderTrackingTab.classList.add('text-blue-600', 'border-blue-600');
+        orderTrackingTab.classList.remove('text-gray-500');
+        assetTrackingTab.classList.remove('text-blue-600', 'border-blue-600');
+        assetTrackingTab.classList.add('text-gray-500');
+        orderTrackingContent.classList.remove('hidden');
+        assetTrackingContent.classList.add('hidden');
+      });
+      
+      assetTrackingTab.addEventListener('click', () => {
+        assetTrackingTab.classList.add('text-blue-600', 'border-blue-600');
+        assetTrackingTab.classList.remove('text-gray-500');
+        orderTrackingTab.classList.remove('text-blue-600', 'border-blue-600');
+        orderTrackingTab.classList.add('text-gray-500');
+        assetTrackingContent.classList.remove('hidden');
+        orderTrackingContent.classList.add('hidden');
+      });
+    }
+    
+    // Delivery functions
+    function assignDelivery(button) {
+      const row = button.closest('tr');
+      const select = row.querySelector('select');
+      const deliveryBoy = select.value;
+      
+      if (!deliveryBoy) {
+        showNotification('Please select a delivery boy first', 'error');
+        return;
+      }
+      
+      // Update status
+      const statusCell = row.querySelector('.status-badge');
+      statusCell.textContent = 'Assigned';
+      statusCell.className = 'status-badge status-active';
+      
+      // Update button
+      button.textContent = 'Assigned';
+      button.classList.remove('btn-primary');
+      button.classList.add('btn-secondary');
+      button.disabled = true;
+      
+      showNotification(`Order assigned to ${deliveryBoy}`, 'success');
+    }
+    
+    function assignBulkDelivery() {
+      const checkboxes = document.querySelectorAll('.delivery-checkbox:checked');
+      if (checkboxes.length === 0) {
+        showNotification('Please select orders to assign', 'error');
+        return;
+      }
+      
+      showNotification(`${checkboxes.length} orders assigned for bulk delivery`, 'success');
+    }
+    
+    // Invoice functions
+    function addInvoiceItem() {
+      const itemsContainer = document.getElementById('invoiceItems');
+      const newItem = document.createElement('div');
+      newItem.className = 'grid grid-cols-12 gap-3 items-end invoice-item';
+      newItem.innerHTML = `
+        <div class="col-span-4">
+          <input type="text" name="itemName[]" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+        </div>
+        <div class="col-span-2">
+          <input type="number" name="quantity[]" required min="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg" onchange="calculateItemTotal(this)">
+        </div>
+        <div class="col-span-2">
+          <input type="number" name="rate[]" required min="0" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg" onchange="calculateItemTotal(this)">
+        </div>
+        <div class="col-span-2">
+          <input type="number" name="amount[]" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
+        </div>
+        <div class="col-span-2">
+          <button type="button" class="btn btn-danger w-full" onclick="removeInvoiceItem(this)">
+            <i data-lucide="minus" class="w-4 h-4"></i>
+          </button>
+        </div>
+      `;
+      itemsContainer.appendChild(newItem);
+      lucide.createIcons();
+    }
+    
+    function removeInvoiceItem(button) {
+      const item = button.closest('.invoice-item');
+      item.remove();
+      calculateTotal();
+    }
+    
+    function calculateItemTotal(input) {
+      const row = input.closest('.invoice-item');
+      const quantity = row.querySelector('input[name="quantity[]"]').value || 0;
+      const rate = row.querySelector('input[name="rate[]"]').value || 0;
+      const amount = quantity * rate;
+      row.querySelector('input[name="amount[]"]').value = amount.toFixed(2);
+      calculateTotal();
+    }
+    
+    function calculateTotal() {
+      const amounts = document.querySelectorAll('input[name="amount[]"]');
+      let subtotal = 0;
+      amounts.forEach(amount => {
+        subtotal += parseFloat(amount.value) || 0;
+      });
+      
+      const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+      const tax = subtotal * (taxRate / 100);
+      const total = subtotal + tax;
+      
+      document.getElementById('subtotal').value = subtotal.toFixed(2);
+      document.getElementById('totalAmount').value = total.toFixed(2);
+    }
+    
+    function updateInvoiceStatus(select, invoiceId) {
+      const status = select.value;
+      showNotification(`Invoice ${invoiceId} status updated to ${status}`, 'success');
+    }
+    
+    function viewInvoice(invoiceId) {
+      showNotification(`Opening invoice ${invoiceId}...`, 'info');
+      // Here you would typically open a detailed invoice view
+    }
+    
+    // Form submission handlers
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        showNotification('Client added successfully!', 'success');
+        closeClientModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Creating...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        const orderType = this.querySelector('select[name="type"]').value;
+        const orderId = orderType === 'commercial' ? 'C-' + Math.floor(Math.random() * 9000 + 1000) : 'R-' + Math.floor(Math.random() * 9000 + 1000);
+        showNotification(`Order ${orderId} created successfully!`, 'success');
+        closeOrderModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    document.getElementById('assetForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        const assetId = 'AS-' + Math.floor(Math.random() * 900 + 100);
+        showNotification(`Asset ${assetId} added successfully!`, 'success');
+        closeAssetModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    document.getElementById('deliveryBoyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        const name = this.querySelector('input[name="name"]').value;
+        showNotification(`Delivery boy ${name} added successfully!`, 'success');
+        closeDeliveryBoyModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    document.getElementById('technicianForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        const name = this.querySelector('input[name="name"]').value;
+        showNotification(`Technician ${name} added successfully!`, 'success');
+        closeTechnicianModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Generating...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        const invoiceId = 'INV-' + Math.floor(Math.random() * 9000 + 1000);
+        showNotification(`Invoice ${invoiceId} generated successfully!`, 'success');
+        closeInvoiceModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 2000);
+    });
+    
+    // File upload handling for import modal
+    const csvFileInput = document.getElementById('csvFileInput');
+    const dropZone = document.getElementById('dropZone');
+    const importBtn = document.getElementById('importBtn');
+    
+    if (csvFileInput) {
+      csvFileInput.addEventListener('change', handleFileSelect);
+      
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-blue-400', 'bg-blue-50');
+      });
+      
+      dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          csvFileInput.files = files;
+          handleFileSelect({ target: { files: files } });
+        }
+      });
+    }
+    
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file && file.type === 'text/csv') {
+        importBtn.disabled = false;
+        dropZone.innerHTML = `
+          <i data-lucide="file-check" class="w-12 h-12 text-green-500 mx-auto mb-4"></i>
+          <p class="text-lg font-medium text-gray-900 mb-2">${file.name}</p>
+          <p class="text-sm text-gray-500">Ready to import</p>
+        `;
+        lucide.createIcons();
+      } else {
+        showNotification('Please select a valid CSV file', 'error');
+        importBtn.disabled = true;
+      }
+    }
+    
+    if (importBtn) {
+      importBtn.addEventListener('click', () => {
+        const originalText = importBtn.innerHTML;
+        importBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Importing...';
+        importBtn.disabled = true;
+        
+        setTimeout(() => {
+          showNotification('Data imported successfully!', 'success');
+          closeImportModal();
+          importBtn.innerHTML = originalText;
+          importBtn.disabled = false;
+        }, 2000);
+      });
+    }
+    
+    // Checkbox handling for bulk operations
+    const selectAllDelivery = document.getElementById('selectAllDelivery');
+    if (selectAllDelivery) {
+      selectAllDelivery.addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.delivery-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+      });
+    }
+    
+    // Notification system
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 100);
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Close modals on outside click
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      }
+    });
+    
+    // Search functionality
+    function setupSearch(inputSelector, tableSelector) {
+      const searchInput = document.querySelector(inputSelector);
+      if (!searchInput) return;
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const table = document.querySelector(tableSelector);
+        if (!table) return;
+        
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+      });
+    }
+    
+    // Initialize search for different pages
+    setupSearch('input[placeholder*="Search clients"]', '#clients table');
+    setupSearch('input[placeholder*="Search orders"]', '#orders-commercial table');
+    
+    // Initialize page on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const defaultPage = document.getElementById('dashboard');
+      if (defaultPage) {
+        defaultPage.classList.remove('hidden');
+      }
+      
+      // Set current date for date inputs
+      const today = new Date().toISOString().split('T')[0];
+      document.querySelectorAll('input[type="date"]:not([value])').forEach(input => {
+        input.value = today;
+      });
+    });
+    
+    // Service & Repair functions
+    function openServiceRequestModal() {
+      showNotification('Service request form will open here', 'info');
+    }
+    
+    function openServiceDetailModal(requestId) {
+      showNotification(`Opening service request ${requestId} details`, 'info');
+    }
+    
+    function openImportInvoiceModal() {
+      openImportModal(); // Reuse the same import modal
+    }
+    
+    // Utility functions
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR'
+      }).format(amount);
+    }
+    
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('en-IN').format(new Date(date));
+    }
+    
+    // Auto-refresh data every 30 seconds (in real app, this would fetch from API)
+    setInterval(() => {
+      // Update timestamps or refresh critical data
+      console.log('Auto-refresh triggered');
+    }, 30000);
+    
+    // Initialize tooltips and other UI enhancements
+    function initializeUI() {
+      // Add hover effects to cards
+      document.querySelectorAll('.card-hover').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+      
+      // Initialize status badges with proper colors
+      document.querySelectorAll('.status-badge').forEach(badge => {
+        const status = badge.textContent.toLowerCase().trim();
+        badge.className = `status-badge ${
+          status.includes('active') || status.includes('delivered') || status.includes('completed') || status.includes('paid') ? 'status-active' :
+          status.includes('pending') || status.includes('processing') || status.includes('warning') ? 'status-pending' :
+          status.includes('overdue') || status.includes('critical') || status.includes('urgent') ? 'status-overdue' :
+          'status-pending'
+        }`;
+      });
+    }
+    
+    // Call initialization functions
+    initializeUI();
+    
+    // Performance monitoring
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.entryType === 'navigation') {
+          console.log(`Page load time: ${entry.loadEventEnd - entry.loadEventStart}ms`);
+        }
+      }
+    });
+    observer.observe({ entryTypes: ['navigation'] });
+  </script>
+</body>
+</html>
+          <button type="button" onclick="closeOrderModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Create Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Asset Modal -->
+  <div id="assetModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-2xl">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Add New Asset</h3>
+          <button onclick="closeAssetModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="assetForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Asset Name</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Serial Number</label>
+            <input type="text" name="serial" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Asset Type</label>
+            <select name="type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="oxygen">Oxygen Cylinder</option>
+              <option value="co2">CO2 Tank</option>
+              <option value="nitrogen">Nitrogen Cylinder</option>
+              <option value="argon">Argon Cylinder</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Capacity</label>
+            <input type="text" name="capacity" placeholder="e.g., 40L, 20kg" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+            <input type="text" name="location" placeholder="Warehouse A, Section B" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Purchase Date</label>
+            <input type="date" name="purchaseDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+            <textarea name="notes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Additional information about the asset..."></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* Custom CSS for enhanced UI */
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      color: #374151;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s;
+      gap: 12px;
+      white-space: nowrap;
+    }
+    
+    .nav-link:hover {
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+    
+    .nav-active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white !important;
+    }
+    
+    .nav-active:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%);
+      color: white !important;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal-overlay.active .modal-container {
+      transform: scale(1);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+    
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-pending {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    
+    .status-active {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .status-overdue {
+      background: #fecaca;
+      color: #dc2626;
+    }
+    
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background: #10b981;
+    }
+    
+    .notification.error {
+      background: #ef4444;
+    }
+    
+    .notification.info {
+      background: #3b82f6;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl text-center">
+      <i data-lucide="wind" class="w-6 h-6 inline mr-2"></i>
+      LiveAir
+    </div>
+    
+    <nav class="flex-1 p-4 space-y-2">
+      <a href="#dashboard" class="nav-link nav-active" data-page="dashboard">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span>Dashboard</span>
+      </a>
+      
+      <a href="#clients" class="nav-link" data-page="clients">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        <span>Clients</span>
+      </a>
+      
+      <details class="group">
+        <summary class="nav-link cursor-pointer">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+          <span>Orders</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 ml-auto group-open:rotate-180 transition-transform"></i>
+        </summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="#orders-commercial" class="nav-link" data-page="orders-commercial">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span>Commercial</span>
+          </a>
+          <a href="#orders-retail" class="nav-link" data-page="orders-retail">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>Retail</span>
+          </a>
+        </div>
+      </details>
+      
+      <a href="#assets" class="nav-link" data-page="assets">
+        <i data-lucide="package" class="w-5 h-5"></i>
+        <span>Assets</span>
+      </a>
+      
+      <a href="#tracking" class="nav-link" data-page="tracking">
+        <i data-lucide="map-pin" class="w-5 h-5"></i>
+        <span>Tracking</span>
+      </a>
+      
+      <a href="#delivery" class="nav-link" data-page="delivery">
+        <i data-lucide="truck" class="w-5 h-5"></i>
+        <span>Delivery</span>
+      </a>
+      
+      <a href="#service" class="nav-link" data-page="service">
+        <i data-lucide="wrench" class="w-5 h-5"></i>
+        <span>Service & Repair</span>
+      </a>
+      
+      <a href="#invoices" class="nav-link" data-page="invoices">
+        <i data-lucide="file-text" class="w-5 h-5"></i>
+        <span>Invoices</span>
+      </a>
+      
+      <a href="#alerts" class="nav-link" data-page="alerts">
+        <i data-lucide="bell" class="w-5 h-5"></i>
+        <span>Alerts</span>
+      </a>
+    </nav>
+    
+    <div class="p-4 border-t text-sm text-gray-500 text-center">
+      © 2025 LiveAir Systems
+    </div>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b p-4 flex justify-between items-center">
+      <div>
+        <h1 id="pageTitle" class="font-bold text-xl text-gray-900">Dashboard</h1>
+        <p class="text-sm text-gray-600">Welcome back, Admin</p>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        </button>
+        
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+            A
+          </div>
+          <span class="text-sm font-medium text-gray-700">Admin User</span>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Page Content -->
+    <div class="flex-1 overflow-hidden">
+      
+      <!-- Dashboard Page -->
+      <div id="dashboard" class="page-content p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                  <p class="text-3xl font-bold text-gray-900">247</p>
+                  <p class="text-sm text-green-600 mt-1">+12% from last month</p>
+                </div>
+                <div class="p-3 bg-blue-100 rounded-lg">
+                  <i data-lucide="shopping-cart" class="w-8 h-8 text-blue-600"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Active Clients</p>
+                  <p class="text-3xl font-bold text-gray-900">89</p>
+                  <p class="text-sm text-green-600 mt-1">+5% from last month</p>
+                </div>
+                <div class="p-3 bg-green-100 rounded-lg">
+                  <i data-lucide="users" class="w-8 h-8 text-green-600"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Pending Deliveries</p>
+                  <p class="text-3xl font-bold text-gray-900">23</p>
+                  <p class="text-sm text-yellow-600 mt-1">4 urgent</p>
+                </div>
+                <div class="p-3 bg-yellow-100 rounded-lg">
+                  <i data-lucide="truck" class="w-8 h-8 text-yellow-600"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Revenue (Month)</p>
+                  <p class="text-3xl font-bold text-gray-900">₹4.2L</p>
+                  <p class="text-sm text-green-600 mt-1">+8% from last month</p>
+                </div>
+                <div class="p-3 bg-purple-100 rounded-lg">
+                  <i data-lucide="indian-rupee" class="w-8 h-8 text-purple-600"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Charts and Recent Activity -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Recent Orders -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</button>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <i data-lucide="package" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Order #C-1001</p>
+                      <p class="text-sm text-gray-600">ACME Labs - Oxygen Cylinders</p>
+                    </div>
+                  </div>
+                  <span class="status-badge status-pending">Pending</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                      <i data-lucide="package" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Order #R-2001</p>
+                      <p class="text-sm text-gray-600">John Doe - CO2 Tank</p>
+                    </div>
+                  </div>
+                  <span class="status-badge status-active">Delivered</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                      <i data-lucide="package" class="w-5 h-5 text-yellow-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Order #C-1002</p>
+                      <p class="text-sm text-gray-600">BioCorp - Nitrogen Supply</p>
+                    </div>
+                  </div>
+                  <span class="status-badge status-pending">In Progress</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <button class="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200">
+                      <i data-lucide="plus" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">New Order</p>
+                      <p class="text-sm text-gray-600">Create new order</p>
+                    </div>
+                  </div>
+                </button>
+                
+                <button class="p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="p-2 bg-green-100 rounded-lg group-hover:bg-green-200">
+                      <i data-lucide="user-plus" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Add Client</p>
+                      <p class="text-sm text-gray-600">Register new client</p>
+                    </div>
+                  </div>
+                </button>
+                
+                <button class="p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200">
+                      <i data-lucide="file-text" class="w-5 h-5 text-purple-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Generate Invoice</p>
+                      <p class="text-sm text-gray-600">Create new invoice</p>
+                    </div>
+                  </div>
+                </button>
+                
+                <button class="p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-colors text-left group">
+                  <div class="flex items-center gap-3">
+                    <div class="p-2 bg-orange-100 rounded-lg group-hover:bg-orange-200">
+                      <i data-lucide="truck" class="w-5 h-5 text-orange-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-gray-900">Schedule Delivery</p>
+                      <p class="text-sm text-gray-600">Assign delivery</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- Other pages will be loaded here -->
+      <div id="clients" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Client Management</h2>
+            <div class="flex gap-3">
+              <button class="btn btn-secondary" onclick="openImportModal()">
+                <i data-lucide="upload" class="w-4 h-4"></i>
+                Import CSV
+              </button>
+              <button class="btn btn-primary" onclick="openClientModal()">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Add Client
+              </button>
+            </div>
+          </div>
+          
+          <!-- Client Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg mr-3">
+                  <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Total Clients</p>
+                  <p class="text-2xl font-bold text-gray-900">156</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg mr-3">
+                  <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Active Clients</p>
+                  <p class="text-2xl font-bold text-gray-900">142</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg mr-3">
+                  <i data-lucide="building" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Commercial</p>
+                  <p class="text-2xl font-bold text-gray-900">89</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg mr-3">
+                  <i data-lucide="user" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Retail</p>
+                  <p class="text-2xl font-bold text-gray-900">67</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Client Table -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900">Client List</h3>
+                <div class="flex items-center gap-3">
+                  <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Search clients..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Order</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                          <i data-lucide="building" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <div>
+                          <div class="text-sm font-medium text-gray-900">ACME Corporation</div>
+                          <div class="text-sm text-gray-500">John Smith</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Commercial</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div>john@acme.com</div>
+                      <div class="text-gray-500">+91 9876543210</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-15</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                      <button class="text-red-600 hover:text-red-900">Delete</button>
+                    </td>
+                  </tr>
+                  <!-- More rows would go here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Orders Commercial Page -->
+      <div id="orders-commercial" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Commercial Orders</h2>
+            <button class="btn btn-primary" onclick="openOrderModal()">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              New Order
+            </button>
+          </div>
+          
+          <!-- Order Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg mr-3">
+                  <i data-lucide="shopping-cart" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                  <p class="text-2xl font-bold text-gray-900">156</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg mr-3">
+                  <i data-lucide="clock" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Pending</p>
+                  <p class="text-2xl font-bold text-gray-900">23</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg mr-3">
+                  <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Completed</p>
+                  <p class="text-2xl font-bold text-gray-900">98</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg mr-3">
+                  <i data-lucide="truck" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">In Transit</p>
+                  <p class="text-2xl font-bold text-gray-900">35</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Orders Table -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900">Order List</h3>
+                <div class="flex items-center gap-3">
+                  <select class="px-3 py-2 border border-gray-300 rounded-lg">
+                    <option>All Status</option>
+                    <option>Pending</option>
+                    <option>In Progress</option>
+                    <option>Completed</option>
+                  </select>
+                  <input type="text" placeholder="Search orders..." class="px-3 py-2 border border-gray-300 rounded-lg">
+                </div>
+              </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button class="text-blue-600 hover:text-blue-800 font-medium" onclick="openTrackingModal('C-1001')">C-1001</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">ACME Corporation</div>
+                      <div class="text-sm text-gray-500">john@acme.com</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">Oxygen Cylinders x3</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹45,000</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <select class="text-sm border border-gray-300 rounded px-2 py-1">
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Ready to Dispatch</option>
+                        <option>Dispatched</option>
+                        <option>Delivered</option>
+                      </select>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                      <button class="text-green-600 hover:text-green-900">Track</button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button class="text-blue-600 hover:text-blue-800 font-medium" onclick="openTrackingModal('C-1002')">C-1002</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">BioCorp Industries</div>
+                      <div class="text-sm text-gray-500">contact@biocorp.com</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">CO2 Tanks x5</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹78,500</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="status-badge status-active">Delivered</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                      <button class="text-green-600 hover:text-green-900">Track</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Orders Retail Page -->
+      <div id="orders-retail" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Retail Orders</h2>
+            <button class="btn btn-primary" onclick="openOrderModal()">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              New Order
+            </button>
+          </div>
+          
+          <!-- Similar structure as commercial orders but with retail-specific data -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-medium text-gray-900">Retail Order List</h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button class="text-blue-600 hover:text-blue-800 font-medium" onclick="openTrackingModal('R-2001')">R-2001</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">John Doe</div>
+                      <div class="text-sm text-gray-500">john.doe@email.com</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">Small CO2 Cylinder</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹2,500</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="status-badge status-pending">Pending</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                      <button class="text-green-600 hover:text-green-900">Track</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Assets Page -->
+      <div id="assets" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Asset Management</h2>
+            <button class="btn btn-primary" onclick="openAssetModal()">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              Add Asset
+            </button>
+          </div>
+          
+          <!-- Asset Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+              <p class="text-sm text-gray-600">Total Assets</p>
+              <p class="text-2xl font-bold text-gray-900">500</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+              <p class="text-sm text-gray-600">In Stock</p>
+              <p class="text-2xl font-bold text-green-600">300</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+              <p class="text-sm text-gray-600">With Customers</p>
+              <p class="text-2xl font-bold text-blue-600">150</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+              <p class="text-sm text-gray-600">Need Refill</p>
+              <p class="text-2xl font-bold text-yellow-600">30</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+              <p class="text-sm text-gray-600">Under Repair</p>
+              <p class="text-2xl font-bold text-red-600">20</p>
+            </div>
+          </div>
+          
+          <!-- Assets Table -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900">Asset Inventory</h3>
+                <div class="flex items-center gap-3">
+                  <select class="px-3 py-2 border border-gray-300 rounded-lg">
+                    <option>All Status</option>
+                    <option>In Stock</option>
+                    <option>With Customer</option>
+                    <option>Under Repair</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asset ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Serial Number</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-600">AS-501</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">Oxygen Cylinder - Large</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">OXY-2024-001</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="status-badge status-active">In Stock</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Warehouse A</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                      <button class="text-green-600 hover:text-green-900">Track</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tracking Page -->
+      <div id="tracking" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Order & Asset Tracking</h2>
+          
+          <!-- Tracking Tabs -->
+          <div class="bg-white rounded-lg shadow-sm mb-6">
+            <div class="flex border-b border-gray-200">
+              <button class="px-6 py-3 font-medium text-blue-600 border-b-2 border-blue-600" id="orderTrackingTab">Order Tracking</button>
+              <button class="px-6 py-3 font-medium text-gray-500 hover:text-gray-700" id="assetTrackingTab">Asset Tracking</button>
+            </div>
+            
+            <!-- Order Tracking -->
+            <div id="orderTrackingContent" class="p-6">
+              <div class="max-w-md">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Enter Order ID</label>
+                <div class="flex gap-3">
+                  <input type="text" id="orderIdInput" placeholder="e.g., C-1001 or R-2001" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg">
+                  <button class="btn btn-primary" onclick="trackOrder()">Track Order</button>
+                </div>
+              </div>
+              
+              <div id="orderTrackingResult" class="mt-8"></div>
+            </div>
+            
+            <!-- Asset Tracking -->
+            <div id="assetTrackingContent" class="p-6 hidden">
+              <div class="max-w-md">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Enter Asset ID</label>
+                <div class="flex gap-3">
+                  <input type="text" id="assetIdInput" placeholder="e.g., AS-501" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg">
+                  <button class="btn btn-primary" onclick="trackAsset()">Track Asset</button>
+                </div>
+              </div>
+              
+              <div id="assetTrackingResult" class="mt-8"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Delivery Page -->
+      <div id="delivery" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Delivery Management</h2>
+            <div class="flex gap-3">
+              <button class="btn btn-secondary" onclick="openDeliveryBoyModal()">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                Add Delivery Boy
+              </button>
+              <button class="btn btn-primary" onclick="assignBulkDelivery()">
+                <i data-lucide="truck" class="w-4 h-4"></i>
+                Bulk Assign
+              </button>
+            </div>
+          </div>
+          
+          <!-- Delivery Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg mr-3">
+                  <i data-lucide="clock" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Pending Assignments</p>
+                  <p class="text-2xl font-bold text-gray-900">12</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg mr-3">
+                  <i data-lucide="truck" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Out for Delivery</p>
+                  <p class="text-2xl font-bold text-gray-900">8</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg mr-3">
+                  <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Delivered Today</p>
+                  <p class="text-2xl font-bold text-gray-900">15</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg mr-3">
+                  <i data-lucide="users" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Active Delivery Boys</p>
+                  <p class="text-2xl font-bold text-gray-900">5</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Delivery Assignment Table -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-medium text-gray-900">Delivery Assignments</h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left">
+                      <input type="checkbox" class="rounded" id="selectAllDelivery">
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priority</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                      <input type="checkbox" class="rounded delivery-checkbox">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-600">C-1001</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">ACME Corp</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Chennai</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="status-badge bg-red-100 text-red-800">High</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <select class="text-sm border border-gray-300 rounded px-2 py-1">
+                        <option value="">Select Delivery Boy</option>
+                        <option>Ravi Kumar</option>
+                        <option>Ashok Singh</option>
+                        <option>Gowtham M</option>
+                      </select>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="status-badge status-pending">Unassigned</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button class="btn btn-primary" onclick="assignDelivery(this)">Assign</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Service & Repair Page -->
+      <div id="service" class="page-content hidden p-6 h-full overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Service & Repair Management</h2>
+            <div class="flex gap-3">
+              <button class="btn btn-secondary" onclick="openTechnicianModal()">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                Add Technician
+              </button>
+              <button class="btn btn-primary" onclick="openServiceRequestModal()">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                New Service Request
+              </button>
+            </div>
+          </div>
+          
+          <!-- Service Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg mr-3">
+                  <i data-lucide="wrench" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Open Requests</p>
+                  <p class="text-2xl font-bold text-gray-900">8</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg mr-3">
+                  <i data-lucide="settings" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">In Progress</p>
+                  <p class="text-2xl font-bold text-gray-900">5</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg mr-3">
+                  <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Completed</p>
+                  <p class="text-2xl font-bold text-gray-900">42</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg mr-3">
+                  <i data-lucide="users" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-600">Technicians</p>
+                  <p class="text-2xl font-bold text-gray-900">6</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Service Requests Table -->
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-medium
+      
+    </div>
+    
+  </main>
+  
+  <!-- Client Modal -->
+  <div id="clientModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-2xl">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Add New Client</h3>
+          <button onclick="closeClientModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <form id="clientForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
+            <input type="text" name="organization" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person</label>
+            <input type="text" name="contact" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input type="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+            <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+            <textarea name="address" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+            <input type="text" name="city" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
+            <input type="text" name="state" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Client Type</label>
+            <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="commercial">Commercial</option>
+              <option value="retail">Retail</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">GST/Tax ID</label>
+            <input type="text" name="gst" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+            <textarea name="notes" rows="3" placeholder="Additional information..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-200">
+          <button type="button" onclick="closeClientModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Add Client
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Import CSV Modal -->
+  <div id="importModal" class="modal-overlay">
+    <div class="modal-container w-full max-w-lg">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-900">Import Client Data</h3>
+          <button onclick="closeImportModal()" class="text-gray-400 hover:text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="p-6">
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors" id="dropZone">
+          <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+          <p class="text-lg font-medium text-gray-900 mb-2">Drop your CSV file here</p>
+          <p class="text-sm text-gray-500 mb-4">or click to browse</p>
+          <input type="file" id="csvFileInput" accept=".csv" class="hidden">
+          <button onclick="document.getElementById('csvFileInput').click()" class="btn btn-primary">
+            <i data-lucide="folder" class="w-4 h-4"></i>
+            Choose File
+          </button>
+        </div>
+        
+        <div class="mt-4">
+          <h4 class="text-sm font-medium text-gray-900 mb-2">Required CSV Format:</h4>
+          <div class="bg-gray-50 rounded-lg p-3">
+            <code class="text-xs text-gray-600">
+              organization,contact,email,phone,address,city,state,type,gst
+            </code>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end gap-3 p-6 border-t border-gray-200">
+        <button onclick="closeImportModal()" class="btn btn-secondary">Cancel</button>
+        <button id="importBtn" class="btn btn-primary" disabled>
+          <i data-lucide="upload" class="w-4 h-4"></i>
+          Import Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Page navigation
+    const navLinks = document.querySelectorAll('.nav-link[data-page]');
+    const pageContents = document.querySelectorAll('.page-content');
+    const pageTitle = document.getElementById('pageTitle');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetPage = link.dataset.page;
+        
+        // Update active nav
+        navLinks.forEach(l => l.classList.remove('nav-active'));
+        link.classList.add('nav-active');
+        
+        // Show target page
+        pageContents.forEach(page => {
+          if (page.id === targetPage) {
+            page.classList.remove('hidden');
+            // Update page title
+            pageTitle.textContent = link.querySelector('span').textContent;
+          } else {
+            page.classList.add('hidden');
+          }
+        });
+      });
+    });
+    
+    // Modal functions
+    function openClientModal() {
+      document.getElementById('clientModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeClientModal() {
+      document.getElementById('clientModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      document.getElementById('clientForm').reset();
+    }
+    
+    function openImportModal() {
+      document.getElementById('importModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeImportModal() {
+      document.getElementById('importModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Client form submission
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Show loading
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+      submitBtn.disabled = true;
+      
+      // Simulate API call
+      setTimeout(() => {
+        showNotification('Client added successfully!', 'success');
+        closeClientModal();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 1500);
+    });
+    
+    // File upload handling
+    const csvFileInput = document.getElementById('csvFileInput');
+    const dropZone = document.getElementById('dropZone');
+    const importBtn = document.getElementById('importBtn');
+    
+    csvFileInput.addEventListener('change', handleFileSelect);
+    
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-blue-400', 'bg-blue-50');
+    });
+    
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        csvFileInput.files = files;
+        handleFileSelect({ target: { files: files } });
+      }
+    });
+    
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file && file.type === 'text/csv') {
+        importBtn.disabled = false;
+        dropZone.innerHTML = `
+          <i data-lucide="file-check" class="w-12 h-12 text-green-500 mx-auto mb-4"></i>
+          <p class="text-lg font-medium text-gray-900 mb-2">${file.name}</p>
+          <p class="text-sm text-gray-500">Ready to import</p>
+        `;
+        lucide.createIcons();
+      } else {
+        showNotification('Please select a valid CSV file', 'error');
+        importBtn.disabled = true;
+      }
+    }
+    
+    importBtn.addEventListener('click', () => {
+      const originalText = importBtn.innerHTML;
+      importBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Importing...';
+      importBtn.disabled = true;
+      
+      setTimeout(() => {
+        showNotification('Client data imported successfully!', 'success');
+        closeImportModal();
+        importBtn.innerHTML = originalText;
+        importBtn.disabled = false;
+      }, 2000);
+    });
+    
+    // Notification system
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 100);
+      
+      // Hide notification
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+    
+    // Close modals on outside click
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      }
+    });
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set initial page state
+      const defaultPage = document.getElementById('dashboard');
+      if (defaultPage) {
+        defaultPage.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

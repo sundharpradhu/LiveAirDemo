@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Invoices & Payments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* Custom Styles for LiveAir */
+    .gradient-bg {
+      background: linear-gradient(135deg, #2196f3 0%, #4caf50 100%);
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #666;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      background: #f3f4f6;
+      color: #333;
+    }
+    
+    .nav-active {background:#dbeafe; color:#1d4ed8; font-weight:600;
+    }
+    
+    .nav-active:hover {
+      background: linear-gradient(135deg, #1976d2, #388e3c);
+    }
+
+    /* Invoice Modal Styles */
+    .invoice-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .invoice-modal.active {
+      display: flex;
+    }
+
+    .invoice-container {
+      background: white;
+      border-radius: 16px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOutUp {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-20px); }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .fade-in-down {
+      animation: fadeInDown 0.3s ease-out forwards;
+    }
+    .fade-out-up {
+      animation: fadeOutUp 0.5s ease-in forwards;
+    }
+
+    
+
+    /* Zoho-style Invoice */
+    .invoice-box {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      background: white;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2196f3;
+    }
+
+    .company-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #2196f3, #4caf50);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .company-info {
+      flex: 1;
+    }
+
+    .company-name {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2196f3;
+      margin-bottom: 4px;
+    }
+
+    .company-tagline {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .invoice-title {
+      text-align: right;
+      color: #2196f3;
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .invoice-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin: 30px 0;
+    }
+
+    .invoice-info, .billing-info {
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border-left: 4px solid #2196f3;
+    }
+
+    .info-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .info-item {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #666;
+    }
+
+    .info-value {
+      color: #333;
+      margin-left: 8px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .invoice-table th {
+      background: linear-gradient(135deg, #2196f3, #1976d2);
+      color: white;
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .invoice-table td {
+      padding: 15px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 14px;
+    }
+
+    .invoice-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .invoice-table tr:hover {
+      background: #e3f2fd;
+    }
+
+    .total-section {
+      display: flex;
+      justify-content: flex-end;
+      margin: 30px 0;
+    }
+
+    .total-details {
+      min-width: 300px;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid #e3f2fd;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+
+    .total-row.final {
+      border-top: 2px solid #2196f3;
+      margin-top: 12px;
+      padding-top: 12px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #2196f3;
+    }
+
+    .terms-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f0f9ff;
+      border-radius: 12px;
+      border-left: 4px solid #0ea5e9;
+    }
+
+    .terms-title {
+      font-weight: 600;
+      color: #0c4a6e;
+      margin-bottom: 12px;
+    }
+
+    .terms-text {
+      font-size: 13px;
+      color: #0369a1;
+      line-height: 1.6;
+    }
+
+    .invoice-footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e0e0e0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Modal Actions */
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #f8f9fa;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #2196f3;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1976d2;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    /* File Upload Modal Styles */
+    .upload-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+    }
+
+    .upload-modal.active {
+      display: flex;
+    }
+
+    .upload-container {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .upload-header {
+      padding: 24px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin: 24px;
+      background: #f9fafb;
+    }
+
+    .upload-area:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .upload-area.dragover {
+      border-color: #2563eb;
+      background: #dbeafe;
+      transform: scale(1.02);
+    }
+
+    /* Status indicators */
+    .status-paid {
+      background: #dcfce7;
+      color: #16a34a;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #d97706;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-overdue {
+      background: #fecaca;
+      color: #dc2626;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .invoice-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .invoice-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+      }
+      
+      .invoice-title {
+        text-align: center;
+      }
+      
+      .modal-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group">
+        <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link nav-active"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+    
+  <main class="flex-1 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Invoices & Payments</h2>
+        <div class="flex gap-3">
+          <button onclick="openUploadModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition-all duration-300 flex items-center gap-2">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            Import CSV
+          </button>
+          <button onclick="openGenerateInvoiceModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-all duration-300 flex items-center gap-2">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Generate Invoice
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-green-100 rounded-lg">
+              <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Paid Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹2,45,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-yellow-100 rounded-lg">
+              <i data-lucide="clock" class="w-6 h-6 text-yellow-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Pending Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹85,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-red-100 rounded-lg">
+              <i data-lucide="alert-circle" class="w-6 h-6 text-red-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Overdue Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">₹32,000</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <div class="flex items-center">
+            <div class="p-2 bg-blue-100 rounded-lg">
+              <i data-lucide="file-text" class="w-6 h-6 text-blue-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Total Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">156</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoices Table -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Invoices</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table id="invoiceTable" class="w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice No</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1001</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Acme Corporation</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹45,000</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-15</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1001')">
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1001')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1001')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1001')">Send</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1002</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Apollo Industries</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹78,500</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-14</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1002')">
+                    <option value="Pending">Pending</option>
+                    <option value="Paid" selected>Paid</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1002')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1002')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1002')">Send</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">INV-1003</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Tech Solutions Ltd</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹32,000</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2025-01-10</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="payment-status border rounded px-2 py-1 text-sm" onchange="updatePaymentStatus(this, 'INV-1003')">
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue" selected>Overdue</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button class="view-btn text-blue-600 hover:text-blue-900 mr-3" onclick="viewInvoice('INV-1003')">View</button>
+                  <button class="text-green-600 hover:text-green-900 mr-3" onclick="downloadInvoice('INV-1003')">Download</button>
+                  <button class="text-purple-600 hover:text-purple-900" onclick="sendInvoice('INV-1003')">Send</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Invoice Modal -->
+  <div id="invoiceModal" class="invoice-modal">
+    <div class="invoice-container">
+      <div class="invoice-box">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+          <div class="company-logo">
+            <div class="logo-icon">LA</div>
+            <div class="company-info">
+              <div class="company-name">LiveAir</div>
+              <div class="company-tagline">Cylinder Delivery Service</div>
+            </div>
+          </div>
+          <h1 class="invoice-title">INVOICE</h1>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+          <div class="invoice-info">
+            <div class="info-title">Company Information</div>
+            <div class="info-item">
+              <span class="info-label">Address:</span>
+              <span class="info-value">123 Business Avenue, City, State 12345</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone:</span>
+              <span class="info-value">(555) 123-4567</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">admin@liveair.com</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">GSTIN:</span>
+              <span class="info-value">12AABCC1234F1Z5</span>
+            </div>
+          </div>
+
+          <div class="billing-info">
+            <div class="info-title">Invoice Details</div>
+            <div class="info-item">
+              <span class="info-label">Invoice #:</span>
+              <span class="info-value" id="modalInvoiceNumber">INV-1001</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date:</span>
+              <span class="info-value" id="modalInvoiceDate">2025-01-15</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Due Date:</span>
+              <span class="info-value" id="modalDueDate">2025-02-15</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status:</span>
+              <span class="info-value" id="modalInvoiceStatus">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing To -->
+        <div class="billing-info" style="margin-bottom: 30px;">
+          <div class="info-title">Billed To:</div>
+          <div class="info-item">
+            <span class="info-label">Company:</span>
+            <span class="info-value" id="modalClientName">Acme Corporation</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Address:</span>
+            <span class="info-value" id="modalClientAddress">456 Client Street, Business District</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value" id="modalClientEmail">client@acme.com</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Phone:</span>
+            <span class="info-value" id="modalClientPhone">(555) 987-6543</span>
+          </div>
+        </div>
+
+        <!-- Invoice Table -->
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="modalInvoiceItems">
+            <tr>
+              <td>CO2 Cylinder</td>
+              <td>20 LBS CO2 Gas Cylinder with delivery</td>
+              <td>2</td>
+              <td>₹30,000.00</td>
+            </tr>
+            <tr>
+              <td>Delivery Service</td>
+              <td>Express delivery and installation</td>
+              <td>1</td>
+              <td>₹5,000.00</td>
+              <td>₹5,000.00</td>
+            </tr>
+            <tr>
+              <td>Nitrogen Cylinder</td>
+              <td>50 LBS Nitrogen Gas Cylinder</td>
+              <td>1</td>
+              <td>₹10,000.00</td>
+              <td>₹10,000.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Total Section -->
+        <div class="total-section">
+          <div class="total-details">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="modalSubtotal">₹45,000.00</span>
+            </div>
+            <div class="total-row">
+              <span>Tax (18% GST):</span>
+              <span id="modalTax">₹8,100.00</span>
+            </div>
+            <div class="total-row">
+              <span>Delivery Charges:</span>
+              <span id="modalDelivery">₹500.00</span>
+            </div>
+            <div class="total-row final">
+              <span>Total Amount:</span>
+              <span id="modalTotal">₹53,600.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+          <div class="terms-title">Terms and Conditions:</div>
+          <div class="terms-text">
+            • Payment is due within 30 days of invoice date.<br>
+            • Late payments may incur additional charges.<br>
+            • All cylinders remain property of LiveAir until full payment.<br>
+            • Any disputes must be reported within 7 days of delivery.
+          </div>
+        </div>
+
+        <!-- Invoice Footer -->
+        <div class="invoice-footer">
+          <p><strong>Thank you for choosing LiveAir!</strong></p>
+          <p>For any queries, contact us at support@liveair.com or (555) 123-4567</p>
+        </div>
+      </div>
+
+      <!-- Modal Actions -->
+      <div class="modal-actions">
+        <div>
+          <button class="action-btn btn-secondary" onclick="closeInvoiceModal()">
+            <i data-lucide="x" class="w-4 h-4"></i>
+            Close
+          </button>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="action-btn btn-primary" onclick="downloadInvoicePDF()">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Download PDF
+          </button>
+          <button class="action-btn btn-success" onclick="sendInvoiceEmail()">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            Send Email
+          </button>
+          <button class="action-btn btn-primary" onclick="printInvoice()">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Upload Modal -->
+  <div id="uploadModal" class="upload-modal">
+    <div class="upload-container">
+      <!-- Upload Header -->
+      <div class="upload-header">
+        <div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 12px;">
+          <i data-lucide="upload" class="w-6 h-6"></i>
+          Import Invoice Data
+        </div>
+        <button onclick="closeUploadModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; font-size: 24px; cursor: pointer; padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          ×
+        </button>
+      </div>
+
+      <!-- Upload Body -->
+      <div style="padding: 32px 24px;">
+        <!-- Upload Area -->
+        <div class="upload-area" id="uploadArea">
+          <input type="file" 
+                 id="fileInput" 
+                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" 
+                 accept=".csv,.xlsx,.xls" 
+                 multiple
+                 onchange="handleFileSelect(event)">
+          
+          <div style="font-size: 48px; color: #6b7280; margin-bottom: 16px;" id="uploadIcon">📁</div>
+          
+          <div style="font-size: 18px; font-weight: 500; color: #374151; margin-bottom: 8px;" id="uploadText">
+            Drag & drop your files here
+          </div>
+          
+          <div style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+            or <strong>click to browse</strong> from your device
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <div class="action-btn btn-primary" style="pointer-events: none;">
+              📂 Choose Files
+            </div>
+          </div>
+        </div>
+
+        <!-- Supported Formats -->
+        <div style="margin: 24px 0; padding: 20px; background: #f0f9ff; border-radius: 8px; border: 1px solid #0ea5e9;">
+          <h4 style="color: #0c4a6e; margin-bottom: 12px; font-size: 16px; font-weight: 600;">📋 Supported File Formats</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">CSV</span>
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">XLSX</span>
+            <span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">XLS</span>
+          </div>
+          <div style="font-size: 12px; color: #6b7280;">
+            Maximum file size: 10MB per file
+          </div>
+        </div>
+
+        <!-- File Preview -->
+        <div id="filePreview" style="margin-top: 24px; display: none;">
+          <h4 style="margin-bottom: 16px; color: #374151;">📄 Selected Files</h4>
+          <div id="fileList">
+            <!-- Files will be displayed here -->
+          </div>
+        </div>
+
+        <!-- Upload Progress -->
+        <div id="uploadProgress" style="margin-top: 16px; display: none;">
+          <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+            <div id="progressFill" style="height: 100%; background: linear-gradient(90deg, #2563eb, #3b82f6); transition: width 0.3s ease; width: 0%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 14px; color: #6b7280;">
+            <span id="progressText">Uploading...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="errorMessage" style="background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 8px; border: 1px solid #fecaca; margin-top: 16px; display: none; font-size: 14px;">
+          <!-- Error messages will appear here -->
+        </div>
+
+        <div id="successMessage" style="background: #f0fdf4; color: #16a34a; padding: 12px 16px; border-radius: 8px; border: 1px solid #bbf7d0; margin-top: 16px; display: none; font-size: 14px;">
+          <!-- Success messages will appear here -->
+        </div>
+      </div>
+
+      <!-- Upload Footer -->
+      <div style="padding: 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f9fafb;">
+        <div style="font-size: 12px; color: #6b7280;">
+          <span id="fileCount">0 files selected</span> • 
+          <span id="totalSize">0 KB</span>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="action-btn btn-secondary" onclick="clearFiles()">
+            🗑️ Clear All
+          </button>
+          <button class="action-btn btn-primary" id="uploadBtn" onclick="uploadFiles()" disabled>
+            <span id="uploadBtnText">⬆️ Upload Files</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Global variables
+    let selectedFiles = [];
+
+    // Sample invoice data
+    const invoiceData = {
+      'INV-1001': {
+        number: 'INV-1001',
+        client: 'Acme Corporation',
+        clientAddress: '456 Client Street, Business District',
+        clientEmail: 'client@acme.com',
+        clientPhone: '(555) 987-6543',
+        date: '2025-01-15',
+        dueDate: '2025-02-15',
+        status: 'Pending',
+        items: [
+          { item: 'CO2 Cylinder', description: '20 LBS CO2 Gas Cylinder with delivery', quantity: 2, rate: 15000, amount: 30000 },
+          { item: 'Delivery Service', description: 'Express delivery and installation', quantity: 1, rate: 5000, amount: 5000 },
+          { item: 'Nitrogen Cylinder', description: '50 LBS Nitrogen Gas Cylinder', quantity: 1, rate: 10000, amount: 10000 }
+        ],
+        subtotal: 45000,
+        tax: 8100,
+        delivery: 500,
+        total: 53600
+      },
+      'INV-1002': {
+        number: 'INV-1002',
+        client: 'Apollo Industries',
+        clientAddress: '789 Industry Road, Manufacturing Zone',
+        clientEmail: 'contact@apollo.com',
+        clientPhone: '(555) 876-5432',
+        date: '2025-01-14',
+        dueDate: '2025-02-14',
+        status: 'Paid',
+        items: [
+          { item: 'Oxygen Cylinder', description: '40 LBS Medical Oxygen Cylinder', quantity: 3, rate: 20000, amount: 60000 },
+          { item: 'Installation', description: 'Professional installation service', quantity: 1, rate: 8000, amount: 8000 }
+        ],
+        subtotal: 68000,
+        tax: 12240,
+        delivery: 750,
+        total: 80990
+      },
+      'INV-1003': {
+        number: 'INV-1003',
+        client: 'Tech Solutions Ltd',
+        clientAddress: '321 Tech Park, Innovation District',
+        clientEmail: 'billing@techsolutions.com',
+        clientPhone: '(555) 765-4321',
+        date: '2025-01-10',
+        dueDate: '2025-02-10',
+        status: 'Overdue',
+        items: [
+          { item: 'Argon Cylinder', description: '25 LBS Argon Gas for welding', quantity: 2, rate: 12000, amount: 24000 },
+          { item: 'Regulator', description: 'High-pressure gas regulator', quantity: 2, rate: 4000, amount: 8000 }
+        ],
+        subtotal: 32000,
+        tax: 5760,
+        delivery: 400,
+        total: 38160
+      }
+    };
+
+    // Invoice Functions
+    function viewInvoice(invoiceId) {
+      const invoice = invoiceData[invoiceId];
+      if (!invoice) {
+        alert('Invoice data not found');
+        return;
+      }
+
+      // Populate modal with invoice data
+      document.getElementById('modalInvoiceNumber').textContent = invoice.number;
+      document.getElementById('modalInvoiceDate').textContent = invoice.date;
+      document.getElementById('modalDueDate').textContent = invoice.dueDate;
+      document.getElementById('modalInvoiceStatus').textContent = invoice.status;
+      document.getElementById('modalClientName').textContent = invoice.client;
+      document.getElementById('modalClientAddress').textContent = invoice.clientAddress;
+      document.getElementById('modalClientEmail').textContent = invoice.clientEmail;
+      document.getElementById('modalClientPhone').textContent = invoice.clientPhone;
+
+      // Populate invoice items
+      const itemsContainer = document.getElementById('modalInvoiceItems');
+      itemsContainer.innerHTML = '';
+      
+      invoice.items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.item}</td>
+          <td>${item.description}</td>
+          <td>${item.quantity}</td>
+          <td>₹${item.rate.toLocaleString()}.00</td>
+          <td>₹${item.amount.toLocaleString()}.00</td>
+        `;
+        itemsContainer.appendChild(row);
+      });
+
+      // Populate totals
+      document.getElementById('modalSubtotal').textContent = `₹${invoice.subtotal.toLocaleString()}.00`;
+      document.getElementById('modalTax').textContent = `₹${invoice.tax.toLocaleString()}.00`;
+      document.getElementById('modalDelivery').textContent = `₹${invoice.delivery.toLocaleString()}.00`;
+      document.getElementById('modalTotal').textContent = `₹${invoice.total.toLocaleString()}.00`;
+
+      // Show modal
+      document.getElementById('invoiceModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('invoiceModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function openGenerateInvoiceModal() {
+      // For demo purposes, we'll just show a success message
+      showNotification('Invoice generation feature coming soon!', 'info');
+    }
+
+    function downloadInvoice(invoiceId) {
+      showNotification(`Downloading invoice ${invoiceId}...`, 'success');
+      // Simulate download
+      setTimeout(() => {
+        showNotification(`Invoice ${invoiceId} downloaded successfully!`, 'success');
+      }, 1500);
+    }
+
+    function sendInvoice(invoiceId) {
+      showNotification(`Sending invoice ${invoiceId} via email...`, 'info');
+      setTimeout(() => {
+        showNotification(`Invoice ${invoiceId} sent successfully!`, 'success');
+      }, 2000);
+    }
+
+    function downloadInvoicePDF() {
+      showNotification('Generating PDF...', 'info');
+      setTimeout(() => {
+        showNotification('PDF downloaded successfully!', 'success');
+        closeInvoiceModal();
+      }, 2000);
+    }
+
+    function sendInvoiceEmail() {
+      showNotification('Sending email...', 'info');
+      setTimeout(() => {
+        showNotification('Invoice sent via email successfully!', 'success');
+        closeInvoiceModal();
+      }, 2000);
+    }
+
+    function printInvoice() {
+      window.print();
+    }
+
+    function updatePaymentStatus(selectElement, invoiceId) {
+      const status = selectElement.value;
+      showNotification(`Invoice ${invoiceId} status updated to: ${status}`, 'success');
+      
+      // Update the invoice data
+      if (invoiceData[invoiceId]) {
+        invoiceData[invoiceId].status = status;
+      }
+      
+      // Update visual styling based on status
+      const row = selectElement.closest('tr');
+      row.classList.remove('bg-green-50', 'bg-yellow-50', 'bg-red-50');
+      
+      switch(status) {
+        case 'Paid':
+          row.classList.add('bg-green-50');
+          break;
+        case 'Pending':
+          row.classList.add('bg-yellow-50');
+          break;
+        case 'Overdue':
+          row.classList.add('bg-red-50');
+          break;
+      }
+    }
+
+    // File Upload Functions
+    function openUploadModal() {
+      document.getElementById('uploadModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('uploadModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      resetUploadModal();
+    }
+
+    function resetUploadModal() {
+      selectedFiles = [];
+      document.getElementById('fileInput').value = '';
+      document.getElementById('filePreview').style.display = 'none';
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('fileList').innerHTML = '';
+      updateFileCounter();
+      updateUploadButton();
+    }
+
+    // Drag and Drop functionality
+    const uploadArea = document.getElementById('uploadArea');
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+      document.getElementById('uploadIcon').textContent = '📥';
+      document.getElementById('uploadText').textContent = 'Drop files here to upload';
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      if (!uploadArea.contains(e.relatedTarget)) {
+        uploadArea.classList.remove('dragover');
+        document.getElementById('uploadIcon').textContent = '📁';
+        document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+      }
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      document.getElementById('uploadIcon').textContent = '📁';
+      document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+      
+      const files = Array.from(e.dataTransfer.files);
+      processFiles(files);
+    });
+
+    function handleFileSelect(event) {
+      const files = Array.from(event.target.files);
+      processFiles(files);
+    }
+
+    function processFiles(files) {
+      hideUploadMessages();
+      
+      const validFiles = [];
+      const errors = [];
+
+      files.forEach(file => {
+        // Check file type
+        const allowedTypes = ['.csv', '.xlsx', '.xls'];
+        const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedTypes.includes(fileExtension)) {
+          errors.push(`${file.name}: Unsupported file type. Please use CSV, XLSX, or XLS files.`);
+          return;
+        }
+
+        // Check file size (10MB limit)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+          return;
+        }
+
+        // Check if file already selected
+        if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+          errors.push(`${file.name}: File already selected.`);
+          return;
+        }
+
+        validFiles.push(file);
+      });
+
+      // Show errors if any
+      if (errors.length > 0) {
+        showUploadError(errors.join('<br>'));
+      }
+
+      // Add valid files
+      if (validFiles.length > 0) {
+        selectedFiles.push(...validFiles);
+        displayFiles();
+        updateFileCounter();
+        updateUploadButton();
+        
+        if (errors.length === 0) {
+          showUploadSuccess(`${validFiles.length} file(s) added successfully!`);
+        }
+      }
+    }
+
+    function displayFiles() {
+      const fileList = document.getElementById('fileList');
+      const filePreview = document.getElementById('filePreview');
+      
+      fileList.innerHTML = '';
+      
+      selectedFiles.forEach((file, index) => {
+        const fileItem = createFileItem(file, index);
+        fileList.appendChild(fileItem);
+      });
+
+      if (selectedFiles.length > 0) {
+        filePreview.style.display = 'block';
+      }
+    }
+
+    function createFileItem(file, index) {
+      const fileItem = document.createElement('div');
+      fileItem.style.cssText = 'display: flex; align-items: center; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; transition: all 0.3s ease;';
+
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      let iconText, iconStyle;
+
+      switch (fileExtension) {
+        case 'csv':
+          iconText = '📊';
+          iconStyle = 'background: #dcfce7; color: #16a34a;';
+          break;
+        case 'xlsx':
+        case 'xls':
+          iconText = '📗';
+          iconStyle = 'background: #fef3c7; color: #d97706;';
+          break;
+        default:
+          iconText = '❌';
+          iconStyle = 'background: #fecaca; color: #dc2626;';
+      }
+
+      fileItem.innerHTML = `
+        <div style="font-size: 32px; margin-right: 16px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 8px; ${iconStyle}">
+          ${iconText}
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; color: #1f2937; font-size: 16px; margin-bottom: 4px;">${file.name}</div>
+          <div style="display: flex; align-items: center; gap: 16px; font-size: 14px; color: #6b7280;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              📏 ${formatFileSize(file.size)}
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">
+              🏷️ ${fileExtension.toUpperCase()}
+            </div>
+            <div style="color: #6b7280;">
+              📅 ${new Date().toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="previewFile(${index})" style="padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe;">
+            👁️ Preview
+          </button>
+          <button onclick="removeFile(${index})" style="padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+            🗑️ Remove
+          </button>
+        </div>
+      `;
+
+      return fileItem;
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      displayFiles();
+      updateFileCounter();
+      updateUploadButton();
+      
+      if (selectedFiles.length === 0) {
+        document.getElementById('filePreview').style.display = 'none';
+      }
+      
+      showUploadSuccess('File removed successfully!');
+    }
+
+    function previewFile(index) {
+      const file = selectedFiles[index];
+      alert(`File Preview:\n\nName: ${file.name}\nSize: ${formatFileSize(file.size)}\nType: ${file.type}\nLast Modified: ${new Date(file.lastModified).toLocaleString()}\n\nNote: In a real application, this would show file contents preview.`);
+    }
+
+    function clearFiles() {
+      if (selectedFiles.length === 0) return;
+      
+      if (confirm(`Are you sure you want to remove all ${selectedFiles.length} selected files?`)) {
+        selectedFiles = [];
+        document.getElementById('filePreview').style.display = 'none';
+        updateFileCounter();
+        updateUploadButton();
+        showUploadSuccess('All files cleared successfully!');
+      }
+    }
+
+    function updateFileCounter() {
+      const fileCount = selectedFiles.length;
+      const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+      
+      document.getElementById('fileCount').textContent = `${fileCount} file${fileCount !== 1 ? 's' : ''} selected`;
+      document.getElementById('totalSize').textContent = formatFileSize(totalSize);
+    }
+
+    function updateUploadButton() {
+      const uploadBtn = document.getElementById('uploadBtn');
+      uploadBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function uploadFiles() {
+      if (selectedFiles.length === 0) {
+        showUploadError('Please select at least one file to upload.');
+        return;
+      }
+
+      hideUploadMessages();
+      showUploadProgress();
+      
+      // Simulate upload process
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+          
+          setTimeout(() => {
+            hideUploadProgress();
+            showUploadSuccess(`Successfully uploaded ${selectedFiles.length} file(s)! 🎉`);
+            
+            console.log('Uploaded files:', selectedFiles);
+            
+            setTimeout(() => {
+              closeUploadModal();
+            }, 2000);
+          }, 500);
+        }
+        
+        updateProgress(progress);
+      }, 200);
+    }
+
+    function showUploadProgress() {
+      document.getElementById('uploadProgress').style.display = 'block';
+      document.getElementById('uploadBtn').disabled = true;
+      document.getElementById('uploadBtnText').innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #2563eb; border-radius: 50%; animation: spin 1s linear infinite;"></span> Uploading...';
+    }
+
+    function hideUploadProgress() {
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('uploadBtn').disabled = false;
+      document.getElementById('uploadBtnText').innerHTML = '⬆️ Upload Files';
+    }
+
+    function updateProgress(percent) {
+      const progressFill = document.getElementById('progressFill');
+      const progressPercent = document.getElementById('progressPercent');
+      const progressText = document.getElementById('progressText');
+      
+      progressFill.style.width = percent + '%';
+      progressPercent.textContent = Math.round(percent) + '%';
+      
+      if (percent < 50) {
+        progressText.textContent = 'Uploading files...';
+      } else if (percent < 80) {
+        progressText.textContent = 'Processing files...';
+      } else if (percent < 95) {
+        progressText.textContent = 'Almost done...';
+      } else {
+        progressText.textContent = 'Finalizing upload...';
+      }
+    }
+
+    function showUploadError(message) {
+      const errorElement = document.getElementById('errorMessage');
+      errorElement.innerHTML = '❌ ' + message;
+      errorElement.style.display = 'block';
+      
+      setTimeout(() => {
+        hideUploadMessages();
+      }, 5000);
+    }
+
+    function showUploadSuccess(message) {
+      const successElement = document.getElementById('successMessage');
+      successElement.innerHTML = '✅ ' + message;
+      successElement.style.display = 'block';
+      
+      setTimeout(() => {
+        hideUploadMessages();
+      }, 3000);
+    }
+
+    function hideUploadMessages() {
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    // Notification System
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      `;
+
+      // Set background color based on type
+      switch(type) {
+        case 'success':
+          notification.style.background = '#10b981';
+          break;
+        case 'error':
+          notification.style.background = '#ef4444';
+          break;
+        case 'info':
+          notification.style.background = '#3b82f6';
+          break;
+        default:
+          notification.style.background = '#6b7280';
+      }
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      // Remove notification after 3 seconds
+      // setTimeout(() => {
+      //   notification.style.animation = 'slideOutRightsetTimeout(() => {
+      // Add slide-out animation
+      notification.classList.add('slide-out-right');
+
+      // Once animation completes, remove it from DOM
+      notification.addEventListener('animationend', () => {
+        notification.remove();
+      }, { once: true });
+
+     3000}
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

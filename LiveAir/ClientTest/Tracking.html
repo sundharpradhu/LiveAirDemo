@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Tracking - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+            <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link nav-active"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Order Tracking</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Search Section -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Track Your Order</h2>
+        <div class="flex space-x-3">
+          <div class="flex-1 relative">
+            <input type="text" id="orderInput" placeholder="Enter Order ID (e.g., ORD-002)" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+            <i data-lucide="package" class="absolute left-4 top-3.5 w-5 h-5 text-gray-400"></i>
+          </div>
+          <button onclick="trackOrder()" class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold">
+            Track Order
+          </button>
+        </div>
+        <p class="text-sm text-gray-500 mt-3">Enter your order ID to get real-time tracking information</p>
+      </div>
+
+      <!-- Quick Track Buttons -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <button onclick="quickTrack('ORD-001')" class="bg-green-50 border border-green-200 rounded-xl p-4 hover:bg-green-100 transition-colors text-left">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+            <div>
+              <p class="font-medium text-gray-900">ORD-001</p>
+              <p class="text-sm text-green-600">Delivered</p>
+            </div>
+          </div>
+        </button>
+        <button onclick="quickTrack('ORD-002')" class="bg-blue-50 border border-blue-200 rounded-xl p-4 hover:bg-blue-100 transition-colors text-left">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="truck" class="w-6 h-6 text-blue-600"></i>
+            <div>
+              <p class="font-medium text-gray-900">ORD-002</p>
+              <p class="text-sm text-blue-600">On The Way</p>
+            </div>
+          </div>
+        </button>
+        <button onclick="quickTrack('ORD-003')" class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 hover:bg-yellow-100 transition-colors text-left">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="package" class="w-6 h-6 text-yellow-600"></i>
+            <div>
+              <p class="font-medium text-gray-900">ORD-003</p>
+              <p class="text-sm text-yellow-600">Dispatched</p>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Tracking Results -->
+      <div id="trackingResult" class="hidden">
+        <!-- Current Order Status Card -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xl font-bold mb-1" id="orderTitle">Order ORD-002</h3>
+                <p class="text-blue-100" id="orderProduct">Ventilator - $1,500</p>
+              </div>
+              <div class="text-right">
+                <div class="bg-white/20 px-4 py-2 rounded-full">
+                  <span class="text-sm font-semibold" id="orderStatus">On The Way</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700">Delivery Progress</span>
+                <span class="text-sm text-blue-600 font-semibold" id="progressPercent">75%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-3">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-1000" style="width: 75%"></div>
+              </div>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div class="text-center p-4 bg-blue-50 rounded-xl">
+                <i data-lucide="calendar" class="w-8 h-8 text-blue-600 mx-auto mb-2"></i>
+                <p class="text-sm text-gray-600">Expected Delivery</p>
+                <p class="font-bold text-gray-900" id="expectedDate">Aug 26, 2024</p>
+              </div>
+              <div class="text-center p-4 bg-green-50 rounded-xl">
+                <i data-lucide="clock" class="w-8 h-8 text-green-600 mx-auto mb-2"></i>
+                <p class="text-sm text-gray-600">Estimated Time</p>
+                <p class="font-bold text-gray-900" id="estimatedTime">2-4 PM</p>
+              </div>
+              <div class="text-center p-4 bg-purple-50 rounded-xl">
+                <i data-lucide="map-pin" class="w-8 h-8 text-purple-600 mx-auto mb-2"></i>
+                <p class="text-sm text-gray-600">Delivery Location</p>
+                <p class="font-bold text-gray-900">Main Hospital</p>
+              </div>
+            </div>
+
+            <!-- Live Status -->
+            <div class="bg-gradient-to-r from-gray-100 to-blue-100 rounded-xl p-4 mb-6">
+              <div class="flex items-center space-x-3">
+                <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <div>
+                  <p class="font-medium text-gray-900" id="liveStatus">Currently at Distribution Center</p>
+                  <p class="text-sm text-gray-600" id="liveLocation">Driver: John Smith - Contact: +91-9876543210</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex space-x-3">
+              <button onclick="contactDriver()" class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                <i data-lucide="phone" class="w-4 h-4 mr-2 inline"></i>
+                Contact Driver
+              </button>
+              <button onclick="rescheduleDelivery()" class="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-200 transition-colors font-medium">
+                <i data-lucide="calendar" class="w-4 h-4 mr-2 inline"></i>
+                Reschedule
+              </button>
+              <button onclick="addInstructions()" class="flex-1 bg-green-100 text-green-700 py-3 px-4 rounded-xl hover:bg-green-200 transition-colors font-medium">
+                <i data-lucide="message-circle" class="w-4 h-4 mr-2 inline"></i>
+                Instructions
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">Tracking Timeline</h3>
+          <div class="space-y-6" id="timeline">
+            <!-- Timeline items will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Order History -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Order Activity</h3>
+          <button onclick="navigateTo('orders.html')" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All Orders</button>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100" onclick="quickTrack('ORD-001')">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">ORD-001 - Oxygen Cylinder</p>
+                <p class="text-sm text-gray-600">Delivered on Aug 23, 2024</p>
+              </div>
+            </div>
+            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+              Track
+            </button>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100" onclick="quickTrack('ORD-002')">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <i data-lucide="truck" class="w-4 h-4 text-blue-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">ORD-002 - Ventilator</p>
+                <p class="text-sm text-gray-600">On the way - Expected Aug 26</p>
+              </div>
+            </div>
+            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+              Track
+            </button>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100" onclick="quickTrack('ORD-003')">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                <i data-lucide="package" class="w-4 h-4 text-yellow-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">ORD-003 - Medical Bed</p>
+                <p class="text-sm text-gray-600">Dispatched - Expected Aug 28</p>
+              </div>
+            </div>
+            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+              Track
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+
+    function trackOrder() {
+      const orderInput = document.getElementById('orderInput').value.trim();
+      if (!orderInput) {
+        alert('Please enter an order ID');
+        return;
+      }
+      showTrackingResult(orderInput);
+    }
+
+    function quickTrack(orderId) {
+      document.getElementById('orderInput').value = orderId;
+      showTrackingResult(orderId);
+    }
+
+    function showTrackingResult(orderId) {
+      const trackingResult = document.getElementById('trackingResult');
+      const orderData = getOrderData(orderId);
+      
+      if (!orderData) {
+        alert(`Order ${orderId} not found. Please check your order ID.`);
+        return;
+      }
+
+      // Update order info
+      document.getElementById('orderTitle').textContent = `Order ${orderId}`;
+      document.getElementById('orderProduct').textContent = `${orderData.product} - $${orderData.price}`;
+      document.getElementById('orderStatus').textContent = orderData.status;
+      document.getElementById('progressPercent').textContent = `${orderData.progress}%`;
+      document.getElementById('progressBar').style.width = `${orderData.progress}%`;
+      document.getElementById('expectedDate').textContent = orderData.expectedDate;
+      document.getElementById('estimatedTime').textContent = orderData.estimatedTime;
+      document.getElementById('liveStatus').textContent = orderData.liveStatus;
+      document.getElementById('liveLocation').textContent = orderData.driverInfo;
+
+      // Update timeline
+      updateTimeline(orderId, orderData);
+
+      trackingResult.classList.remove('hidden');
+      trackingResult.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function getOrderData(orderId) {
+      const orders = {
+        'ORD-001': {
+          product: 'Oxygen Cylinder',
+          price: 120,
+          status: 'Delivered',
+          progress: 100,
+          expectedDate: 'Aug 23, 2024',
+          estimatedTime: 'Delivered',
+          liveStatus: 'Delivered successfully',
+          driverInfo: 'Delivered by: Mike Johnson'
+        },
+        'ORD-002': {
+          product: 'Ventilator',
+          price: 1500,
+          status: 'On The Way',
+          progress: 75,
+          expectedDate: 'Aug 26, 2024',
+          estimatedTime: '2-4 PM',
+          liveStatus: 'Currently at Distribution Center',
+          driverInfo: 'Driver: John Smith - Contact: +91-9876543210'
+        },
+        'ORD-003': {
+          product: 'Medical Bed',
+          price: 450,
+          status: 'Dispatched',
+          progress: 40,
+          expectedDate: 'Aug 28, 2024',
+          estimatedTime: '10AM-2PM',
+          liveStatus: 'Preparing for shipment',
+          driverInfo: 'Will be assigned soon'
+        }
+      };
+      return orders[orderId];
+    }
+
+    function updateTimeline(orderId, orderData) {
+      const timeline = document.getElementById('timeline');
+      const timelineHTML = generateTimelineHTML(orderId, orderData);
+      timeline.innerHTML = timelineHTML;
+    }
+
+    function generateTimelineHTML(orderId, orderData) {
+      const baseTimeline = [
+        { title: 'Order Placed', date: 'Aug 22, 2024 - 10:30 AM', desc: 'Your order has been successfully placed and payment confirmed.', status: 'completed' },
+        { title: 'Order Confirmed', date: 'Aug 22, 2024 - 11:15 AM', desc: 'Order confirmed by our medical equipment team.', status: 'completed' },
+        { title: 'Preparing for Shipment', date: 'Aug 23, 2024 - 2:45 PM', desc: 'Item being prepared and quality checked at our warehouse.', status: 'completed' }
+      ];
+
+      let additionalSteps = [];
+      
+      if (orderData.progress >= 50) {
+        additionalSteps.push({ title: 'Shipped', date: 'Aug 24, 2024 - 9:00 AM', desc: 'Package has been dispatched from warehouse to distribution center.', status: 'completed' });
+      }
+      
+      if (orderData.progress >= 75) {
+        additionalSteps.push({ title: 'Out for Delivery', date: 'Aug 25, 2024 - 8:30 AM', desc: `Package is currently out for delivery. ${orderData.driverInfo}`, status: 'current' });
+      }
+      
+      if (orderData.progress >= 100) {
+        additionalSteps.push({ title: 'Delivered', date: orderData.expectedDate, desc: 'Package has been successfully delivered to your location.', status: 'completed' });
+      } else {
+        additionalSteps.push({ title: 'Delivered', date: `Expected: ${orderData.expectedDate}`, desc: 'Package will be delivered to your specified location.', status: 'pending' });
+      }
+
+      const allSteps = [...baseTimeline, ...additionalSteps];
+      
+      return allSteps.map(step => {
+        const iconClass = step.status === 'completed' ? 'bg-green-100 text-green-600' : 
+                         step.status === 'current' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-400';
+        const icon = step.status === 'completed' ? 'check' : 
+                    step.status === 'current' ? 'truck' : 'clock';
+        const opacity = step.status === 'pending' ? 'opacity-50' : '';
+        
+        return `
+          <div class="flex items-start space-x-4 ${opacity}">
+            <div class="w-10 h-10 ${iconClass} rounded-full flex items-center justify-center flex-shrink-0">
+              <i data-lucide="${icon}" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <h4 class="font-semibold text-gray-900">${step.title}</h4>
+                <span class="text-sm text-gray-500">${step.date}</span>
+              </div>
+              <p class="text-gray-600 text-sm">${step.desc}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function contactDriver() {
+      alert('Contacting driver...\n\nDriver: John Smith\nPhone: +91-9876543210\nVehicle: DL-1234\n\nYou can call the driver directly for updates on your delivery.');
+    }
+
+    function rescheduleDelivery() {
+      const newDate = prompt('Enter new delivery date (DD-MM-YYYY):');
+      if (newDate) {
+        alert(`Delivery rescheduled to ${newDate}. You will receive a confirmation email shortly.`);
+      }
+    }
+
+    function addInstructions() {
+      const instructions = prompt('Enter delivery instructions:');
+      if (instructions) {
+        alert(`Delivery instructions added: "${instructions}"\n\nThe driver will receive these instructions before delivery.`);
+      }
+    }
+
+    function showAlerts() {
+      alert('Tracking Alerts:\n• Order ORD-002 is out for delivery\n• Delivery attempted for ORD-001 - will retry tomorrow\n• Weather may affect delivery times');
+    }
+
+    function showNotifications() {
+      alert('Delivery Notifications:\n• Your order ORD-002 is 30 minutes away\n• Delivery rescheduled for ORD-003\n• Driver trying to contact you');
+    }
+
+    function showProfile() {
+      alert('Profile Options:\n• Delivery Preferences\n• Contact Information\n• Notification Settings\n• Account Settings\n• Logout');
+    }
+
+    // Auto-refresh timeline icons
+    setTimeout(() => {
+      lucide.createIcons();
+    }, 1000);
+
+    // Allow Enter key to trigger search
+    document.getElementById('orderInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        trackOrder();
+      }
+    });
+  </script>
+</body>
+</html>

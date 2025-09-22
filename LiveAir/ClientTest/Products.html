@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link nav-active"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+            <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Medical Equipment Catalog</h1>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" placeholder="Search products..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+        </div>
+        <button title="Cart" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700" onclick="showCart()">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+          <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Category Filter -->
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button class="px-6 py-2 bg-blue-600 text-white rounded-full font-medium" onclick="filterCategory('all')">All Products</button>
+        <button class="px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-full border border-gray-300" onclick="filterCategory('respiratory')">Respiratory</button>
+        <button class="px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-full border border-gray-300" onclick="filterCategory('critical-care')">Critical Care</button>
+        <button class="px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-full border border-gray-300" onclick="filterCategory('patient-care')">Patient Care</button>
+        <button class="px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 rounded-full border border-gray-300" onclick="filterCategory('disposables')">Disposables</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productsGrid">
+        <!-- Product Card 1 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card respiratory" data-product="oxygen-cylinder">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+              <i data-lucide="zap" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">In Stock</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('oxygen-cylinder')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Oxygen Cylinder</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.8</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">High-pressure medical oxygen cylinder with regulator. Suitable for emergency care.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$120</div>
+              <div class="text-sm text-gray-500">Per unit</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('oxygen-cylinder', 'Oxygen Cylinder', 120)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('oxygen-cylinder')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 2 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card critical-care" data-product="ventilator">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+              <i data-lucide="activity" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">Featured</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('ventilator')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Ventilator</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.9</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">Advanced mechanical ventilator with multiple modes for critical care.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$1,500</div>
+              <div class="text-sm text-gray-500">Per unit</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('ventilator', 'Ventilator', 1500)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('ventilator')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 3 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card patient-care" data-product="medical-bed">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center">
+              <i data-lucide="bed" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">In Stock</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('medical-bed')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Medical Bed</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.7</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">Electric hospital bed with adjustable height and positioning.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$450</div>
+              <div class="text-sm text-gray-500">Per unit</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('medical-bed', 'Medical Bed', 450)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('medical-bed')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 4 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card disposables" data-product="syringe-pack">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+              <i data-lucide="syringe" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">Bulk Pack</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('syringe-pack')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Syringe Pack</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.6</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">Sterile disposable syringes, various sizes. Pack of 100 units.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$20</div>
+              <div class="text-sm text-gray-500">Per pack</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('syringe-pack', 'Syringe Pack', 20)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('syringe-pack')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 5 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card disposables" data-product="medical-gloves">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+              <i data-lucide="hand" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Essential</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('medical-gloves')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Medical Gloves</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.5</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">Latex-free disposable gloves. Box of 100 pairs, powder-free.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$5</div>
+              <div class="text-sm text-gray-500">Per box</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('medical-gloves', 'Medical Gloves', 5)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('medical-gloves')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card 6 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 product-card disposables" data-product="thermometer">
+          <div class="relative">
+            <div class="h-48 bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center">
+              <i data-lucide="thermometer" class="w-16 h-16 text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">Digital</span>
+            </div>
+            <button class="absolute top-4 left-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors" onclick="toggleWishlist('thermometer')">
+              <i data-lucide="heart" class="w-4 h-4 text-gray-600"></i>
+            </button>
+          </div>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">Digital Thermometer</h3>
+              <div class="flex items-center space-x-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="text-sm text-gray-600">4.9</span>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-3">Fast, accurate digital thermometer with LCD display.</p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-xl font-bold text-blue-600">$15</div>
+              <div class="text-sm text-gray-500">Per unit</div>
+            </div>
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="addToCart('thermometer', 'Digital Thermometer', 15)">
+                Add to Cart
+              </button>
+              <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" onclick="viewProductDetails('thermometer')">
+                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+    let cart = [];
+
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+
+    function filterCategory(category) {
+      const cards = document.querySelectorAll('.product-card');
+      const buttons = document.querySelectorAll('[onclick^="filterCategory"]');
+      
+      // Reset button styles
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      });
+      
+      // Highlight active button
+      event.target.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      event.target.classList.add('bg-blue-600', 'text-white');
+      
+      cards.forEach(card => {
+        if (category === 'all') {
+          card.style.display = 'block';
+        } else {
+          card.style.display = card.classList.contains(category) ? 'block' : 'none';
+        }
+      });
+    }
+
+    function addToCart(productId, name, price) {
+      cart.push({id: productId, name, price});
+      updateCartCount();
+      
+      // Show confirmation
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+      toast.textContent = `${name} added to cart!`;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 3000);
+    }
+
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.length;
+    }
+
+    function showCart() {
+      if (cart.length === 0) {
+        alert('Your cart is empty. Add some products to proceed.');
+        return;
+      }
+      
+      let cartSummary = 'Shopping Cart:\n\n';
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        cartSummary += `${index + 1}. ${item.name} - $${item.price}\n`;
+        total += item.price;
+      });
+      
+      cartSummary += `\nTotal: $${total}`;
+      cartSummary += '\n\nWould you like to proceed to checkout?';
+      
+      if (confirm(cartSummary)) {
+        alert('Proceeding to checkout... You will be redirected to the order confirmation page.');
+        // In real implementation, navigate to checkout
+      }
+    }
+
+    function viewProductDetails(productId) {
+      const productInfo = {
+        'oxygen-cylinder': 'High-pressure medical oxygen cylinder\n\nFeatures:\n• 15L capacity\n• Built-in regulator\n• Safety valve\n• Medical grade aluminum\n• 5-year warranty',
+        'ventilator': 'Advanced mechanical ventilator\n\nFeatures:\n• Multiple ventilation modes\n• Touch screen interface\n• Patient monitoring\n• Backup battery system\n• 2-year warranty',
+        'medical-bed': 'Electric hospital bed\n\nFeatures:\n• Electric height adjustment\n• Backrest and leg rest positioning\n• Side rails included\n• Medical mattress\n• Remote control\n• 3-year warranty',
+        'syringe-pack': 'Sterile disposable syringes\n\nFeatures:\n• Pack of 100 units\n• Various sizes (1ml, 2ml, 5ml)\n• Latex-free\n• Sterile packaging\n• Single use only',
+        'medical-gloves': 'Latex-free medical gloves\n\nFeatures:\n• Box of 100 pairs\n• Powder-free\n• Hypoallergenic\n• Textured fingertips\n• Size: Medium',
+        'thermometer': 'Digital thermometer\n\nFeatures:\n• Fast reading (30 seconds)\n• LCD display\n• Memory function\n• Auto shut-off\n• Protective case included'
+      };
+      
+      alert(productInfo[productId] || 'Product details not available.');
+    }
+
+    function toggleWishlist(productId) {
+      const heartIcon = event.target.closest('button').querySelector('i');
+      const isWishlisted = heartIcon.classList.contains('fill-red-500');
+      
+      if (isWishlisted) {
+        heartIcon.classList.remove('fill-red-500', 'text-red-500');
+        heartIcon.classList.add('text-gray-600');
+        alert('Removed from wishlist');
+      } else {
+        heartIcon.classList.remove('text-gray-600');
+        heartIcon.classList.add('fill-red-500', 'text-red-500');
+        alert('Added to wishlist');
+      }
+    }
+
+    function showAlerts() {
+      alert('System Alerts:\n• New products added to catalog\n• Special discount available on bulk orders\n• Maintenance scheduled for tonight');
+    }
+
+    function showNotifications() {
+      alert('Product Notifications:\n• Oxygen cylinders back in stock\n• New ventilator model available\n• Bulk discount on disposables');
+    }
+
+    function showProfile() {
+      alert('Profile Options:\n• View Profile\n• Order History\n• Wishlist\n• Account Settings\n• Logout');
+    }
+
+     // Orders Chart
+      const ctxOrders = document.getElementById('ordersChart').getContext('2d');
+      const ordersChart = new Chart(ctxOrders, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Orders',
+            data: [30, 45, 28, 80, 99, 43, 65, 75, 90, 100, 120, 150],
+            borderColor: 'rgba(59, 130, 246, 1)',
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // Invoices Bar Chart
+      const ctxInvoices = document.getElementById('invoicesBarChart').getContext('2d');
+      const invoicesBarChart = new Chart(ctxInvoices, {
+        type: 'bar',
+        data: {
+          labels: ['Paid', 'Pending', 'Overdue'],
+          datasets: [{
+            label: 'Invoices',
+            data: [12, 3, 1],
+            backgroundColor: [
+              'rgba(34, 197, 94, 0.7)',
+              'rgba(234, 179, 8, 0.7)',
+              'rgba(239, 68, 68, 0.7)'
+            ],
+            borderColor: [
+              'rgba(34, 197, 94, 1)',
+              'rgba(234, 179, 8, 1)',
+              'rgba(239, 68, 68, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    
+  </script>
+</body>
+</html>
+     

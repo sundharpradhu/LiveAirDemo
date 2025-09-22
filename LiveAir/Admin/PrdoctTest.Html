@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - My Products</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      color: #374151;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s;
+      gap: 12px;
+      cursor: pointer;
+    }
+    
+    .nav-link:hover {
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+    
+    .nav-active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white !important;
+    }
+    
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .dynamic-field {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    .remove-field {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 10;
+    }
+    
+    .tax-info {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px solid #0ea5e9;
+    }
+    
+    .product-card {
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .small {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link nav-active"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+    
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">My Products</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+    
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Product Management</h2>
+        <button onclick="openProductModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          Add New Product
+        </button>
+      </div>
+      
+      <!-- Product Statistics -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-lg shadow text-center">
+          <div class="text-sm text-gray-600">Total Products</div>
+          <div class="text-2xl font-bold text-gray-800" id="totalProducts">12</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow text-center">
+          <div class="text-sm text-gray-600">In Stock</div>
+          <div class="text-2xl font-bold text-green-600">8</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow text-center">
+          <div class="text-sm text-gray-600">Low Stock</div>
+          <div class="text-2xl font-bold text-orange-600">3</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow text-center">
+          <div class="text-sm text-gray-600">Out of Stock</div>
+          <div class="text-2xl font-bold text-red-600">1</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow text-center">
+          <div class="text-sm text-gray-600">Total Value</div>
+          <div class="text-2xl font-bold text-blue-600">₹2.5L</div>
+        </div>
+      </div>
+
+      <!-- Product Filters -->
+      <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <div class="flex flex-wrap gap-4 items-center">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700">Category:</label>
+            <select class="border border-gray-300 rounded px-3 py-1 text-sm">
+              <option value="">All Categories</option>
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing</option>
+              <option value="books">Books</option>
+              <option value="home">Home & Garden</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700">Status:</label>
+            <select class="border border-gray-300 rounded px-3 py-1 text-sm">
+              <option value="">All Status</option>
+              <option value="in-stock">In Stock</option>
+              <option value="low-stock">Low Stock</option>
+              <option value="out-of-stock">Out of Stock</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <input type="text" placeholder="Search products..." class="w-full border border-gray-300 rounded px-3 py-1 text-sm">
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="productsGrid">
+        <!-- Sample Product Cards -->
+        <div class="product-card bg-white rounded-lg shadow overflow-hidden">
+          <div class="h-32 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-12 h-12 text-white"></i>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-gray-800 mb-1">iPhone 15 Pro</h3>
+            <p class="text-sm text-gray-600 mb-2">Electronics • SKU: IPH15P001</p>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-lg font-bold text-gray-800">₹1,29,900</span>
+              <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">In Stock</span>
+            </div>
+            <div class="text-xs text-gray-500 mb-3">Tax: 18% GST • Stock: 25 units</div>
+            <div class="flex gap-2">
+              <button onclick="editProduct(this)" class="flex-1 bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Edit</button>
+              <div class="relative">
+                <button onclick="toggleDropdown(this)" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                  <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                </button>
+                <div class="dropdown-menu absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border hidden z-10">
+                  <a href="#" onclick="viewProduct(this)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <i data-lucide="eye" class="w-4 h-4 inline mr-2"></i>View Details
+                  </a>
+                  <a href="#" onclick="duplicateProduct(this)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <i data-lucide="copy" class="w-4 h-4 inline mr-2"></i>Duplicate
+                  </a>
+                  <a href="#" onclick="updateStock(this)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <i data-lucide="package" class="w-4 h-4 inline mr-2"></i>Update Stock
+                  </a>
+                  <hr class="my-1">
+                  <a href="#" onclick="archiveProduct(this)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <i data-lucide="archive" class="w-4 h-4 inline mr-2"></i>Archive
+                  </a>
+                  <a href="#" onclick="deleteProduct(this)" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                    <i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i>Delete
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card bg-white rounded-lg shadow overflow-hidden">
+          <div class="h-32 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+            <i data-lucide="shirt" class="w-12 h-12 text-white"></i>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-gray-800 mb-1">Cotton T-Shirt</h3>
+            <p class="text-sm text-gray-600 mb-2">Clothing • SKU: CTS001</p>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-lg font-bold text-gray-800">₹899</span>
+              <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Low Stock</span>
+            </div>
+            <div class="text-xs text-gray-500 mb-3">Tax: 5% GST • Stock: 3 units</div>
+            <div class="flex gap-2">
+              <button class="flex-1 bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Edit</button>
+              <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Add Product Modal -->
+  <div id="productModal" class="fixed inset-0 hidden items-center justify-center modal-overlay z-50">
+    <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-6 border-b">
+        <h2 class="text-xl font-bold text-gray-800">Add New Product</h2>
+        <button onclick="closeProductModal()" class="text-gray-500 hover:text-gray-700">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      
+      <form id="productForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Basic Information -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i data-lucide="info" class="w-5 h-5"></i>
+              Basic Information
+            </h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Product Name *</label>
+            <input type="text" name="productName" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter product name">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">SKU/Product Code *</label>
+            <input type="text" name="sku" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., PRD001">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+            <select name="category" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="">Select Category</option>
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing & Fashion</option>
+              <option value="books">Books & Media</option>
+              <option value="home">Home & Garden</option>
+              <option value="sports">Sports & Outdoors</option>
+              <option value="beauty">Beauty & Personal Care</option>
+              <option value="automotive">Automotive</option>
+              <option value="toys">Toys & Games</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Brand</label>
+            <input type="text" name="brand" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter brand name">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea name="description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Product description..."></textarea>
+          </div>
+          
+          <!-- Pricing & Tax -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+              Pricing & Tax Information
+            </h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Base Price (₹) *</label>
+            <input type="number" name="basePrice" id="basePrice" required step="0.01" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0.00" oninput="calculateTax()">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%) *</label>
+            <select name="taxRate" id="taxRate" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="calculateTax()">
+              <option value="">Select Tax Rate</option>
+              <option value="0">0% - Essential goods</option>
+              <option value="5">5% - Books, basic food items</option>
+              <option value="12">12% - Processed food, computers</option>
+              <option value="18">18% - Electronics, services</option>
+              <option value="28">28% - Luxury items</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <div class="tax-info rounded-lg p-4">
+              <h4 class="font-medium text-blue-800 mb-2">Tax Calculation</h4>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span class="text-gray-600">Base Price:</span>
+                  <div class="font-semibold">₹<span id="displayBasePrice">0.00</span></div>
+                </div>
+                <div>
+                  <span class="text-gray-600">Tax Amount:</span>
+                  <div class="font-semibold text-blue-600">₹<span id="taxAmount">0.00</span></div>
+                </div>
+                <div>
+                  <span class="text-gray-600">Final Price:</span>
+                  <div class="font-semibold text-green-600">₹<span id="finalPrice">0.00</span></div>
+                </div>
+                <div>
+                  <span class="text-gray-600">Tax Rate:</span>
+                  <div class="font-semibold"><span id="displayTaxRate">0</span>%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Inventory -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i data-lucide="package" class="w-5 h-5"></i>
+              Inventory & Specifications
+            </h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Stock Quantity *</label>
+            <input type="number" name="stockQuantity" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Stock Alert</label>
+            <input type="number" name="minStock" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="5">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+            <input type="number" name="weight" step="0.01" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0.00">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Dimensions (L×W×H cm)</label>
+            <input type="text" name="dimensions" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 10×5×3">
+          </div>
+          
+          <!-- Dynamic Fields Section -->
+          <div class="md:col-span-2">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                Additional Fields
+              </h3>
+              <button type="button" onclick="addDynamicField()" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 flex items-center gap-1">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Add Field
+              </button>
+            </div>
+            <div id="dynamicFields" class="space-y-3">
+              <!-- Dynamic fields will be added here -->
+            </div>
+          </div>
+          
+          <!-- Status -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i data-lucide="settings" class="w-5 h-5"></i>
+              Product Status
+            </h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+          
+          <div class="flex items-center">
+            <input type="checkbox" name="featuredProduct" id="featuredProduct" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            <label for="featuredProduct" class="ml-2 text-sm text-gray-700">Featured Product</label>
+          </div>
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-3 mt-8 pt-6 border-t">
+          <button type="button" onclick="closeProductModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Add Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 hidden items-center justify-center modal-overlay z-50">
+    <div class="bg-white rounded-lg shadow-2xl p-6 mx-4 max-w-md text-center">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
+      </div>
+      <h3 class="text-lg font-bold mb-2">Product Added Successfully!</h3>
+      <p id="successMessage" class="text-gray-600 mb-4"></p>
+      <button onclick="closeSuccessModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        OK
+      </button>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div id="editProductModal" class="fixed inset-0 hidden items-center justify-center modal-overlay z-50">
+    <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-6 border-b">
+        <h2 class="text-xl font-bold text-gray-800">Edit Product</h2>
+        <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      
+      <form id="editProductForm" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+            <input type="text" id="editProductName" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
+            <input type="number" id="editProductPrice" step="0.01" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
+            <input type="number" id="editProductStock" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select id="editProductStatus" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+              <option value="In Stock">In Stock</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 mt-6">
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Update Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Stock Update Modal -->
+  <div id="stockModal" class="fixed inset-0 hidden items-center justify-center modal-overlay z-50">
+    <div class="bg-white rounded-lg shadow-2xl p-6 mx-4 max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-gray-800">Update Stock</h3>
+        <button onclick="closeStockModal()" class="text-gray-500 hover:text-gray-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <form id="stockUpdateForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Product</label>
+          <div id="stockProductName" class="font-medium text-gray-800"></div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Current Stock</label>
+          <div id="currentStock" class="text-lg font-bold text-blue-600"></div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Update Type</label>
+          <select id="stockUpdateType" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+            <option value="add">Add Stock</option>
+            <option value="remove">Remove Stock</option>
+            <option value="set">Set Stock</option>
+          </select>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+          <input type="number" id="stockQuantity" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="flex justify-end gap-3">
+          <button type="button" onclick="closeStockModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            Update Stock
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" class="fixed inset-0 hidden items-center justify-center modal-overlay z-50">
+    <div class="bg-white rounded-lg shadow-2xl p-6 mx-4 max-w-md text-center">
+      <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+      </div>
+      <h3 class="text-lg font-bold mb-2">Confirm Action</h3>
+      <p id="confirmMessage" class="text-gray-600 mb-6"></p>
+      <div class="flex justify-center gap-3">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+          Cancel
+        </button>
+        <button id="confirmButton" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    lucide.createIcons();
+    
+    let productCounter = 1;
+    let dynamicFieldCounter = 0;
+    let currentEditingProduct = null;
+    
+    // Dropdown functionality
+    function toggleDropdown(button) {
+      // Close all other dropdowns first
+      document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+        if (dropdown !== button.nextElementSibling) {
+          dropdown.classList.add('hidden');
+        }
+      });
+      
+      // Toggle current dropdown
+      const dropdown = button.nextElementSibling;
+      dropdown.classList.toggle('hidden');
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.add('hidden');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    }
+    
+    // Edit product functionality
+    function editProduct(button) {
+      const productCard = button.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      const productPrice = productCard.querySelector('.text-lg.font-bold').textContent.replace('₹', '').replace(',', '');
+      const stockInfo = productCard.querySelector('.text-xs.text-gray-500').textContent;
+      const stockMatch = stockInfo.match(/Stock: (\d+)/);
+      const currentStock = stockMatch ? stockMatch[1] : '0';
+      const status = productCard.querySelector('.px-2.py-1.bg-green-100, .px-2.py-1.bg-orange-100, .px-2.py-1.bg-red-100').textContent;
+      
+      // Populate edit form
+      document.getElementById('editProductName').value = productName;
+      document.getElementById('editProductPrice').value = productPrice;
+      document.getElementById('editProductStock').value = currentStock;
+      document.getElementById('editProductStatus').value = status;
+      
+      currentEditingProduct = productCard;
+      
+      // Show edit modal
+      document.getElementById('editProductModal').classList.remove('hidden');
+      document.getElementById('editProductModal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // View product details
+    function viewProduct(link) {
+      link.preventDefault();
+      const productCard = link.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      
+      showNotification(`Viewing details for ${productName}`, 'info');
+      
+      // Close dropdown
+      link.closest('.dropdown-menu').classList.add('hidden');
+    }
+    
+    // Duplicate product
+    function duplicateProduct(link) {
+      link.preventDefault();
+      const productCard = link.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      
+      // Update total count
+      const totalElement = document.getElementById('totalProducts');
+      totalElement.textContent = parseInt(totalElement.textContent) + 1;
+      
+      showNotification(`${productName} duplicated successfully!`, 'success');
+      
+      // Close dropdown
+      link.closest('.dropdown-menu').classList.add('hidden');
+    }
+    
+    // Update stock functionality
+    function updateStock(link) {
+      link.preventDefault();
+      const productCard = link.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      const stockInfo = productCard.querySelector('.text-xs.text-gray-500').textContent;
+      const stockMatch = stockInfo.match(/Stock: (\d+)/);
+      const currentStock = stockMatch ? stockMatch[1] : '0';
+      
+      // Populate stock modal
+      document.getElementById('stockProductName').textContent = productName;
+      document.getElementById('currentStock').textContent = currentStock + ' units';
+      
+      currentEditingProduct = productCard;
+      
+      // Show stock modal
+      document.getElementById('stockModal').classList.remove('hidden');
+      document.getElementById('stockModal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      
+      // Close dropdown
+      link.closest('.dropdown-menu').classList.add('hidden');
+    }
+    
+    // Archive product
+    function archiveProduct(link) {
+      link.preventDefault();
+      const productCard = link.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      
+      showConfirmModal(
+        `Are you sure you want to archive "${productName}"? It will be moved to archived products.`,
+        () => {
+          showNotification(`${productName} archived successfully!`, 'success');
+          // Here you would typically send to archive API
+        }
+      );
+      
+      // Close dropdown
+      link.closest('.dropdown-menu').classList.add('hidden');
+    }
+    
+    // Delete product
+    function deleteProduct(link) {
+      link.preventDefault();
+      const productCard = link.closest('.product-card');
+      const productName = productCard.querySelector('h3').textContent;
+      
+      showConfirmModal(
+        `Are you sure you want to delete "${productName}"? This action cannot be undone.`,
+        () => {
+          // Update total count
+          const totalElement = document.getElementById('totalProducts');
+          totalElement.textContent = parseInt(totalElement.textContent) - 1;
+          
+          // Remove product card with animation
+          productCard.style.transition = 'all 0.3s ease';
+          productCard.style.transform = 'scale(0)';
+          productCard.style.opacity = '0';
+          
+          setTimeout(() => {
+            productCard.remove();
+            showNotification(`${productName} deleted successfully!`, 'success');
+          }, 300);
+        }
+      );
+      
+      // Close dropdown
+      link.closest('.dropdown-menu').classList.add('hidden');
+    }
+    
+    // Modal close functions
+    function closeEditModal() {
+      document.getElementById('editProductModal').classList.add('hidden');
+      document.getElementById('editProductModal').classList.remove('flex');
+      document.body.style.overflow = 'auto';
+      currentEditingProduct = null;
+    }
+    
+    function closeStockModal() {
+      document.getElementById('stockModal').classList.add('hidden');
+      document.getElementById('stockModal').classList.remove('flex');
+      document.body.style.overflow = 'auto';
+      document.getElementById('stockUpdateForm').reset();
+    }
+    
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.add('hidden');
+      document.getElementById('confirmModal').classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Show confirmation modal
+    function showConfirmModal(message, onConfirm) {
+      document.getElementById('confirmMessage').textContent = message;
+      document.getElementById('confirmButton').onclick = () => {
+        onConfirm();
+        closeConfirmModal();
+      };
+      
+      document.getElementById('confirmModal').classList.remove('hidden');
+      document.getElementById('confirmModal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'success') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white font-medium z-50 transform translate-x-full transition-transform duration-300`;
+      
+      // Set background color based on type
+      switch(type) {
+        case 'success':
+          notification.classList.add('bg-green-600');
+          break;
+        case 'error':
+          notification.classList.add('bg-red-600');
+          break;
+        case 'info':
+          notification.classList.add('bg-blue-600');
+          break;
+        default:
+          notification.classList.add('bg-gray-600');
+      }
+      
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+    
+    // Handle edit form submission
+    document.getElementById('editProductForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (currentEditingProduct) {
+        const newName = document.getElementById('editProductName').value;
+        const newPrice = document.getElementById('editProductPrice').value;
+        const newStock = document.getElementById('editProductStock').value;
+        const newStatus = document.getElementById('editProductStatus').value;
+        
+        // Update product card
+        currentEditingProduct.querySelector('h3').textContent = newName;
+        currentEditingProduct.querySelector('.text-lg.font-bold').textContent = `₹${parseFloat(newPrice).toLocaleString('en-IN')}`;
+        
+        // Update stock info
+        const stockInfo = currentEditingProduct.querySelector('.text-xs.text-gray-500');
+        const taxInfo = stockInfo.textContent.split('•')[0];
+        stockInfo.textContent = `${taxInfo}• Stock: ${newStock} units`;
+        
+        // Update status badge
+        const statusBadge = currentEditingProduct.querySelector('.px-2.py-1.bg-green-100, .px-2.py-1.bg-orange-100, .px-2.py-1.bg-red-100');
+        statusBadge.textContent = newStatus;
+        
+        // Update status badge color
+        statusBadge.className = 'px-2 py-1 text-xs rounded-full';
+        if (newStatus === 'In Stock') {
+          statusBadge.classList.add('bg-green-100', 'text-green-800');
+        } else if (newStatus === 'Low Stock') {
+          statusBadge.classList.add('bg-orange-100', 'text-orange-800');
+        } else {
+          statusBadge.classList.add('bg-red-100', 'text-red-800');
+        }
+        
+        showNotification(`${newName} updated successfully!`, 'success');
+        closeEditModal();
+      }
+    });
+    
+    // Handle stock update form submission
+    document.getElementById('stockUpdateForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (currentEditingProduct) {
+        const updateType = document.getElementById('stockUpdateType').value;
+        const quantity = parseInt(document.getElementById('stockQuantity').value);
+        const productName = document.getElementById('stockProductName').textContent;
+        
+        // Get current stock
+        const stockInfo = currentEditingProduct.querySelector('.text-xs.text-gray-500').textContent;
+        const stockMatch = stockInfo.match(/Stock: (\d+)/);
+        let currentStock = stockMatch ? parseInt(stockMatch[1]) : 0;
+        
+        // Calculate new stock
+        let newStock = currentStock;
+        switch(updateType) {
+          case 'add':
+            newStock = currentStock + quantity;
+            break;
+          case 'remove':
+            newStock = Math.max(0, currentStock - quantity);
+            break;
+          case 'set':
+            newStock = quantity;
+            break;
+        }
+        
+        // Update stock display
+        const stockInfoElement = currentEditingProduct.querySelector('.text-xs.text-gray-500');
+        const taxInfo = stockInfoElement.textContent.split('•')[0];
+        stockInfoElement.textContent = `${taxInfo}• Stock: ${newStock} units`;
+        
+        // Update status based on new stock
+        const statusBadge = currentEditingProduct.querySelector('.px-2.py-1.bg-green-100, .px-2.py-1.bg-orange-100, .px-2.py-1.bg-red-100');
+        statusBadge.className = 'px-2 py-1 text-xs rounded-full';
+        
+        if (newStock === 0) {
+          statusBadge.textContent = 'Out of Stock';
+          statusBadge.classList.add('bg-red-100', 'text-red-800');
+        } else if (newStock <= 5) {
+          statusBadge.textContent = 'Low Stock';
+          statusBadge.classList.add('bg-orange-100', 'text-orange-800');
+        } else {
+          statusBadge.textContent = 'In Stock';
+          statusBadge.classList.add('bg-green-100', 'text-green-800');
+        }
+        
+        showNotification(`${productName} stock updated to ${newStock} units!`, 'success');
+        closeStockModal();
+      }
+    });
+    
+    function openProductModal() {
+      document.getElementById('productModal').classList.remove('hidden');
+      document.getElementById('productModal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeProductModal() {
+      document.getElementById('productModal').classList.add('hidden');
+      document.getElementById('productModal').classList.remove('flex');
+      document.body.style.overflow = 'auto';
+      document.getElementById('productForm').reset();
+      clearDynamicFields();
+      resetTaxCalculation();
+    }
+    
+    function closeSuccessModal() {
+      document.getElementById('successModal').classList.add('hidden');
+      document.getElementById('successModal').classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function calculateTax() {
+      const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+      const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+      
+      const taxAmount = (basePrice * taxRate) / 100;
+      const finalPrice = basePrice + taxAmount;
+      
+      document.getElementById('displayBasePrice').textContent = basePrice.toFixed(2);
+      document.getElementById('taxAmount').textContent = taxAmount.toFixed(2);
+      document.getElementById('finalPrice').textContent = finalPrice.toFixed(2);
+      document.getElementById('displayTaxRate').textContent = taxRate;
+    }
+    
+    function resetTaxCalculation() {
+      document.getElementById('displayBasePrice').textContent = '0.00';
+      document.getElementById('taxAmount').textContent = '0.00';
+      document.getElementById('finalPrice').textContent = '0.00';
+      document.getElementById('displayTaxRate').textContent = '0';
+    }
+    
+    function addDynamicField() {
+      const dynamicFieldsContainer = document.getElementById('dynamicFields');
+      const fieldId = `dynamicField_${dynamicFieldCounter++}`;
+      
+      const fieldHTML = `
+        <div class="dynamic-field border border-gray-200 rounded-lg p-3" id="${fieldId}">
+          <button type="button" onclick="removeDynamicField('${fieldId}')" class="remove-field text-red-500 hover:text-red-700">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Field Name</label>
+              <input type="text" name="dynamicFieldName_${dynamicFieldCounter}" class="w-full border border-gray-300 rounded px-2 py-1 text-sm" placeholder="e.g., Color, Size, Model">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Field Type</label>
+              <select name="dynamicFieldType_${dynamicFieldCounter}" class="w-full border border-gray-300 rounded px-2 py-1 text-sm">
+                <option value="text">Text</option>
+                <option value="number">Number</option>
+                <option value="select">Dropdown</option>
+                <option value="textarea">Long Text</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Field Value</label>
+              <input type="text" name="dynamicFieldValue_${dynamicFieldCounter}" class="w-full border border-gray-300 rounded px-2 py-1 text-sm" placeholder="Enter value">
+            </div>
+          </div>
+        </div>
+      `;
+      
+      dynamicFieldsContainer.insertAdjacentHTML('beforeend', fieldHTML);
+      lucide.createIcons();
+    }
+    
+    function removeDynamicField(fieldId) {
+      document.getElementById(fieldId).remove();
+    }
+    
+    function clearDynamicFields() {
+      document.getElementById('dynamicFields').innerHTML = '';
+      dynamicFieldCounter = 0;
+    }
+    
+    // Handle form submission
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const productName = formData.get('productName');
+      const sku = formData.get('sku');
+      const basePrice = formData.get('basePrice');
+      const taxRate = formData.get('taxRate');
+      
+      // Calculate tax for confirmation
+      const tax = (parseFloat(basePrice) * parseFloat(taxRate)) / 100;
+      const finalPrice = parseFloat(basePrice) + tax;
+      
+      // Update product counter and total count
+      const totalElement = document.getElementById('totalProducts');
+      totalElement.textContent = parseInt(totalElement.textContent) + 1;
+      
+      // Show success message
+      const successMessage = `
+        <strong>${productName}</strong> has been added successfully!<br>
+        <small>SKU: ${sku}</small><br>
+        <small>Price: ₹${basePrice} + ₹${tax.toFixed(2)} tax = ₹${finalPrice.toFixed(2)}</small>
+      `;
+      
+      document.getElementById('successMessage').innerHTML = successMessage;
+      
+      // Close product modal and show success modal
+      closeProductModal();
+      document.getElementById('successModal').classList.remove('hidden');
+      document.getElementById('successModal').classList.add('flex');
+      
+      productCounter++;
+    });
+
+    // Close modals when clicking outside
+    document.getElementById('productModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeProductModal();
+      }
+    });
+
+    document.getElementById('successModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeSuccessModal();
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const productModal = document.getElementById('productModal');
+        const successModal = document.getElementById('successModal');
+        
+        if (!productModal.classList.contains('hidden')) {
+          closeProductModal();
+        } else if (!successModal.classList.contains('hidden')) {
+          closeSuccessModal();
+        }
+      }
+    });
+
+    // Auto-generate SKU based on product name
+    document.querySelector('input[name="productName"]').addEventListener('input', function(e) {
+      const productName = e.target.value;
+      const skuField = document.querySelector('input[name="sku"]');
+      
+      if (productName && !skuField.value) {
+        // Generate SKU from product name
+        const sku = productName
+          .replace(/[^a-zA-Z0-9\s]/g, '')
+          .split(' ')
+          .map(word => word.substring(0, 3).toUpperCase())
+          .join('') + 
+          String(productCounter).padStart(3, '0');
+        
+        skuField.value = sku;
+      }
+    });
+
+    // Category-based tax rate suggestions
+    document.querySelector('select[name="category"]').addEventListener('change', function(e) {
+      const category = e.target.value;
+      const taxRateField = document.getElementById('taxRate');
+      
+      // Suggest tax rates based on category
+      const taxSuggestions = {
+        'electronics': '18',
+        'clothing': '5',
+        'books': '0',
+        'home': '18',
+        'sports': '18',
+        'beauty': '18',
+        'automotive': '28',
+        'toys': '12'
+      };
+      
+      if (taxSuggestions[category] && !taxRateField.value) {
+        taxRateField.value = taxSuggestions[category];
+        calculateTax();
+      }
+    });
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link nav-active"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+      <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Client Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Welcome Section -->
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome to LiveAir Medical</h2>
+        <p class="text-gray-600">Your comprehensive healthcare equipment management portal</p>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow" onclick="navigateTo('orders.html')">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Active Orders</p>
+              <p class="text-2xl font-bold text-gray-900">3</p>
+            </div>
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+              <i data-lucide="shopping-bag" class="w-5 h-5 text-green-600"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow" onclick="navigateTo('invoices.html')">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Pending Invoices</p>
+              <p class="text-2xl font-bold text-gray-900">2</p>
+            </div>
+            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+              <i data-lucide="file-text" class="w-5 h-5 text-yellow-600"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow" onclick="navigateTo('service.html')">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Open Tickets</p>
+              <p class="text-2xl font-bold text-gray-900">2</p>
+            </div>
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+              <i data-lucide="ticket" class="w-5 h-5 text-blue-600"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow" onclick="showTotalSpent()">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Total Spent</p>
+              <p class="text-2xl font-bold text-gray-900">$2,070</p>
+            </div>
+            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+              <i data-lucide="dollar-sign" class="w-5 h-5 text-purple-600"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all" onclick="navigateTo('products.html')">
+          <div class="flex items-center space-x-4">
+            <i data-lucide="plus-circle" class="w-8 h-8"></i>
+            <div>
+              <h3 class="text-lg font-semibold">Place New Order</h3>
+              <p class="text-blue-100 text-sm">Browse our medical equipment catalog</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white cursor-pointer hover:from-green-600 hover:to-green-700 transition-all" onclick="navigateTo('tracking.html')">
+          <div class="flex items-center space-x-4">
+            <i data-lucide="search" class="w-8 h-8"></i>
+            <div>
+              <h3 class="text-lg font-semibold">Track Orders</h3>
+              <p class="text-green-100 text-sm">Real-time order tracking</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white cursor-pointer hover:from-purple-600 hover:to-purple-700 transition-all" onclick="navigateTo('service.html')">
+          <div class="flex items-center space-x-4">
+            <i data-lucide="headphones" class="w-8 h-8"></i>
+            <div>
+              <h3 class="text-lg font-semibold">Get Support</h3>
+              <p class="text-purple-100 text-sm">Service and repair requests</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+            <button class="text-blue-600 hover:text-blue-700 text-sm font-medium" onclick="navigateTo('orders.html')">View All</button>
+          </div>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <div class="px-6 py-4 flex items-center space-x-4 cursor-pointer hover:bg-gray-50" onclick="navigateTo('orders.html?order=ORD-001')">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+              <i data-lucide="check" class="w-5 h-5 text-green-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Order ORD-001 delivered</p>
+              <p class="text-xs text-gray-500">Oxygen Cylinder • Aug 20, 2024</p>
+            </div>
+          </div>
+          <div class="px-6 py-4 flex items-center space-x-4 cursor-pointer hover:bg-gray-50" onclick="navigateTo('tracking.html?order=ORD-002')">
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+              <i data-lucide="truck" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Order ORD-002 is on the way</p>
+              <p class="text-xs text-gray-500">Ventilator • Expected Aug 26, 2024</p>
+            </div>
+          </div>
+          <div class="px-6 py-4 flex items-center space-x-4 cursor-pointer hover:bg-gray-50" onclick="navigateTo('service.html?ticket=TKT-002')">
+            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+              <i data-lucide="wrench" class="w-5 h-5 text-yellow-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Service ticket TKT-002 in progress</p>
+              <p class="text-xs text-gray-500">Medical Bed Wheel issue • Aug 22, 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modals -->
+  <div id="alertModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">System Alerts</h3>
+        <button onclick="closeModal('alertModal')" class="text-gray-400 hover:text-gray-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="space-y-3">
+        <div class="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+          <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600 mt-0.5"></i>
+          <div>
+            <p class="text-sm font-medium text-yellow-800">Payment Due</p>
+            <p class="text-xs text-yellow-700">Invoice INV-002 due in 5 days</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+          <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+          <div>
+            <p class="text-sm font-medium text-blue-800">Delivery Update</p>
+            <p class="text-xs text-blue-700">Order ORD-002 out for delivery</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+
+    function showAlerts() {
+      document.getElementById('alertModal').classList.remove('hidden');
+    }
+
+    function showNotifications() {
+      alert('Notifications:\n• Payment reminder: Invoice INV-002 due in 5 days\n• Delivery update: Order ORD-002 out for delivery\n• Service update: Ticket TKT-002 in progress');
+    }
+
+    function showProfile() {
+      alert('Profile Options:\n• View Profile\n• Account Settings\n• Change Password\n• Logout');
+    }
+
+    function showTotalSpent() {
+      alert('Total Spending Breakdown:\n• Paid: $120\n• Pending: $1,950\n• Total: $2,070');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Close modal on outside click
+    document.getElementById('alertModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal('alertModal');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Delivery Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="home" class="w-5 h-5 mr-2"></i>Home</a>
+      <a href="orders.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i>Orders</a>
+      <a href="payments.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="file-text" class="w-5 h-5 mr-2"></i>Payments</a>
+    <a href="tracking.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="service.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+    
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Delivery Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">D</div>
+      </div>
+    </header>
+    
+    <!-- Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <!-- Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-4 rounded-xl shadow card-hover transition hover:ring-2 hover:ring-emerald-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-2 text-emerald-500"></i>Delivered Orders
+          </h2>
+          <p class="text-gray-600 mt-2"><b id="deliveredCount">25</b> orders delivered</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow card-hover transition hover:ring-2 hover:ring-orange-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="clock" class="w-5 h-5 mr-2 text-orange-500"></i>Pending Orders
+          </h2>
+          <p class="text-gray-600 mt-2"><b id="pendingCount">10</b> orders pending</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow card-hover transition hover:ring-2 hover:ring-red-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-red-500"></i>Overdue Orders
+          </h2>
+          <p class="text-gray-600 mt-2"><b id="overdueCount">2</b> overdue orders</p>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center"><i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-indigo-500"></i>Order Trends</h2>
+          <canvas id="ordersChart" height="140"></canvas>
+        </div>
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center"><i data-lucide="bar-chart" class="w-5 h-5 mr-2 text-blue-500"></i>Order Status</h2>
+          <canvas id="statusChart" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctxOrders = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ctxOrders, {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Orders',
+          data: [15,18,12,20,25,22],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99,102,241,0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true},x:{grid:{display:false}}} }
+    });
+
+    const ctxStatus = document.getElementById('statusChart').getContext('2d');
+    new Chart(ctxStatus, {
+      type: 'bar',
+      data: {
+        labels: ['Delivered','Pending','Overdue'],
+        datasets: [{
+          data: [25,10,2],
+          backgroundColor: ['#10b981','#f59e0b','#ef4444'],
+          borderRadius: 8,
+          barThickness: 40
+        }]
+      },
+      options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{stepSize:5}}} }
+    });
+  </script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders - Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex">
+  <!-- Sidebar -->
+  <aside class="w-72 bg-white shadow-xl border-r border-gray-200 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+          <i data-lucide="user" class="text-white w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-gray-900">Client Portal</h2>
+          <p class="text-sm text-gray-600">Welcome back!</p>
+        </div>
+      </div>
+    </div>
+    <nav class="p-6 flex-1">
+      <ul class="space-y-3">
+        <li><a href="index.html" class="menu-btn w-full flex items-center space-x-4 px-6 py-3 rounded-xl text-left text-gray-600 hover:bg-gray-100"><i data-lucide="home" class="w-6 h-6"></i><span>Home</span></a></li>
+        <li><a href="orders.html" class="menu-btn w-full flex items-center space-x-4 px-6 py-3 rounded-xl text-left bg-blue-600 text-white"><i data-lucide="shopping-cart" class="w-6 h-6"></i><span>My Orders</span></a></li>
+        <li><a href="tracking.html" class="menu-btn w-full flex items-center space-x-4 px-6 py-3 rounded-xl text-left"><i data-lucide="package" class="w-6 h-6"></i><span>Tracking</span></a></li>
+        <li><a href="invoices.html" class="menu-btn w-full flex items-center space-x-4 px-6 py-3 rounded-xl text-left"><i data-lucide="file-text" class="w-6 h-6"></i><span>Invoices</span></a></li>
+        <li><a href="service.html" class="menu-btn w-full flex items-center space-x-4 px-6 py-3 rounded-xl text-left"><i data-lucide="settings" class="w-6 h-6"></i><span>Service & Repair</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 p-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">My Orders</h1>
+    <div class="bg-white shadow-md rounded-xl p-6 overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-gray-50 text-left text-gray-700">
+            <th class="px-6 py-3">Order ID</th>
+            <th class="px-6 py-3">Product</th>
+            <th class="px-6 py-3">Date</th>
+            <th class="px-6 py-3">Amount</th>
+            <th class="px-6 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          <tr>
+            <td class="px-6 py-3">ORD-001</td>
+            <td class="px-6 py-3">Gaming Laptop</td>
+            <td class="px-6 py-3">2024-08-20</td>
+            <td class="px-6 py-3 font-bold">$1299</td>
+            <td class="px-6 py-3"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">Delivered</span></td>
+          </tr>
+          <tr>
+            <td class="px-6 py-3">ORD-002</td>
+            <td class="px-6 py-3">Wireless Headphones</td>
+            <td class="px-6 py-3">2024-08-22</td>
+            <td class="px-6 py-3 font-bold">$199</td>
+            <td class="px-6 py-3"><span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">On the way</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

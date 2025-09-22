@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Enterprise User Management — RBAC + Audit</title>
+<style>
+  /* -- Basic design system (compact) -- */
+  :root{
+    --bg:#f4f6fb; --card:#fff; --muted:#6b7280; --text:#0f172a;
+    --accent:#2563eb; --danger:#ef4444; --success:#16a34a;
+    --glass: rgba(255,255,255,0.9);
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:var(--text);background:var(--bg);}
+  .wrap{max-width:1200px;margin:20px auto;padding:18px;}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  h1{font-size:20px;margin:0}
+  .muted{color:var(--muted);font-size:13px}
+  .row{display:flex;gap:12px;align-items:center}
+  .btn{border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
+  .btn.warn{background:transparent;border:1px solid rgba(234,88,12,0.08);color:#ea580c}
+  .card{background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+  nav.tabs{display:flex;gap:8px;margin-bottom:12px}
+  nav.tabs button{padding:8px 12px;border-radius:8px;border:0;background:transparent;cursor:pointer}
+  nav.tabs button.active{background:#eef2ff}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{padding:12px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);text-align:center}
+  .stat h3{margin:0;font-size:18px}
+  .stat p{margin:6px 0 0;color:var(--muted);font-size:13px}
+  .toolbar{display:flex;gap:10px;align-items:center;margin:12px 0}
+  .search{padding:8px 10px;border-radius:8px;border:1px solid #e6e9ef;min-width:240px}
+  table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+  th,td{padding:8px 10px;border-bottom:1px solid #f1f5f9;text-align:left}
+  th{font-size:13px;color:var(--muted)}
+  .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#f3f4f6;font-size:12px}
+  .small{font-size:13px}
+  .muted-block{background:#fbfbfe;padding:8px;border-radius:8px;color:var(--muted)}
+  /* Modal */
+  .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:90}
+  .modal{background:var(--card);border-radius:10px;padding:18px;max-width:900px;width:95%;max-height:90vh;overflow:auto}
+  .form-row{display:flex;gap:12px;align-items:center}
+  input[type="text"], input[type="email"], select, textarea{padding:8px 10px;border:1px solid #e6e9ef;border-radius:8px;font-size:14px}
+  textarea{min-height:80px;resize:vertical}
+  label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+  .form-col{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .flex{display:flex;gap:8px;align-items:center}
+  .right{margin-left:auto}
+  .tiny{font-size:12px;color:var(--muted)}
+  .perm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .perm-card{background:#fbfdff;padding:8px;border-radius:8px;border:1px solid #eef2ff}
+  /* responsive */
+  @media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} .form-col{grid-template-columns:1fr} }
+  @media (max-width:600px){ .grid{grid-template-columns:1fr} .toolbar{flex-direction:column;align-items:stretch} .right{margin-left:0} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Enterprise User Management</h1>
+        <div class="muted">RBAC | Audit trail | Hierarchical reporting | Departments</div>
+      </div>
+      <div class="row">
+        <div class="muted tiny">Signed in as: <strong id="currentUserBadge">superadmin@example.com</strong></div>
+        <button id="btnNewRole" class="btn ghost">New Role</button>
+        <button id="btnNewUser" class="btn primary">New User</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button data-tab="dashboard" class="active">Dashboard</button>
+      <button data-tab="users">Users</button>
+      <button data-tab="roles">Roles & Permissions</button>
+      <button data-tab="audit">Audit Log</button>
+    </nav>
+
+    <!-- Dashboard -->
+    <section id="panel-dashboard" class="card">
+      <div class="grid" style="margin-bottom:12px">
+        <div class="stat">
+          <h3 id="statTotal">0</h3><p>Total Users</p>
+        </div>
+        <div class="stat">
+          <h3 id="statActive">0</h3><p>Active</p>
+        </div>
+        <div class="stat">
+          <h3 id="statPending">0</h3><p>Pending</p>
+        </div>
+        <div class="stat">
+          <h3 id="statInactive">0</h3><p>Inactive</p>
+        </div>
+      </div>
+
+      <div class="card" style="display:flex;gap:12px;align-items:center">
+        <div style="flex:1">
+          <input id="dashSearch" class="search" placeholder="Search users by name, email, employee ID..." />
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="dashRoleFilter">
+            <option value="">All Roles</option>
+          </select>
+          <select id="dashDeptFilter">
+            <option value="">All Departments</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Users -->
+    <section id="panel-users" class="card" style="margin-top:12px;display:none">
+      <div class="toolbar">
+        <input id="userSearch" class="search" placeholder="Advanced search (name, email, emp ID)"/>
+        <select id="filterRole"><option value="">Filter by role</option></select>
+        <select id="filterStatus">
+          <option value="">All status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="pending">Pending</option>
+        </select>
+        <select id="filterDept"><option value="">Filter by department</option></select>
+        <div class="right tiny muted">Permission: <span id="permIndicator">—</span></div>
+      </div>
+
+      <div style="overflow:auto">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Emp ID</th><th>Department</th><th>Manager</th><th>Roles</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="usersTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Roles -->
+    <section id="panel-roles" class="card" style="margin-top:12px;display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div>
+          <strong>Roles & Permission Templates</strong>
+          <div class="tiny muted">Create roles and assign permission sets. Permissions are applied to UI and API guards.</div>
+        </div>
+        <div class="tiny muted">You can create custom roles and map fine-grained permissions.</div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px" id="rolesPreview"></div>
+
+      <div class="card" style="margin-top:8px">
+        <strong>Permission Templates</strong>
+        <div class="perm-grid" id="permGrid" style="margin-top:10px"></div>
+      </div>
+    </section>
+
+    <!-- Audit -->
+    <section id="panel-audit" class="card" style="margin-top:12px;display:none">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <input id="auditSearch" class="search" placeholder="Filter audit by user, action or meta"/>
+        <select id="auditUserFilter"><option value="">All users</option></select>
+        <select id="auditActionFilter"><option value="">All actions</option></select>
+        <input id="auditFrom" type="date" />
+        <input id="auditTo" type="date" />
+        <div class="right">
+          <button id="btnClearAudit" class="btn ghost">Clear Audit</button>
+        </div>
+      </div>
+      <div id="auditContainer" style="max-height:420px;overflow:auto"></div>
+    </section>
+
+  </div>
+
+  <!-- Modal backdrop -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div id="modalWindow" class="modal" role="dialog" aria-modal="true"></div>
+  </div>
+
+<script>
+/* -------------------------------------------------------------------------
+  Enterprise User Management (vanilla JS)
+  - single-file demo implementing RBAC, role management, users, audit log
+  - persistence via localStorage (mockAPI) — swap for real API easily
+--------------------------------------------------------------------------*/
+
+/* ------------------ Data Keys ------------------ */
+const KEYS = { USERS:'ent_users_v1', ROLES:'ent_roles_v1', AUDIT:'ent_audit_v1', DEPTS:'ent_depts_v1' };
+
+/* ------------------ Utils ------------------ */
+const uid = () => Math.random().toString(36).slice(2,9);
+const nowISO = () => new Date().toISOString();
+const parseDate = s => s ? new Date(s) : null;
+const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, ch=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[ch]);
+
+function save(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
+function load(key){ const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+
+/* ------------------ Mock API wrapper ------------------ */
+/* Replace these functions with real fetch()/axios calls to your backend */
+const mockAPI = {
+  getUsers(){ return load(KEYS.USERS) || []; },
+  saveUsers(u){ save(KEYS.USERS, u); },
+  getRoles(){ return load(KEYS.ROLES) || []; },
+  saveRoles(r){ save(KEYS.ROLES, r); },
+  getAudit(){ return load(KEYS.AUDIT) || []; },
+  saveAudit(a){ save(KEYS.AUDIT, a); },
+  getDepts(){ return load(KEYS.DEPTS) || []; },
+  saveDepts(d){ save(KEYS.DEPTS, d); },
+
+  log(action, actor='system', meta={}){
+    // try to capture client IP — attempt fetch, fallback to 127.0.0.1
+    const basic = { id: uid(), ts: nowISO(), action, actor, meta, ip: '127.0.0.1' };
+    const arr = this.getAudit();
+    arr.unshift(basic);
+    this.saveAudit(arr.slice(0,2000));
+  }
+};
+
+/* ------------------ Seed defaults ------------------ */
+function seedIfEmpty(){
+  if (!mockAPI.getDepts().length){
+    mockAPI.saveDepts(['Operations','Service','Sales','HR','Finance','IT']);
+  }
+  if (!mockAPI.getRoles().length){
+    // roles with built-in permissions (permission keys)
+    const baseRoles = [
+      { id: uid(), name:'super_admin', title:'Super Admin', description:'Full system access', level:100, permissions:['user:*','role:*','audit:*','system:config'] },
+      { id: uid(), name:'admin', title:'Admin', description:'User management, client & order management, reports', level:80, permissions:['user:manage','role:view','order:manage','client:manage','reports:view'] },
+      { id: uid(), name:'manager', title:'Manager', description:'Order & client management, team reports', level:70, permissions:['order:manage','client:manage','reports:view','team:manage'] },
+      { id: uid(), name:'delivery_boy', title:'Delivery Boy', description:'Delivery tasks & routes', level:20, permissions:['order:view','delivery:manage','route:view'] },
+      { id: uid(), name:'technician', title:'Technician', description:'Service & repair logs', level:25, permissions:['service:manage','asset:view','repair:log'] },
+      { id: uid(), name:'client_admin', title:'Client Admin', description:'Client orders & team', level:50, permissions:['client:orders','reports:view','team:manage'] },
+      { id: uid(), name:'client_manager', title:'Client Manager', description:'Client orders & reports', level:40, permissions:['client:orders','reports:view'] }
+    ];
+    mockAPI.saveRoles(baseRoles);
+    mockAPI.log('seed.roles','system',{ seeded: baseRoles.map(r=>r.name) });
+  }
+  if (!mockAPI.getUsers().length){
+    const roles = mockAPI.getRoles();
+    const sa = { id: uid(), name:'System Super', email:'superadmin@example.com', empId:'EMP0001', department:'IT', managerId:null, roles:[roles.find(r=>r.name==='super_admin').id], status:'active', notes:'Default super admin', createdAt: nowISO() };
+    mockAPI.saveUsers([sa]);
+    mockAPI.log('seed.users','system',{ seeded:[sa.email] });
+  }
+}
+seedIfEmpty();
+
+/* ------------------ App State (mirrors storage) ------------------ */
+let USERS = mockAPI.getUsers();
+let ROLES = mockAPI.getRoles();
+let AUDIT = mockAPI.getAudit();
+let DEPTS = mockAPI.getDepts();
+
+/* ------------------ Simulated Current User ------------------ */
+/* In a real app, pull current user & permissions from auth tokens */
+let CURRENT_USER = USERS[0]; // super admin seeded
+document.getElementById('currentUserBadge').textContent = CURRENT_USER.email;
+
+/* ------------------ RBAC Helpers ------------------ */
+// permission string examples: 'user:create', 'user:delete', 'order:view', 'user:*'
+function hasPermission(user, perm){
+  if (!user) return false;
+  const userRoles = (user.roles||[]).map(rid => ROLES.find(r=>r.id===rid)).filter(Boolean);
+  for (const r of userRoles){
+    if (!r.permissions) continue;
+    for (const p of r.permissions){
+      if (p === perm) return true;
+      if (p.endsWith('*')){
+        const base = p.slice(0, -1);
+        if (perm.startsWith(base)) return true;
+      }
+    }
+  }
+  // also allow per-user overrides - e.g. user.permissions array (optional)
+  if (user.permissions && user.permissions.includes(perm)) return true;
+  return false;
+}
+
+/* ------------------ UI refs ------------------ */
+const tabs = document.querySelectorAll('nav.tabs button');
+const panelDashboard = document.getElementById('panel-dashboard');
+const panelUsers = document.getElementById('panel-users');
+const panelRoles = document.getElementById('panel-roles');
+const panelAudit = document.getElementById('panel-audit');
+
+const statTotal = document.getElementById('statTotal');
+const statActive = document.getElementById('statActive');
+const statPending = document.getElementById('statPending');
+const statInactive = document.getElementById('statInactive');
+
+const dashSearch = document.getElementById('dashSearch');
+const dashRoleFilter = document.getElementById('dashRoleFilter');
+const dashDeptFilter = document.getElementById('dashDeptFilter');
+
+const userSearch = document.getElementById('userSearch');
+const filterRole = document.getElementById('filterRole');
+const filterStatus = document.getElementById('filterStatus');
+const filterDept = document.getElementById('filterDept');
+const usersTable = document.getElementById('usersTable');
+const rolesPreview = document.getElementById('rolesPreview');
+const permGrid = document.getElementById('permGrid');
+
+const auditContainer = document.getElementById('auditContainer');
+const auditSearch = document.getElementById('auditSearch');
+const auditUserFilter = document.getElementById('auditUserFilter');
+const auditActionFilter = document.getElementById('auditActionFilter');
+
+const btnNewUser = document.getElementById('btnNewUser');
+const btnNewRole = document.getElementById('btnNewRole');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalWindow = document.getElementById('modalWindow');
+
+const btnClearAudit = document.getElementById('btnClearAudit');
+
+/* ------------------ Render helpers ------------------ */
+function reloadState(){ USERS = mockAPI.getUsers(); ROLES = mockAPI.getRoles(); AUDIT = mockAPI.getAudit(); DEPTS = mockAPI.getDepts(); }
+
+function renderStats(){
+  statTotal.textContent = USERS.length;
+  statActive.textContent = USERS.filter(u=>u.status==='active').length;
+  statPending.textContent = USERS.filter(u=>u.status==='pending').length;
+  statInactive.textContent = USERS.filter(u=>u.status==='inactive').length;
+}
+
+function populateFilters(){
+  // roles
+  [dashRoleFilter, filterRole].forEach(sel=>{
+    sel.innerHTML = '<option value="">All Roles</option>';
+    for (const r of ROLES) sel.insertAdjacentHTML('beforeend', `<option value="${r.id}">${escapeHtml(r.title || r.name)}</option>`);
+  });
+  // depts
+  [dashDeptFilter, filterDept].forEach(sel=>{
+    sel.innerHTML = '<option value="">All Departments</option>';
+    for (const d of DEPTS) sel.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`);
+  });
+  // audit users
+  auditUserFilter.innerHTML = '<option value="">All users</option>';
+  for (const u of USERS) auditUserFilter.insertAdjacentHTML('beforeend', `<option value="${u.id}">${escapeHtml(u.name || u.email)}</option>`);
+  // audit actions (unique)
+  const actions = Array.from(new Set(AUDIT.map(a=>a.action)));
+  auditActionFilter.innerHTML = '<option value="">All actions</option>';
+  for (const a of actions) auditActionFilter.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`);
+}
+
+function renderUsersTable(){
+  const q = (userSearch.value || '').toLowerCase().trim();
+  const roleFilterVal = filterRole.value;
+  const statusVal = filterStatus.value;
+  const deptVal = filterDept.value;
+
+  usersTable.innerHTML = '';
+  const list = USERS.filter(u => {
+    if (q){
+      if (!((u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q) || (u.empId||'').toLowerCase().includes(q))) return false;
+    }
+    if (roleFilterVal){
+      if (! (u.roles || []).includes(roleFilterVal) ) return false;
+    }
+    if (statusVal && u.status !== statusVal) return false;
+    if (deptVal && u.department !== deptVal) return false;
+    return true;
+  });
+
+  for (const u of list){
+    const manager = USERS.find(x=>x.id===u.managerId);
+    const rolesHtml = (u.roles||[]).map(rid=> { const r = ROLES.find(rr=>rr.id===rid); return r ? `<span class="badge">${escapeHtml(r.title||r.name)}</span>` : ''; }).join(' ');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(u.name)}</strong><div class="tiny muted">${escapeHtml(u.email)}</div></td>
+      <td>${escapeHtml(u.email)}</td>
+      <td>${escapeHtml(u.empId || '')}</td>
+      <td>${escapeHtml(u.department || '')}</td>
+      <td>${escapeHtml(manager ? manager.name : '')}</td>
+      <td>${rolesHtml}</td>
+      <td>${escapeHtml(u.status)}</td>
+      <td>
+        <div style="display:flex;gap:8px">
+          <button class="btn ghost btn-edit" data-id="${u.id}">Edit</button>
+          <button class="btn warn btn-view" data-id="${u.id}">View</button>
+          <button class="btn" style="background:#fee2e2;border:1px solid rgba(239,68,68,0.12)" data-id="${u.id}" data-action="delete">Delete</button>
+        </div>
+      </td>
+    `;
+    usersTable.appendChild(tr);
+  }
+
+  // attach handlers
+  document.querySelectorAll('.btn-edit').forEach(b=> b.addEventListener('click', e => openUserModal(b.dataset.id)));
+  document.querySelectorAll('.btn-view').forEach(b=> b.addEventListener('click', e => openUserView(b.dataset.id)));
+  document.querySelectorAll('button[data-action="delete"]').forEach(b=> b.addEventListener('click', e => deleteUser(b.dataset.id)));
+}
+
+function renderRolesPreview(){
+  rolesPreview.innerHTML = '';
+  for (const r of ROLES){
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.minWidth = '220px';
+    div.style.padding = '10px';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div><strong>${escapeHtml(r.title || r.name)}</strong><div class="tiny muted">${escapeHtml(r.description || '')}</div></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn ghost edit-role" data-id="${r.id}">Edit</button>
+          <button class="btn" style="background:#fee2e2;border:1px solid rgba(239,68,68,0.12)" data-id="${r.id}" data-action="delete-role">Del</button>
+        </div>
+      </div>
+      <div class="tiny muted">${(r.permissions||[]).slice(0,6).join(', ' )}</div>
+    `;
+    rolesPreview.appendChild(div);
+  }
+  // handlers
+  document.querySelectorAll('.edit-role').forEach(b => b.addEventListener('click', e => openRoleModal(b.dataset.id)));
+  document.querySelectorAll('button[data-action="delete-role"]').forEach(b => b.addEventListener('click', e => deleteRole(b.dataset.id)));
+}
+
+function renderPermGrid(){
+  permGrid.innerHTML = '';
+  const allPerms = gatherPermissions();
+  for (const p of allPerms){
+    const div = document.createElement('div');
+    div.className = 'perm-card';
+    div.innerHTML = `<div style="font-weight:600">${escapeHtml(p)}</div><div class="tiny muted">Used by roles: ${rolesUsingPerm(p).map(r=>r.title||r.name).join(', ')}</div>`;
+    permGrid.appendChild(div);
+  }
+}
+
+function renderAuditList(){
+  const q = (auditSearch.value || '').toLowerCase().trim();
+  const userFilter = auditUserFilter.value;
+  const actionFilter = auditActionFilter.value;
+  const from = auditFrom ? parseDate(auditFrom.value) : null;
+  const to = auditTo ? parseDate(auditTo.value) : null;
+
+  auditContainer.innerHTML = '';
+  const list = AUDIT.filter(ev => {
+    if (q){
+      const metaStr = JSON.stringify(ev.meta || {}).toLowerCase();
+      if (!(ev.action.toLowerCase().includes(q) || (ev.actor||'').toLowerCase().includes(q) || metaStr.includes(q))) return false;
+    }
+    if (userFilter && ev.actor !== userFilter) return false;
+    if (actionFilter && ev.action !== actionFilter) return false;
+    if (from && new Date(ev.ts) < from) return false;
+    if (to && new Date(ev.ts) > (new Date(to).setHours(23,59,59,999))) return false;
+    return true;
+  });
+
+  if (!list.length) { auditContainer.innerHTML = '<div class="muted tiny">No audit entries</div>'; return; }
+
+  for (const ev of list){
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.marginBottom = '8px';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>${escapeHtml(ev.action)}</strong><div class="tiny muted">actor: ${escapeHtml(ev.actor)} • ${new Date(ev.ts).toLocaleString()}</div></div>
+        <div class="tiny muted">${escapeHtml(ev.ip || '')}</div>
+      </div>
+      <pre style="white-space:pre-wrap;margin-top:8px;font-size:13px">${escapeHtml(JSON.stringify(ev.meta || {}, null, 2))}</pre>
+    `;
+    auditContainer.appendChild(div);
+  }
+}
+
+/* ------------------ Permission utilities ------------------ */
+function gatherPermissions(){
+  // aggregate permission strings across roles
+  const set = new Set();
+  for (const r of ROLES) (r.permissions||[]).forEach(p=>set.add(p));
+  return Array.from(set).sort();
+}
+function rolesUsingPerm(perm){
+  return ROLES.filter(r => (r.permissions||[]).includes(perm));
+}
+
+/* ------------------ CRUD Actions ------------------ */
+function createUser(payload){
+  const u = { id: uid(), createdAt: nowISO(), ...payload };
+  USERS.unshift(u); mockAPI.saveUsers(USERS); mockAPI.log('user.create', CURRENT_USER.email, { email: u.email, empId: u.empId }); reloadAndRender();
+}
+function updateUser(id, updates){
+  USERS = USERS.map(u => u.id===id ? {...u, ...updates } : u); mockAPI.saveUsers(USERS); mockAPI.log('user.update', CURRENT_USER.email, { id, updates }); reloadAndRender();
+}
+function deleteUser(id){
+  const u = USERS.find(x=>x.id===id);
+  if (!u) return alert('User not found');
+  if (!confirm(`Delete user ${u.name || u.email}?`)) return;
+  USERS = USERS.filter(x=>x.id!==id); mockAPI.saveUsers(USERS); mockAPI.log('user.delete', CURRENT_USER.email, { id, email: u.email }); reloadAndRender();
+}
+
+function createRole(payload){
+  const r = { id: uid(), ...payload }; ROLES.unshift(r); mockAPI.saveRoles(ROLES); mockAPI.log('role.create', CURRENT_USER.email, { name: r.name }); reloadAndRender();
+}
+function updateRole(id, updates){
+  ROLES = ROLES.map(r => r.id===id ? {...r, ...updates } : r); mockAPI.saveRoles(ROLES); mockAPI.log('role.update', CURRENT_USER.email, { id, updates }); reloadAndRender();
+}
+function deleteRole(id){
+  const r = ROLES.find(x=>x.id===id);
+  if (!r) return;
+  if (!confirm(`Delete role ${r.title || r.name}? This will be removed from all users.`)) return;
+  // remove role from users
+  USERS = USERS.map(u => ({ ...u, roles: (u.roles||[]).filter(rr => rr !== id) }));
+  ROLES = ROLES.filter(x=>x.id!==id);
+  mockAPI.saveUsers(USERS); mockAPI.saveRoles(ROLES);
+  mockAPI.log('role.delete', CURRENT_USER.email, { name: r.title || r.name });
+  reloadAndRender();
+}
+
+/* ------------------ Modals (user & role forms) ------------------ */
+function openModal(html){
+  modalWindow.innerHTML = html;
+  modalBackdrop.style.display = 'flex';
+  document.getElementById('modalBackdrop').focus();
+}
+function closeModal(){ modalBackdrop.style.display = 'none'; modalWindow.innerHTML = ''; }
+
+function openUserModal(userId){
+  const editing = USERS.find(u=>u.id===userId) || null;
+  // permission check (only users with user:manage or super_admin)
+  if (!hasPermission(CURRENT_USER,'user:manage') && !hasPermission(CURRENT_USER,'user:*')) {
+    return alert('You do not have permission to manage users');
+  }
+  const deptsOptions = DEPTS.map(d=>`<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+  const mgrOptions = USERS.map(u=>`<option value="${u.id}" ${editing && editing.managerId === u.id ? 'selected' : ''}>${escapeHtml(u.name || u.email)}</option>`).join('');
+  const rolesChecks = ROLES.map(r=>`<label style="margin-right:8px"><input type="checkbox" data-role="${r.id}" ${editing && (editing.roles||[]).includes(r.id) ? 'checked':''}/> ${escapeHtml(r.title||r.name)}</label>`).join('');
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>${editing ? 'Edit User' : 'Create User'}</h3>
+      <button id="closeModal" class="btn ghost">Close</button>
+    </div>
+    <div class="form-col">
+      <div>
+        <label>Name</label>
+        <input id="f_name" type="text" value="${escapeHtml(editing?.name||'')}" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input id="f_email" type="email" value="${escapeHtml(editing?.email||'')}" />
+      </div>
+      <div>
+        <label>Employee ID</label>
+        <input id="f_emp" type="text" value="${escapeHtml(editing?.empId||'')}" />
+      </div>
+      <div>
+        <label>Department</label>
+        <select id="f_dept"><option value="">--</option>${deptsOptions}</select>
+      </div>
+      <div>
+        <label>Reporting Manager</label>
+        <select id="f_mgr"><option value="">--</option>${mgrOptions}</select>
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="f_status">
+          <option value="active" ${editing?.status==='active' ? 'selected':''}>Active</option>
+          <option value="pending" ${editing?.status==='pending' ? 'selected':''}>Pending</option>
+          <option value="inactive" ${editing?.status==='inactive' ? 'selected':''}>Inactive</option>
+        </select>
+      </div>
+      <div style="grid-column:1/-1">
+        <label>Assign Roles</label>
+        <div>${rolesChecks}</div>
+      </div>
+      <div style="grid-column:1/-1">
+        <label>Custom Notes</label>
+        <textarea id="f_notes">${escapeHtml(editing?.notes||'')}</textarea>
+      </div>
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px">
+        <button id="cancelUser" class="btn ghost">Cancel</button>
+        <button id="saveUser" class="btn primary">${editing ? 'Save changes' : 'Create User'}</button>
+      </div>
+    </div>
+  `);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('cancelUser').addEventListener('click', closeModal);
+  document.getElementById('saveUser').addEventListener('click', () => {
+    const name = document.getElementById('f_name').value.trim();
+    const email = document.getElementById('f_email').value.trim();
+    const emp = document.getElementById('f_emp').value.trim();
+    const dept = document.getElementById('f_dept').value;
+    const mgr = document.getElementById('f_mgr').value || null;
+    const status = document.getElementById('f_status').value;
+    const notes = document.getElementById('f_notes').value.trim();
+    if (!name || !email) return alert('Name & Email required');
+    const selectedRoles = Array.from(modalWindow.querySelectorAll('input[data-role]:checked')).map(cb=>cb.dataset.role);
+    const payload = { name, email, empId: emp, department: dept, managerId: mgr, roles: selectedRoles, status, notes };
+    if (editing) updateUser(editing.id, payload);
+    else createUser(payload);
+    closeModal();
+  });
+}
+
+function openUserView(userId){
+  const u = USERS.find(x=>x.id===userId);
+  if (!u) return alert('User not found');
+  const manager = USERS.find(x=>x.id===u.managerId);
+  const rolesHtml = (u.roles||[]).map(rid=>{ const r = ROLES.find(rr=>rr.id===rid); return r ? `<span class="badge">${escapeHtml(r.title||r.name)}</span>` : ''; }).join(' ');
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>View User</h3><button id="closeModal" class="btn ghost">Close</button>
+    </div>
+    <div class="form-col">
+      <div><label>Name</label><div class="muted-block">${escapeHtml(u.name)}</div></div>
+      <div><label>Email</label><div class="muted-block">${escapeHtml(u.email)}</div></div>
+      <div><label>Employee ID</label><div class="muted-block">${escapeHtml(u.empId||'')}</div></div>
+      <div><label>Department</label><div class="muted-block">${escapeHtml(u.department||'')}</div></div>
+      <div><label>Manager</label><div class="muted-block">${escapeHtml(manager ? manager.name : '')}</div></div>
+      <div style="grid-column:1/-1"><label>Roles</label><div>${rolesHtml}</div></div>
+      <div style="grid-column:1/-1"><label>Notes</label><div class="muted-block">${escapeHtml(u.notes||'')}</div></div>
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end">
+        <button id="closeModal2" class="btn ghost">Close</button>
+      </div>
+    </div>
+  `);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('closeModal2').addEventListener('click', closeModal);
+}
+
+function openRoleModal(roleId){
+  // permission check
+  if (!hasPermission(CURRENT_USER,'role:view') && !hasPermission(CURRENT_USER,'role:*')) return alert('No permission to modify roles');
+  const editing = ROLES.find(r=>r.id===roleId) || null;
+  const allPerms = [
+    'user:manage','user:view','user:assign','role:manage','role:view','order:manage','order:view',
+    'client:manage','client:orders','reports:view','team:manage','delivery:manage','service:manage',
+    'asset:view','repair:log','system:config','audit:view','audit:export'
+  ];
+  const permsCheckboxes = allPerms.map(p=>`<label style="display:block;margin-bottom:6px"><input type="checkbox" data-perm="${p}" ${editing && (editing.permissions||[]).includes(p) ? 'checked':''}/> ${escapeHtml(p)}</label>`).join('');
+  openModal(`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>${editing ? 'Edit Role' : 'Create Role'}</h3><button id="closeModal" class="btn ghost">Close</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:12px">
+      <div>
+        <label>Role key (system)</label>
+        <input id="r_key" type="text" value="${escapeHtml(editing?.name||'')}" />
+        <label>Title</label>
+        <input id="r_title" type="text" value="${escapeHtml(editing?.title||'')}" />
+        <label>Description</label>
+        <input id="r_desc" type="text" value="${escapeHtml(editing?.description||'')}" />
+        <label>Hierarchy level (higher = more powerful)</label>
+        <input id="r_level" type="number" value="${editing?.level || 10}" />
+      </div>
+      <div>
+        <strong>Permissions</strong>
+        <div style="max-height:420px;overflow:auto;margin-top:8px">${permsCheckboxes}</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+      <button id="cancelRole" class="btn ghost">Cancel</button>
+      <button id="saveRole" class="btn primary">${editing ? 'Save' : 'Create'}</button>
+    </div>
+  `);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('cancelRole').addEventListener('click', closeModal);
+  document.getElementById('saveRole').addEventListener('click', () => {
+    const key = document.getElementById('r_key').value.trim();
+    const title = document.getElementById('r_title').value.trim();
+    const desc = document.getElementById('r_desc').value.trim();
+    const level = parseInt(document.getElementById('r_level').value) || 10;
+    if (!key || !title) return alert('key & title required');
+    const perms = Array.from(modalWindow.querySelectorAll('input[data-perm]:checked')).map(cb=>cb.dataset.perm);
+    if (editing) updateRole(editing.id, { name:key, title, description:desc, level, permissions:perms });
+    else createRole({ name:key, title, description:desc, level, permissions:perms });
+    closeModal();
+  });
+}
+
+/* ------------------ Event wiring ------------------ */
+tabs.forEach(btn => btn.addEventListener('click', (e)=> {
+  tabs.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const tab = btn.dataset.tab;
+  panelDashboard.style.display = tab==='dashboard' ? '' : 'none';
+  panelUsers.style.display = tab==='users' ? '' : 'none';
+  panelRoles.style.display = tab==='roles' ? '' : 'none';
+  panelAudit.style.display = tab==='audit' ? '' : 'none';
+}));
+
+btnNewUser.addEventListener('click', ()=> openUserModal(null));
+btnNewRole.addEventListener('click', ()=> openRoleModal(null));
+
+userSearch.addEventListener('input', renderUsersTable);
+filterRole.addEventListener('change', renderUsersTable);
+filterStatus.addEventListener('change', renderUsersTable);
+filterDept.addEventListener('change', renderUsersTable);
+
+dashSearch.addEventListener('input', ()=>{/* optionally implement quick jump */});
+dashRoleFilter.addEventListener('change', ()=>{/* noop */});
+dashDeptFilter.addEventListener('change', ()=>{/* noop */});
+
+auditSearch.addEventListener('input', renderAuditList);
+auditUserFilter.addEventListener('change', renderAuditList);
+auditActionFilter.addEventListener('change', renderAuditList);
+
+btnClearAudit.addEventListener('click', ()=> {
+  if (!confirm('Clear audit log?')) return;
+  mockAPI.saveAudit([]); reloadAndRender();
+});
+
+modalBackdrop.addEventListener('click', (ev)=> { if (ev.target === modalBackdrop) closeModal(); });
+
+/* ------------------ Reload and render all ------------------ */
+function reloadAndRender(){
+  reloadState();
+  renderStats();
+  populateFilters();
+  renderUsersTable();
+  renderRolesPreview();
+  renderPermGrid();
+  renderAuditList();
+}
+
+reloadAndRender();
+
+/* ------------------ Audit wrapper (with attempt to fetch IP) ------------------ */
+async function audit(action, actor=CURRENT_USER.email, meta={}){
+  // attempt simple IP capture; not required for demo if blocked
+  try {
+    const r = await fetch('https://api.ipify.org?format=json').then(res=>res.json());
+    meta._ip = r.ip;
+  } catch(e){
+    meta._ip = '127.0.0.1';
+  }
+  mockAPI.log(action, actor, meta);
+  AUDIT = mockAPI.getAudit();
+  renderAuditList();
+}
+
+/* Overwrite mockAPI.log to use above audit function so IP gets captured when available */
+mockAPI.log = (action, actor='system', meta={}) => {
+  // push basic - we will also call audit() in important places
+  const arr = mockAPI.getAudit();
+  arr.unshift({ id: uid(), ts: nowISO(), action, actor, meta, ip: meta._ip || '127.0.0.1' });
+  mockAPI.saveAudit(arr.slice(0,2000));
+};
+
+/* Ensure main CRUD uses audit wrapper for IP capture where useful */
+const originalCreateUser = createUser;
+createUser = function(payload){
+  originalCreateUser(payload);
+  audit('user.create', CURRENT_USER.email, { email: payload.email, empId: payload.empId }).catch(()=>{});
+};
+const originalUpdateUser = updateUser;
+updateUser = function(id, updates){
+  originalUpdateUser(id, updates);
+  audit('user.update', CURRENT_USER.email, { id, updates }).catch(()=>{});
+};
+const originalDeleteUser = deleteUser;
+deleteUser = function(id){
+  originalDeleteUser(id);
+  audit('user.delete', CURRENT_USER.email, { id }).catch(()=>{});
+};
+
+const originalCreateRole = createRole;
+createRole = function(payload){
+  originalCreateRole(payload);
+  audit('role.create', CURRENT_USER.email, { name: payload.name }).catch(()=>{});
+};
+const originalUpdateRole = updateRole;
+updateRole = function(id, updates){
+  originalUpdateRole(id, updates);
+  audit('role.update', CURRENT_USER.email, { id, updates }).catch(()=>{});
+};
+const originalDeleteRole = deleteRole;
+deleteRole = function(id){
+  originalDeleteRole(id);
+  audit('role.delete', CURRENT_USER.email, { id }).catch(()=>{});
+};
+
+/* ------------------ Utility: reload state (exposed) ------------------ */
+window.reloadUserModule = reloadAndRender;
+
+/* ------------------ Notes for integration ------------------
+ - Replace mockAPI.* with API calls: getUsers -> GET /api/users, save -> POST/PUT, etc.
+ - Replace CURRENT_USER assignment with actual authenticated user from your auth layer.
+ - Enforce server-side RBAC: always check permissions on backend, client-side checks only for UX.
+ - Audit: send entries to server (immutable store) for compliance / export.
+ - IP capture: server-side capture is more reliable (use request IP).
+ - For large datasets: implement server-side pagination, filtering, and search.
+------------------------------------------------------------*/
+
+</script>
+</body>
+</html>

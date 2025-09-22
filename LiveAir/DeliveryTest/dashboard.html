@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Delivery Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link nav-active"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="Orders.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>Orders</span></a>
+      <a href="Payments.html" class="nav-link"><i data-lucide="credit-card" class="w-5 h-5"></i><span>Payments</span></a>
+      <a href="Tracking.html" class="nav-link"><i data-lucide="map-pin" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <div>
+        <h1 class="font-bold text-lg">Delivery Dashboard</h1>
+        <p class="text-sm text-gray-600">Welcome back, John Doe</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded relative" onclick="showNotifications()">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+        </button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">JD</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Quick Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Deliveries Today Card -->
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="navigateTo('delivery-orders.html')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="truck" class="w-6 h-6"></i>
+            </div>
+            <span class="text-blue-200 text-sm font-medium">Today</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1" id="deliveriesToday">12</h3>
+          <p class="text-blue-100 text-sm">Deliveries Today</p>
+          <div class="mt-3 flex items-center text-sm text-blue-200">
+            <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+            <span>+2 from yesterday</span>
+          </div>
+        </div>
+
+        <!-- Pending Orders Card -->
+        <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="navigateTo('delivery-orders.html?filter=pending')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="clock" class="w-6 h-6"></i>
+            </div>
+            <span class="text-orange-200 text-sm font-medium">Pending</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1" id="pendingOrders">8</h3>
+          <p class="text-orange-100 text-sm">Pending Orders</p>
+          <div class="mt-3 flex items-center text-sm text-orange-200">
+            <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
+            <span>3 urgent</span>
+          </div>
+        </div>
+
+        <!-- Completed Deliveries Card -->
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="navigateTo('delivery-orders.html?filter=completed')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="check-circle" class="w-6 h-6"></i>
+            </div>
+            <span class="text-green-200 text-sm font-medium">Completed</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1" id="completedOrders">4</h3>
+          <p class="text-green-100 text-sm">Completed Today</p>
+          <div class="mt-3 flex items-center text-sm text-green-200">
+            <i data-lucide="target" class="w-4 h-4 mr-1"></i>
+            <span>75% success rate</span>
+          </div>
+        </div>
+
+        <!-- Collected Payments Card -->
+        <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="navigateTo('delivery-payments.html')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+            </div>
+            <span class="text-purple-200 text-sm font-medium">Collected</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1" id="collectedPayments">$320</h3>
+          <p class="text-purple-100 text-sm">Collected Today</p>
+          <div class="mt-3 flex items-center text-sm text-purple-200">
+            <i data-lucide="wallet" class="w-4 h-4 mr-1"></i>
+            <span>6 transactions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Order Status Chart -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Orders by Status</h2>
+            <div class="flex space-x-2">
+              <button class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">Today</button>
+              <button class="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-full">Week</button>
+            </div>
+          </div>
+          <div class="relative">
+            <canvas id="statusChart" height="200"></canvas>
+          </div>
+          <div class="grid grid-cols-3 gap-4 mt-4">
+            <div class="text-center p-3 bg-blue-50 rounded-lg">
+              <div class="w-3 h-3 bg-blue-500 rounded-full mx-auto mb-1"></div>
+              <p class="text-sm font-medium text-gray-900">Pending</p>
+              <p class="text-xs text-gray-600">8 orders</p>
+            </div>
+            <div class="text-center p-3 bg-green-50 rounded-lg">
+              <div class="w-3 h-3 bg-green-500 rounded-full mx-auto mb-1"></div>
+              <p class="text-sm font-medium text-gray-900">Delivered</p>
+              <p class="text-xs text-gray-600">4 orders</p>
+            </div>
+            <div class="text-center p-3 bg-red-50 rounded-lg">
+              <div class="w-3 h-3 bg-red-500 rounded-full mx-auto mb-1"></div>
+              <p class="text-sm font-medium text-gray-900">Returned</p>
+              <p class="text-xs text-gray-600">1 order</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Trends Chart -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Order Trends</h2>
+            <div class="flex space-x-2">
+              <button class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full">7 Days</button>
+              <button class="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-full">30 Days</button>
+            </div>
+          </div>
+          <div class="relative">
+            <canvas id="trendsChart" height="200"></canvas>
+          </div>
+          <div class="mt-4 flex items-center justify-between text-sm text-gray-600">
+            <span>Last 7 days performance</span>
+            <span class="flex items-center text-green-600">
+              <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+              +15% increase
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions & Recent Activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <button onclick="navigateTo('delivery-orders.html')" class="flex items-center space-x-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors">
+              <i data-lucide="package" class="w-6 h-6 text-blue-600"></i>
+              <div class="text-left">
+                <p class="font-medium text-gray-900">View Orders</p>
+                <p class="text-sm text-gray-600">Manage deliveries</p>
+              </div>
+            </button>
+            <button onclick="navigateTo('delivery-tracking.html')" class="flex items-center space-x-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors">
+              <i data-lucide="map-pin" class="w-6 h-6 text-green-600"></i>
+              <div class="text-left">
+                <p class="font-medium text-gray-900">Start Route</p>
+                <p class="text-sm text-gray-600">Begin tracking</p>
+              </div>
+            </button>
+            <button onclick="navigateTo('delivery-payments.html')" class="flex items-center space-x-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors">
+              <i data-lucide="credit-card" class="w-6 h-6 text-purple-600"></i>
+              <div class="text-left">
+                <p class="font-medium text-gray-900">Collect Payment</p>
+                <p class="text-sm text-gray-600">Process COD</p>
+              </div>
+            </button>
+            <button onclick="emergencyContact()" class="flex items-center space-x-3 p-4 bg-red-50 hover:bg-red-100 rounded-xl transition-colors">
+              <i data-lucide="phone" class="w-6 h-6 text-red-600"></i>
+              <div class="text-left">
+                <p class="font-medium text-gray-900">Emergency</p>
+                <p class="text-sm text-gray-600">Contact support</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Recent Activity</h2>
+            <button onclick="navigateTo('delivery-orders.html')" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</button>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer" onclick="viewOrderDetails('ORD-2024-001')">
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900">Order ORD-2024-001 delivered</p>
+                <p class="text-xs text-gray-500">Oxygen Cylinder to Metro Hospital</p>
+                <p class="text-xs text-gray-400">2 minutes ago</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer" onclick="viewPaymentDetails('PAY-001')">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i data-lucide="dollar-sign" class="w-4 h-4 text-blue-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900">Payment collected: $120</p>
+                <p class="text-xs text-gray-500">COD from Ravi Kumar</p>
+                <p class="text-xs text-gray-400">15 minutes ago</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer" onclick="viewOrderDetails('ORD-2024-002')">
+              <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i data-lucide="truck" class="w-4 h-4 text-orange-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900">En route to delivery</p>
+                <p class="text-xs text-gray-500">Ventilator to City Hospital</p>
+                <p class="text-xs text-gray-400">30 minutes ago</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer" onclick="viewServiceDetails('SRV-001')">
+              <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i data-lucide="wrench" class="w-4 h-4 text-purple-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900">Service request assigned</p>
+                <p class="text-xs text-gray-500">Cylinder replacement at Anita Sharma</p>
+                <p class="text-xs text-gray-400">1 hour ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Initialize Charts
+    function initializeCharts() {
+      // Status Chart
+      const statusCtx = document.getElementById('statusChart').getContext('2d');
+      new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Pending', 'Delivered', 'Returned'],
+          datasets: [{
+            data: [8, 4, 1],
+            backgroundColor: ['#3b82f6', '#10b981', '#ef4444'],
+            borderWidth: 0,
+            cutout: '60%'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+
+      // Trends Chart
+      const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+      new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Deliveries',
+            data: [8, 12, 6, 14, 10, 15, 12],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#10b981',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: '#f3f4f6'
+              },
+              ticks: {
+                color: '#6b7280'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: '#6b7280'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Initialize charts when page loads
+    document.addEventListener('DOMContentLoaded', initializeCharts);
+
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+
+    function showNotifications() {
+      alert('Recent Notifications:\n• 3 new orders assigned\n• Payment reminder for ORD-2024-003\n• Route optimization available\n• Emergency contact updated');
+    }
+
+    function showProfile() {
+      alert('Profile Menu:\n• View Profile\n• Update Location\n• Delivery History\n• Settings\n• Logout');
+    }
+
+    function viewOrderDetails(orderId) {
+      alert(`Order Details: ${orderId}\n\nCustomer: Metro Hospital\nProduct: Oxygen Cylinder\nAddress: Sector 15, Delhi\nStatus: Delivered\n\nWould you like to view full details?`);
+    }
+
+    function viewPaymentDetails(paymentId) {
+      alert(`Payment Details: ${paymentId}\n\nAmount: $120\nMethod: Cash on Delivery\nCustomer: Ravi Kumar\nOrder: ORD-2024-001\nTime: 15 minutes ago`);
+    }
+
+    function viewServiceDetails(serviceId) {
+      alert(`Service Details: ${serviceId}\n\nType: Cylinder Replacement\nCustomer: Anita Sharma\nAddress: Block A, Noida\nStatus: Assigned\nPriority: Normal`);
+    }
+
+    function emergencyContact() {
+      if (confirm('Emergency Contact\n\nThis will immediately contact LiveAir support team.\n\nProceed?')) {
+        alert('Connecting to emergency support...\n\nSupport Team: +91-9876543210\nYour location has been shared.\nHelp is on the way.');
+      }
+    }
+
+    // Update stats periodically (simulate real-time updates)
+    function updateStats() {
+      // This would typically fetch data from an API
+      const stats = {
+        deliveries: Math.floor(Math.random() * 3) + 10,
+        pending: Math.floor(Math.random() * 5) + 6,
+        completed: Math.floor(Math.random() * 3) + 3,
+        payments: Math.floor(Math.random() * 100) + 250
+      };
+
+      document.getElementById('deliveriesToday').textContent = stats.deliveries;
+      document.getElementById('pendingOrders').textContent = stats.pending;
+      document.getElementById('completedOrders').textContent = stats.completed;
+      document.getElementById('collectedPayments').textContent = `$${stats.payments}`;
+    }
+
+    // Update stats every 30 seconds
+    setInterval(updateStats, 30000);
+  </script>
+</body>
+</html>

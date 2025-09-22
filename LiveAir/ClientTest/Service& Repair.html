@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service & Repair - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+      <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link nav-active"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Service & Repair Center</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <!-- Open Tickets -->
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="filterTickets('open')">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="ticket" class="w-8 h-8 text-blue-100"></i>
+            <span class="text-blue-100 text-sm font-medium">Active</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">2</h3>
+          <p class="text-blue-100 text-sm">Open Tickets</p>
+        </div>
+
+        <!-- Resolved Tickets -->
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="filterTickets('resolved')">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="check-circle" class="w-8 h-8 text-green-100"></i>
+            <span class="text-green-100 text-sm font-medium">Resolved</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">12</h3>
+          <p class="text-green-100 text-sm">Completed Repairs</p>
+        </div>
+
+        <!-- Response Time -->
+        <div class="bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="showResponseTime()">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="clock" class="w-8 h-8 text-purple-100"></i>
+            <span class="text-purple-100 text-sm font-medium">Average</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">24h</h3>
+          <p class="text-purple-100 text-sm">Response Time</p>
+        </div>
+
+        <!-- Satisfaction -->
+        <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-lg transition-shadow" onclick="showSatisfaction()">
+          <div class="flex items-center justify-between mb-4">
+            <i data-lucide="smile" class="w-8 h-8 text-yellow-100"></i>
+            <span class="text-yellow-100 text-sm font-medium">Satisfaction</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-1">95%</h3>
+          <p class="text-yellow-100 text-sm">Customer Rating</p>
+        </div>
+      </div>        
+
+      <!-- Tickets Table -->          
+      <div class="bg-white rounded-xl shadow p-4">
+  <div class="flex justify-between items-center mb-4">
+    <!-- Left -->
+    <h2 class="text-lg font-semibold">My Service Tickets</h2>
+
+    <!-- Right -->
+    <div class="flex items-center gap-3">
+      <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+        2 Open Tickets
+      </div>
+      <select id="statusFilter" class="border rounded px-3 py-1" onchange="filterTickets(this.value)">
+        <option value="all">All Statuses</option>
+        <option value="open">Open</option>
+        <option value="in-progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+        <option value="closed">Closed</option>
+      </select>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2" onclick="createNewTicket()">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        New Ticket
+      </button>
+    </div>
+  </div>
+</div>
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b">
+              <th class="py-2 px-3">Ticket ID</th>
+              <th class="py-2 px-3">Subject</th>
+              <th class="py-2 px-3">Status</th>
+              <th class="py-2 px-3">Created On</th>
+              <th class="py-2 px-3">Last Updated</th>
+              <th class="py-2 px-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ticketsTableBody">
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="viewTicket('TCK-2024-001')">
+              <td class="py-2 px-3 font-mono text-sm text-blue-600">TCK-2024-001</td>
+              <td class="py-2 px-3">Air Conditioner Not Cooling</td>
+              <td class="py-2 px-3"><span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">Open</span></td>
+              <td class="py-2 px-3">2024-06-10</td>
+              <td class="py-2 px-3">2024-06-11</td>
+              <td class="py-2 px-3">
+                <button class="text-blue-600 hover:underline" onclick="event.stopPropagation(); editTicket('TCK-2024-001')">Edit</button> |
+                <button class="text-red-600 hover:underline" onclick="event.stopPropagation(); closeTicket('TCK-2024-001')">Close</button>
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="viewTicket('TCK-2024-002')">
+              <td class="py-2 px-3 font-mono text-sm text-blue-600">TCK-2024-002</td>
+              <td class="py-2 px-3">Refrigerator Making Noise</td>
+              <td class="py-2 px-3"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-sm font-medium">In Progress</span></td>
+              <td class="py-2 px-3">2024-06-08</td>
+              <td class="py-2 px-3">2024-06-10</td>
+              <td class="py-2 px-3">
+                <button class="text-blue-600 hover:underline" onclick="event.stopPropagation(); editTicket('TCK-2024-002')">Edit</button> |
+                <button class="text-red-600 hover:underline" onclick="event.stopPropagation(); closeTicket('TCK-2024-002')">Close</button>
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="viewTicket('TCK-2024-003')">
+              <td class="py-2 px-3 font-mono text-sm text-blue-600">TCK-2024-003</td>
+              <td class="py-2 px-3">Washing Machine Leak</td>
+              <td class="py-2 px-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm font-medium">Resolved</span></td>
+              <td class="py-2 px-3">2024-05-30</td>
+              <td class="py-2 px-3">2024-06-05</td>
+              <td class="py-2 px-3">
+                <button class="text-blue-600 hover:underline" onclick="event.stopPropagation(); editTicket('TCK-2024-003')">Edit</button> |
+                <button class="text-red-600 hover:underline" onclick="event.stopPropagation(); closeTicket('TCK-2024-003')">Close</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    function filterTickets(status) {
+      alert('Filter tickets by status: ' + status);
+    }
+    function createNewTicket() { alert('Create a new service ticket'); }
+    function viewTicket(ticketId) { alert('View details for ticket: ' + ticketId); }
+    function editTicket(ticketId) { alert('Edit ticket: ' + ticketId); }
+    function closeTicket(ticketId) {
+      if (confirm('Are you sure you want to close ticket ' + ticketId + '?')) {
+        alert('Ticket ' + ticketId + ' closed');
+      }
+    }
+    function showNotifications() { alert('Show notifications (placeholder)'); }
+    function showProfile() { alert('Show profile options (placeholder)'); }
+    function showResponseTime() { alert('Average response time is 24 hours (placeholder)'); }
+    function showSatisfaction() { alert('Customer satisfaction is 95% (placeholder)'); }
+    function showAlerts() { alert('Alerts placeholder'); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Admin Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-md transform -translate-x-full transition-transform duration-300 lg:translate-x-0 z-50">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="p-4 space-y-2">
+      <a href="index.html" id="homeLink" class="nav-link nav-active">
+        <i data-lucide="home" class="w-5 h-5"></i><span>Home</span>
+      </a>
+      <a href="clients.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="users" class="w-5 h-5"></i><span>Clients</span>
+      </a>
+
+      <details class="group" open>
+        <summary class="nav-link flex items-center gap-2 cursor-pointer">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span>
+        </summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link">
+            <i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span>
+          </a>
+          <a href="orders-retail.html" class="nav-link">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span>
+          </a>
+        </div>
+      </details>
+
+      <a href="assets.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="package" class="w-5 h-5"></i><span>My Products</span>
+      </a>
+      <a href="tracking.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span>
+      </a>
+      <a href="delivery.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span>
+      </a>
+      <a href="service-repair.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span>
+      </a>
+      <a href="invoices.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span>
+      </a>
+      <a href="alerts.html" class="nav-link flex items-center gap-2">
+        <i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span>
+      </a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500 mt-auto">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Overlay (mobile only) -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 lg:hidden"></div>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col lg:ml-64">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <button id="menuBtn" class="lg:hidden bg-gray-100 p-2 rounded">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+        </button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <!-- Top Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <a href="invoices.html" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-blue-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="file-text" class="w-5 h-5 mr-2 text-blue-500"></i>Invoices
+          </h2>
+          <p class="text-gray-600 mt-2">Paid: <b>12</b> | Pending: <b>3</b></p>
+        </a>
+
+        <a href="orders-commercial.html" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-green-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-green-500"></i>Orders
+          </h2>
+          <p class="text-gray-600 mt-2">Completed: <b>20</b> | In-Progress: <b>5</b> | Pending: <b>2</b></p>
+        </a>
+
+        <a href="assets.html#low-stock" class="bg-white p-4 rounded-xl shadow block transition hover:ring-2 hover:ring-red-200">
+          <h2 class="font-semibold flex items-center">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-red-500"></i>Low Stock
+          </h2>
+          <p class="text-gray-600 mt-2"><span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm">5 cylinders low</span></p>
+        </a>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-indigo-500"></i>Order Trends
+          </h2>
+          <canvas id="ordersChart" height="140"></canvas>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="font-semibold mb-4 flex items-center">
+            <i data-lucide="bar-chart" class="w-5 h-5 mr-2 text-blue-500"></i>Invoice Status
+          </h2>
+          <canvas id="invoicesBarChart" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Orders Chart
+    const ctx = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Orders',
+          data: [12, 19, 14, 17, 22, 18],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99,102,241,0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#6366f1'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { display: false } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Invoices Bar Chart
+    const invoicesBarCtx = document.getElementById('invoicesBarChart').getContext('2d');
+    new Chart(invoicesBarCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Paid', 'Pending'],
+        datasets: [{
+          label: 'Invoices',
+          data: [12, 3],
+          backgroundColor: ['#3b82f6', '#f59e42'],
+          borderRadius: 8,
+          barThickness: 32
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const menuBtn = document.getElementById('menuBtn');
+    const homeLink = document.getElementById('homeLink');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    }
+
+    menuBtn.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    homeLink.addEventListener('click', (e) => {
+      e.preventDefault(); // prevent navigating away
+      openSidebar();
+    });
+  </script>
+
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Clients</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Fixed body */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      min-height: 100vh;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-container {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px 16px 0 0;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-body { padding: 24px; }
+    .modal-footer {
+      padding: 16px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn-secondary { background: #f3f4f6; color: #374151; }
+    .btn-primary { background: #2563eb; color: white; }
+  </style>
+</head>
+<body class="bg-gray-100 flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link nav-active"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group" open>
+        <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Clients</h2>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="button" onclick="openUploadModal()">Import CSV</button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow">
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input class="border p-2 rounded" placeholder="Organization Name" />
+          <input class="border p-2 rounded" placeholder="Contact Person" />
+          <input type="email" class="border p-2 rounded" placeholder="Email" />
+          <input type="tel" class="border p-2 rounded" placeholder="Phone" />
+          <button type="button" 
+        class="bg-blue-600 text-white px-4 py-2 rounded md:col-span-2" 
+        onclick="openClientModal()">
+  Add Client
+</button>
+          <!-- Create Client Modal -->
+<div id="clientModal" class="modal-overlay">
+  <div class="modal-container max-w-xl w-full">
+    <div class="modal-header">
+      <div class="modal-title">📝 Create Client</div>
+      <button class="close-btn" onclick="closeClientModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="clientForm" class="space-y-4">
+        <input type="text" placeholder="Organization Name" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Contact Person" class="w-full border p-2 rounded" required>
+        <input type="email" placeholder="Email Address" class="w-full border p-2 rounded" required>
+        <input type="tel" placeholder="Phone Number" class="w-full border p-2 rounded" required>
+        <input type="text" placeholder="Address" class="w-full border p-2 rounded">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="City" class="border p-2 rounded">
+          <input type="text" placeholder="State / Province" class="border p-2 rounded">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input type="text" placeholder="Country" class="border p-2 rounded">
+          <input type="text" placeholder="GST / Tax ID" class="border p-2 rounded">
+        </div>
+        <textarea placeholder="Notes" class="w-full border p-2 rounded"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <form id="clientForm" class="space-y-4">
+  <!-- form fields here -->
+  <div class="flex justify-end gap-3 pt-4">
+    <button class="btn btn-secondary" type="button" onclick="closeClientModal()">Cancel</button>
+    <button class="btn btn-primary" type="submit">Save Client</button>
+  </div>
+</form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openClientModal() {
+    document.getElementById('clientModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeClientModal() {
+    document.getElementById('clientModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  document.getElementById('clientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('✅ Client created successfully!');
+    closeClientModal();
+  });
+</script>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <<!-- Upload Modal -->
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-container">
+            <!-- Header -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    📁 Import Files
+                </div>
+                <button class="close-btn" onclick="closeUploadModal()">
+                    ×
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" 
+                           id="fileInput" 
+                           class="file-input" 
+                           accept=".csv,.xlsx,.xls" 
+                           multiple
+                           onchange="handleFileSelect(event)">
+                    
+                    <div class="upload-icon" id="uploadIcon">📁</div>
+                    
+                    <div class="upload-text" id="uploadText">
+                        Drag & drop your files here
+                    </div>
+                    
+                    <div class="upload-subtext">
+                        or <strong>click to browse</strong> from your device
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <div class="btn btn-primary" style="pointer-events: none;">
+                            📂 Choose Files
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supported Formats -->
+                <div class="supported-formats">
+                    <h4>📋 Supported File Formats</h4>
+                    <div class="format-list">
+                        <span class="format-tag">CSV</span>
+                        <span class="format-tag">XLSX</span>
+                        <span class="format-tag">XLS</span>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 12px; color: #6b7280;">
+                        Maximum file size: 10MB per file
+                    </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressText">Uploading...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+
+                <!-- File Preview -->
+                <div class="file-preview" id="filePreview">
+                    <h4 style="margin-bottom: 16px; color: #374151;">📄 Selected Files</h4>
+                    <div id="fileList">
+                        <!-- Files will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage">
+                    <!-- Error messages will appear here -->
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <!-- Success messages will appear here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <div class="footer-info">
+                    <span id="fileCount">0 files selected</span> • 
+                    <span id="totalSize">0 KB</span>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn btn-secondary" onclick="clearFiles()">
+                        🗑️ Clear All
+                    </button>
+                    <button class="btn btn-primary" id="uploadBtn" onclick="uploadFiles()" disabled>
+                        <span id="uploadBtnText">⬆️ Upload Files</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+        let selectedFiles = [];
+        let isDragging = false;
+
+        // Modal Functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            resetModal();
+        }
+
+        function resetModal() {
+            selectedFiles = [];
+            document.getElementById('fileInput').value = '';
+            document.getElementById('filePreview').classList.remove('active');
+            document.getElementById('uploadProgress').classList.remove('active');
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+            document.getElementById('fileList').innerHTML = '';
+            updateFileCounter();
+            updateUploadButton();
+        }
+
+        // Drag and Drop Functionality
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+            document.getElementById('uploadIcon').textContent = '📥';
+            document.getElementById('uploadText').textContent = 'Drop files here to upload';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+                document.getElementById('uploadIcon').textContent = '📁';
+                document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            document.getElementById('uploadIcon').textContent = '📁';
+            document.getElementById('uploadText').textContent = 'Drag & drop your files here';
+            
+            const files = Array.from(e.dataTransfer.files);
+            processFiles(files);
+        });
+
+        // File Selection
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        function processFiles(files) {
+            hideMessages();
+            
+            const validFiles = [];
+            const errors = [];
+
+            files.forEach(file => {
+                // Check file type
+                const allowedTypes = ['.csv', '.xlsx', '.xls'];
+                const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+                
+                if (!allowedTypes.includes(fileExtension)) {
+                    errors.push(`${file.name}: Unsupported file type. Please use CSV, XLSX, or XLS files.`);
+                    return;
+                }
+
+                // Check file size (10MB limit)
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+                    return;
+                }
+
+                // Check if file already selected
+                if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    errors.push(`${file.name}: File already selected.`);
+                    return;
+                }
+
+                validFiles.push(file);
+            });
+
+            // Show errors if any
+            if (errors.length > 0) {
+                showError(errors.join('<br>'));
+            }
+
+            // Add valid files
+            if (validFiles.length > 0) {
+                selectedFiles.push(...validFiles);
+                displayFiles();
+                updateFileCounter();
+                updateUploadButton();
+                
+                if (errors.length === 0) {
+                    showSuccess(`${validFiles.length} file(s) added successfully!`);
+                }
+            }
+        }
+
+        function displayFiles() {
+            const fileList = document.getElementById('fileList');
+            const filePreview = document.getElementById('filePreview');
+            
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = createFileItem(file, index);
+                fileList.appendChild(fileItem);
+            });
+
+            if (selectedFiles.length > 0) {
+                filePreview.classList.add('active');
+            }
+        }
+
+        function createFileItem(file, index) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            let iconClass, iconText;
+
+            switch (fileExtension) {
+                case 'csv':
+                    iconClass = 'csv-icon';
+                    iconText = '📊';
+                    break;
+                case 'xlsx':
+                case 'xls':
+                    iconClass = 'excel-icon';
+                    iconText = '📗';
+                    break;
+                default:
+                    iconClass = 'error-icon';
+                    iconText = '❌';
+            }
+
+            fileItem.innerHTML = `
+                <div class="file-icon ${iconClass}">
+                    ${iconText}
+                </div>
+                <div class="file-details">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-meta">
+                        <div class="file-size">
+                            📏 ${formatFileSize(file.size)}
+                        </div>
+                        <div class="file-type">
+                            🏷️ ${fileExtension.toUpperCase()}
+                        </div>
+                        <div style="color: #6b7280;">
+                            📅 ${new Date().toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="action-btn preview-btn" onclick="previewFile(${index})">
+                        👁️ Preview
+                    </button>
+                    <button class="action-btn remove-btn" onclick="removeFile(${index})">
+                        🗑️ Remove
+                    </button>
+                </div>
+            `;
+
+            return fileItem;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayFiles();
+            updateFileCounter();
+            updateUploadButton();
+            
+            if (selectedFiles.length === 0) {
+                document.getElementById('filePreview').classList.remove('active');
+            }
+            
+            showSuccess('File removed successfully!');
+        }
+
+        function previewFile(index) {
+            const file = selectedFiles[index];
+            
+            // For demo purposes, show file info
+            alert(`File Preview:\n\nName: ${file.name}\nSize: ${formatFileSize(file.size)}\nType: ${file.type}\nLast Modified: ${new Date(file.lastModified).toLocaleString()}\n\nNote: In a real application, this would show file contents preview.`);
+        }
+
+        function clearFiles() {
+            if (selectedFiles.length === 0) return;
+            
+            if (confirm(`Are you sure you want to remove all ${selectedFiles.length} selected files?`)) {
+                selectedFiles = [];
+                document.getElementById('filePreview').classList.remove('active');
+                updateFileCounter();
+                updateUploadButton();
+                showSuccess('All files cleared successfully!');
+            }
+        }
+
+        function updateFileCounter() {
+            const fileCount = selectedFiles.length;
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            
+            document.getElementById('fileCount').textContent = `${fileCount} file${fileCount !== 1 ? 's' : ''} selected`;
+            document.getElementById('totalSize').textContent = formatFileSize(totalSize);
+        }
+
+        function updateUploadButton() {
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = selectedFiles.length === 0;
+        }
+
+        // Upload Functionality
+        function uploadFiles() {
+            if (selectedFiles.length === 0) {
+                showError('Please select at least one file to upload.');
+                return;
+            }
+
+            hideMessages();
+            showUploadProgress();
+            
+            // Simulate upload process
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        hideUploadProgress();
+                        showSuccess(`Successfully uploaded ${selectedFiles.length} file(s)! 🎉`);
+                        
+                        // In a real application, you would process the files here
+                        console.log('Uploaded files:', selectedFiles);
+                        
+                        // Reset after success
+                        setTimeout(() => {
+                            closeUploadModal();
+                        }, 2000);
+                    }, 500);
+                }
+                
+                updateProgress(progress);
+            }, 200);
+        }
+
+        function showUploadProgress() {
+            document.getElementById('uploadProgress').classList.add('active');
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtnText').innerHTML = '<span class="loading"></span> Uploading...';
+        }
+
+        function hideUploadProgress() {
+            document.getElementById('uploadProgress').classList.remove('active');
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadBtnText').innerHTML = '⬆️ Upload Files';
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            
+            if (percent < 50) {
+                progressText.textContent = 'Uploading files...';
+            } else if (percent < 80) {
+                progressText.textContent = 'Processing files...';
+            } else if (percent < 95) {
+                progressText.textContent = 'Almost done...';
+            } else {
+                progressText.textContent = 'Finalizing upload...';
+            }
+        }
+
+        // Message Functions
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.innerHTML = '❌ ' + message;
+            errorElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.innerHTML = '✅ ' + message;
+            successElement.classList.add('active');
+            
+            setTimeout(() => {
+                hideMessages();
+            }, 3000);
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('uploadModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('uploadModal')) {
+                closeUploadModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('uploadModal').classList.contains('active')) {
+                closeUploadModal();
+            }
+        });
+
+        // Prevent default drag behaviors on the entire page
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    </script>
+    <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

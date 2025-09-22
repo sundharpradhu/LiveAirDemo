@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Delivery Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="Orders.html" class="nav-link nav-active"><i data-lucide="package" class="w-5 h-5"></i><span>Orders</span></a>
+      <a href="Payments.html" class="nav-link"><i data-lucide="credit-card" class="w-5 h-5"></i><span>Payments</span></a>
+      <a href="Tracking.html" class="nav-link"><i data-lucide="map-pin" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+       </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <div>
+        <h1 class="font-bold text-lg">Delivery Orders</h1>
+        <p class="text-sm text-gray-600">Manage your assigned deliveries</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" onclick="optimizeRoute()">
+          <i data-lucide="route" class="w-4 h-4 mr-2 inline"></i>
+          Optimize Route
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+        </button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">JD</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Filter Tabs -->
+      <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl mb-6 w-fit">
+        <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg filter-btn" onclick="filterOrders('active')">Active Orders</button>
+        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg filter-btn" onclick="filterOrders('delivered')">Delivered</button>
+        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg filter-btn" onclick="filterOrders('cancelled')">Cancelled/Returned</button>
+      </div>
+
+      <!-- Orders List -->
+      <div class="space-y-4" id="ordersList">
+        <!-- Active Order 1 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 order-card active" data-order="ORD-2024-001">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="zap" class="w-6 h-6 text-blue-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-1">
+                  <h3 class="text-lg font-semibold text-gray-900">ORD-2024-001</h3>
+                  <span class="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full font-medium">HIGH PRIORITY</span>
+                </div>
+                <p class="text-gray-600 mb-2">Oxygen Cylinder - 15L Medical Grade</p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Ravi Kumar</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543210</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                Pending
+              </span>
+              <p class="text-sm text-gray-500 mt-1">COD: $120</p>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-gray-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">B-123, Sector 15, Noida</p>
+                <p class="text-sm text-gray-600">Near Metro Station, Landmark: Blue Building</p>
+                <p class="text-xs text-gray-500 mt-1">Distance: 2.3 km • ETA: 15 mins</p>
+              </div>
+              <button onclick="openMaps('B-123, Sector 15, Noida')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 transition-colors">
+                <i data-lucide="navigation" class="w-4 h-4 mr-1 inline"></i>
+                Navigate
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="callCustomer('+91-9876543210')" class="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="phone" class="w-4 h-4 mr-1 inline"></i>
+                Call
+              </button>
+              <button onclick="markDelivered('ORD-2024-001')" class="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-1 inline"></i>
+                Mark Delivered
+              </button>
+            </div>
+            <button onclick="goToPayment('ORD-2024-001')" class="px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg font-medium transition-colors">
+              <i data-lucide="credit-card" class="w-4 h-4 mr-2 inline"></i>
+              Payment
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Order 2 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 order-card active" data-order="ORD-2024-002">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="activity" class="w-6 h-6 text-purple-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-1">
+                  <h3 class="text-lg font-semibold text-gray-900">ORD-2024-002</h3>
+                  <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full font-medium">PAID ONLINE</span>
+                </div>
+                <p class="text-gray-600 mb-2">Ventilator - ICU Grade with Monitors</p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="building-2" class="w-4 h-4 mr-1"></i>Metro Hospital</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543211</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <i data-lucide="truck" class="w-4 h-4 mr-1"></i>
+                En Route
+              </span>
+              <p class="text-sm text-gray-500 mt-1">Amount: $1500</p>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-gray-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">Metro Hospital, Sector 12, Delhi</p>
+                <p class="text-sm text-gray-600">Main Reception, Emergency Wing</p>
+                <p class="text-xs text-gray-500 mt-1">Distance: 5.7 km • ETA: 25 mins</p>
+              </div>
+              <button onclick="openMaps('Metro Hospital, Sector 12, Delhi')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 transition-colors">
+                <i data-lucide="navigation" class="w-4 h-4 mr-1 inline"></i>
+                Navigate
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="callCustomer('+91-9876543211')" class="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="phone" class="w-4 h-4 mr-1 inline"></i>
+                Call
+              </button>
+              <button onclick="markDelivered('ORD-2024-002')" class="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-1 inline"></i>
+                Mark Delivered
+              </button>
+            </div>
+            <button onclick="goToPayment('ORD-2024-002')" class="px-6 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg font-medium transition-colors">
+              <i data-lucide="check" class="w-4 h-4 mr-2 inline"></i>
+              Paid Online
+            </button>
+          </div>
+        </div>
+
+        <!-- Delivered Order (Hidden by default) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 order-card delivered hidden" data-order="ORD-2024-003">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-gray-900">ORD-2024-003</h3>
+                <p class="text-gray-600 mb-2">Medical Bed - Electric Adjustable</p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Priya Sharma</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543212</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                Delivered
+              </span>
+              <p class="text-sm text-gray-500 mt-1">COD: $450</p>
+            </div>
+          </div>
+
+          <div class="bg-green-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="check" class="w-5 h-5 text-green-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-green-800">Successfully delivered</p>
+                <p class="text-sm text-green-700">Delivered at 2:30 PM to A-456, Gurgaon</p>
+                <p class="text-xs text-green-600 mt-1">Payment collected: $450 (Cash)</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="viewDeliveryProof('ORD-2024-003')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="image" class="w-4 h-4 mr-1 inline"></i>
+                View Proof
+              </button>
+              <button onclick="downloadReceipt('ORD-2024-003')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="download" class="w-4 h-4 mr-1 inline"></i>
+                Receipt
+              </button>
+            </div>
+            <span class="text-sm text-gray-500">Delivered today at 2:30 PM</span>
+          </div>
+        </div>
+
+        <!-- Cancelled Order (Hidden by default) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 order-card cancelled hidden" data-order="ORD-2024-004">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="x-circle" class="w-6 h-6 text-red-600"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-gray-900">ORD-2024-004</h3>
+                <p class="text-gray-600 mb-2">Oxygen Concentrator - Portable</p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Rajesh Gupta</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543213</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                <i data-lucide="x-circle" class="w-4 h-4 mr-1"></i>
+                Cancelled
+              </span>
+              <p class="text-sm text-gray-500 mt-1">Amount: $800</p>
+            </div>
+          </div>
+
+          <div class="bg-red-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="info" class="w-5 h-5 text-red-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-red-800">Order cancelled by customer</p>
+                <p class="text-sm text-red-700">Reason: Changed delivery address, rescheduled</p>
+                <p class="text-xs text-red-600 mt-1">Cancelled at 1:15 PM</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="contactSupport('ORD-2024-004')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="headphones" class="w-4 h-4 mr-1 inline"></i>
+                Contact Support
+              </button>
+            </div>
+            <span class="text-sm text-gray-500">Cancelled today at 1:15 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State (when no orders in current filter) -->
+      <div id="emptyState" class="text-center py-12 hidden">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="package" class="w-12 h-12 text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
+        <p class="text-gray-600">No orders match your current filter selection.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function filterOrders(type) {
+      const cards = document.querySelectorAll('.order-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+      const emptyState = document.getElementById('emptyState');
+      
+      // Reset button styles
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('text-gray-600');
+      });
+      
+      // Highlight active button
+      event.target.classList.remove('text-gray-600');
+      event.target.classList.add('bg-blue-600', 'text-white');
+      
+      let visibleCount = 0;
+      cards.forEach(card => {
+        if (card.classList.contains(type)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Show empty state if no cards are visible
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    function callCustomer(phoneNumber) {
+      if (confirm(`Call customer at ${phoneNumber}?`)) {
+        // In real app, this would initiate a call
+        alert(`Calling ${phoneNumber}...\n\nThis would open your phone's dialer app.`);
+      }
+    }
+
+    function markDelivered(orderId) {
+      if (confirm(`Mark order ${orderId} as delivered?\n\nThis will require delivery confirmation and signature.`)) {
+        alert(`Order ${orderId} marked as delivered!\n\n• Delivery proof photo required\n• Customer signature captured\n• Payment status updated\n• Notification sent to customer`);
+        // In real app, this would update the order status
+      }
+    }
+
+    function goToPayment(orderId) {
+      window.location.href = `delivery-payments.html?order=${orderId}`;
+    }
+
+    function openMaps(address) {
+      // In real app, this would open Google Maps or preferred navigation app
+      alert(`Opening navigation to:\n${address}\n\nThis would launch your preferred maps application with turn-by-turn directions.`);
+    }
+
+    function optimizeRoute() {
+      if (confirm('Optimize delivery route?\n\nThis will reorder your deliveries for the most efficient path.')) {
+        alert('Route optimized!\n\n• Total distance reduced by 15%\n• Estimated time saved: 45 minutes\n• New route order updated\n• GPS navigation ready');
+      }
+    }
+
+    function viewDeliveryProof(orderId) {
+      alert(`Delivery Proof for ${orderId}:\n\n• Photo timestamp: 2:30 PM\n• GPS location: A-456, Gurgaon\n• Customer signature: Available\n• Delivery notes: Received by customer\n\nWould you like to view the full proof of delivery?`);
+    }
+
+    function downloadReceipt(orderId) {
+      alert(`Downloading receipt for ${orderId}...\n\nThe delivery receipt PDF will be saved to your device.`);
+    }
+
+    function contactSupport(orderId) {
+      alert(`Contact Support for ${orderId}:\n\nSupport Team: +91-1800-LIVEAIR\nTicket will be created for cancelled order\n\nWould you like to speak with support now?`);
+    }
+
+    function showNotifications() {
+      alert('Delivery Notifications:\n• New order assigned: ORD-2024-005\n• Route optimization available\n• Customer called for ORD-2024-001\n• Payment reminder sent');
+    }
+
+    function showProfile() {
+      alert('Delivery Profile:\n• Current Location: Sector 15, Noida\n• Online Status: Active\n• Today\'s Stats: 4/8 deliveries\n• Update Location\n• Logout');
+    }
+  </script>
+</body>
+</html>

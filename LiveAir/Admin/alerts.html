@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Alerts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+    <aside class="w-64 bg-white shadow-lg flex flex-col">
+      <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+      <nav class="flex-1 p-4 space-y-1">
+        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+        <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+        <details class="group" open>
+          <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+          <div class="pl-8 py-1 space-y-1">
+            <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+            <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+          </div>
+        </details>
+        <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+        <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+        <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+        <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+        <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+        <a href="alerts.html" class="nav-link nav-active"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+      </nav>
+      <div class="p-4 small">© 2025 LiveAir</div>
+    </aside>
+    
+  <main class="flex-1 flex flex-col">
+    
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+    
+    <section class="p-6 overflow-y-auto flex-1">
+  <h2 class="text-2xl font-bold mb-8">Alerts</h2>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <!-- Card 1 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-red-500 to-rose-600 text-white"
+      onclick="showAlertDetails('Low stock alert', 'The stock for Product A is below the threshold of 20 units.', 'Active')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Low Stock Alert</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-red-600">
+          Active
+        </span>
+      </div>
+      <p class="text-base">Stock for <span class="font-semibold">Product A</span> dropped below 20 units.</p>
+    </div>
+
+    <!-- Card 2 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-green-500 to-emerald-600 text-white"
+      onclick="showAlertDetails('Due date reminder', 'Client B has a due date approaching.', 'Enabled')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="calendar" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Due Date Reminder</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-green-600">
+          Enabled
+        </span>
+      </div>
+      <p class="text-base">Client <span class="font-semibold">B</span> has a due date approaching soon.</p>
+    </div>
+
+    <!-- Card 3 -->
+    <div 
+      class="rounded-2xl shadow-lg p-6 cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
+      onclick="showAlertDetails('Urgent delivery', 'Urgent delivery for Order #12345.', 'Enabled')"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-3 rounded-xl">
+            <i data-lucide="truck" class="w-8 h-8"></i>
+          </div>
+          <h3 class="font-semibold text-xl">Urgent Delivery</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white text-blue-600">
+          Enabled
+        </span>
+      </div>
+      <p class="text-base">Urgent delivery required for <span class="font-semibold">Order #12345</span>.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  </main>
+
+  <!-- Modal -->
+  <div id="alertModal" class="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50 hidden">
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+      <h3 class="text-lg font-semibold mb-4">Alert Details</h3>
+      <div id="modalContent">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to show the modal with alert details
+    function showAlertDetails(title, description, status) {
+      // Close any open modal
+      closeModal();
+
+      // Set the modal content
+      const modalContent = `
+        <div><strong>Title:</strong> ${title}</div>
+        <div><strong>Description:</strong> ${description}</div>
+        <div><strong>Status:</strong> <span class="${status === 'Active' ? 'text-red-600' : 'text-green-600'}">${status}</span></div>
+      `;
+      document.getElementById('modalContent').innerHTML = modalContent;
+
+      // Display the modal
+      document.getElementById('alertModal').classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      document.getElementById('alertModal').classList.add('hidden');
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

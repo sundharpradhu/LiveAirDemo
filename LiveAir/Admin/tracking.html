@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Tracking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group" open>
+        <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link nav-active"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+
+    <!-- Tracking Section -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <h2 class="text-xl font-bold mb-4">Tracking</h2>
+
+      <!-- Tabs -->
+      <div class="flex border-b mb-4">
+        <button id="tabOrder" class="px-4 py-2 font-semibold border-b-2 border-blue-600 text-blue-600">By Order ID</button>
+        <button id="tabAsset" class="px-4 py-2 font-semibold border-b-2 border-transparent text-gray-600 hover:text-blue-600">By Asset ID</button>
+      </div>
+
+      <!-- Order ID Search -->
+      <div id="orderSearch" class="bg-white p-4 rounded shadow">
+        <div class="flex gap-2 items-center">
+          <input id="orderInput" class="border p-2 rounded w-full md:w-1/2" placeholder="Enter Order ID (e.g. C-1001)" />
+          <button id="orderBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
+        </div>
+        <div id="orderResult" class="mt-4"></div>
+      </div>
+
+      <!-- Asset ID Search -->
+      <div id="assetSearch" class="bg-white p-4 rounded shadow hidden">
+        <div class="flex gap-2 items-center">
+          <input id="assetInput" class="border p-2 rounded w-full md:w-1/2" placeholder="Enter Asset ID (e.g. AS-501)" />
+          <button id="assetBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
+        </div>
+        <div id="assetResult" class="mt-4"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Dummy order tracking data
+    const ORDER_STATUS = {
+      "C-1001": 2, // Ready to Dispatch
+      "C-1002": 4, // Out for Delivery
+      "C-1003": 6  // Paid
+    };
+
+    const STEPS = ["Placed","In Progress","Ready To Dispatch","Dispatch","On the Way","Delivered","Paid","Replace"];
+
+    // Dummy asset mapping
+    const ASSET_DATA = {
+      "AS-501": { name: "Oxygen Cylinder", client: "ACME Labs", type: "Commercial" },
+      "AS-502": { name: "Nitrogen Tank", client: "GreenMedics", type: "Retail" }
+    };
+
+    // Tab switching
+    const tabOrder = document.getElementById("tabOrder");
+    const tabAsset = document.getElementById("tabAsset");
+    const orderSearch = document.getElementById("orderSearch");
+    const assetSearch = document.getElementById("assetSearch");
+
+    tabOrder.addEventListener("click", () => {
+      tabOrder.classList.add("border-blue-600","text-blue-600");
+      tabAsset.classList.remove("border-blue-600","text-blue-600");
+      assetSearch.classList.add("hidden");
+      orderSearch.classList.remove("hidden");
+    });
+
+    tabAsset.addEventListener("click", () => {
+      tabAsset.classList.add("border-blue-600","text-blue-600");
+      tabOrder.classList.remove("border-blue-600","text-blue-600");
+      orderSearch.classList.add("hidden");
+      assetSearch.classList.remove("hidden");
+    });
+
+    // Search by Order ID
+    document.getElementById("orderBtn").addEventListener("click", () => {
+      const orderId = document.getElementById("orderInput").value.trim();
+      const resultDiv = document.getElementById("orderResult");
+
+      if (!ORDER_STATUS[orderId]) {
+        resultDiv.innerHTML = `<p class="text-red-600">No order found for ID: ${orderId}</p>`;
+        return;
+      }
+
+      const currentIndex = ORDER_STATUS[orderId];
+      const stepsHtml = STEPS.map((s,i) => `
+        <div class="flex items-center">
+          <div class="w-3 h-3 rounded-full ${i<=currentIndex?'bg-green-500':'bg-gray-300'}"></div>
+          <span class="ml-2 ${i<=currentIndex?'text-green-700':'text-gray-500'}">${s}</span>
+        </div>
+      `).join("<div class='ml-2 h-4 border-l border-gray-300'></div>");
+
+      resultDiv.innerHTML = `
+        <h3 class="font-semibold mb-2">Tracking for ${orderId}</h3>
+        <div class="space-y-2">${stepsHtml}</div>
+      `;
+    });
+
+    // Search by Asset ID
+    document.getElementById("assetBtn").addEventListener("click", () => {
+      const assetId = document.getElementById("assetInput").value.trim();
+      const resultDiv = document.getElementById("assetResult");
+
+      if (!ASSET_DATA[assetId]) {
+        resultDiv.innerHTML = `<p class="text-red-600">No asset found for ID: ${assetId}</p>`;
+        return;
+      }
+
+      const asset = ASSET_DATA[assetId];
+      resultDiv.innerHTML = `
+        <h3 class="font-semibold mb-2">Asset Details</h3>
+        <div class="p-3 bg-gray-50 rounded border">
+          <p><b>Asset ID:</b> ${assetId}</p>
+          <p><b>Name:</b> ${asset.name}</p>
+          <p><b>Client/User:</b> ${asset.client}</p>
+          <p><b>Type:</b> ${asset.type}</p>
+        </div>
+      `;
+    });
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

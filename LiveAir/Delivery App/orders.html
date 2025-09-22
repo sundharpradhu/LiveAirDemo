@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiveAir - Delivery Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="home" class="w-5 h-5 mr-2"></i>Home</a>
+      <a href="orders.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i>Orders</a>
+      <a href="payments.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="file-text" class="w-5 h-5 mr-2"></i>Payments</a>
+     <a href="tracking.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="service.html" class="flex items-center p-2 rounded hover:bg-gray-100"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Orders</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">D</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      
+      <!-- Tabs -->
+      <div class="flex space-x-4 border-b mb-6">
+        <button class="tab-btn px-4 py-2 border-b-2 border-blue-600 text-blue-600 font-medium" onclick="showTab('assigned')">Assigned Orders</button>
+        <button class="tab-btn px-4 py-2 text-gray-600 hover:text-gray-900" onclick="showTab('complaints')">Service Complaints</button>
+      </div>
+
+      <!-- Assigned Orders -->
+      <div id="assigned" class="tab-content">
+        <h2 class="text-xl font-semibold mb-4">Assigned Orders</h2>
+        <div class="space-y-4">
+          <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-gray-900">ORD-2024-001 — LPG Cylinder</p>
+              <p class="text-gray-500 text-sm">Customer: Ravi Kumar</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">Go to Payment</button>
+              <button class="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-100">Scan Cylinder</button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-gray-900">ORD-2024-002 — Oxygen Cylinder</p>
+              <p class="text-gray-500 text-sm">Customer: Metro Hospital</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">Go to Payment</button>
+              <button class="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-100">Scan Cylinder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Complaints -->
+      <div id="complaints" class="tab-content hidden">
+        <h2 class="text-xl font-semibold mb-4">Service Complaints</h2>
+        <div class="space-y-4">
+          <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-gray-900">CMP-301 — Cylinder leakage</p>
+              <p class="text-gray-500 text-sm">Customer: Anita Sharma</p>
+            </div>
+            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-600">Assign Service</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+      document.getElementById(tab).classList.remove("hidden");
+
+      document.querySelectorAll(".tab-btn").forEach(el => {
+        el.classList.remove("border-b-2","border-blue-600","text-blue-600","font-medium");
+        el.classList.add("text-gray-600");
+      });
+      event.target.classList.add("border-b-2","border-blue-600","text-blue-600","font-medium");
+    }
+    lucide.createIcons();
+  </script>
+</body>
+</html>

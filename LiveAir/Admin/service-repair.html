@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Service & Repair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-100 flex h-screen">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="index.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Home</span></a>
+      <a href="clients.html" class="nav-link"><i data-lucide="users" class="w-5 h-5"></i><span>Clients</span></a>
+      <details class="group" open>
+        <summary class="nav-link"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="orders-commercial.html" class="nav-link"><i data-lucide="store" class="w-5 h-5"></i><span>Commercial Orders</span></a>
+          <a href="orders-retail.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>Retail Orders</span></a>
+        </div>
+      </details>
+      <a href="assets.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>My Products</span></a>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="delivery.html" class="nav-link"><i data-lucide="truck" class="w-5 h-5"></i><span>Delivery</span></a>
+      <a href="service-repair.html" class="nav-link nav-active"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="alerts.html" class="nav-link"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 small">© 2025 LiveAir</div>
+  </aside>
+    
+  <!-- Main -->
+  <main class="flex-1 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Admin Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center">A</div>
+      </div>
+    </header>
+    
+    <!-- Content -->
+    <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Service & Repair</h2>
+        <button onclick="openAddTechModal()" class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">+ Add Technician</button>
+      </div>
+      <div class="bg-white p-4 rounded shadow overflow-x-auto">
+        <table id="repairTable" class="w-full text-sm border">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-2 border">Log ID</th>
+              <th class="p-2 border">Client Name</th>
+              <th class="p-2 border">Location</th>
+              <th class="p-2 border">Equipment</th>
+              <th class="p-2 border">Issue Reported</th>
+              <th class="p-2 border">Priority</th>
+              <th class="p-2 border">Technician</th>
+              <th class="p-2 border">Date Reported</th>
+              <th class="p-2 border">Due Date</th>
+              <th class="p-2 border">Repair Status</th>
+              <th class="p-2 border">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2 border cursor-pointer log-id">L-101</td>
+              <td class="p-2 border">Acme Corp</td>
+              <td class="p-2 border">Chennai</td>
+              <td class="p-2 border">Oxygen Cylinder</td>
+              <td class="p-2 border">Valve leakage during refill</td>
+              <td class="p-2 border"><span class="px-2 py-1 rounded bg-red-100 text-red-600 text-xs font-semibold">High</span></td>
+              <td class="p-2 border">Karthik</td>
+              <td class="p-2 border">2025-08-25</td>
+              <td class="p-2 border due-date">-</td>
+              <td class="p-2 border">
+                <select class="repair-status border rounded px-2 py-1">
+                  <option selected>Pending</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </td>
+              <td class="p-2 border">
+                <button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-2 border cursor-pointer log-id">L-102</td>
+              <td class="p-2 border">Apollo</td>
+              <td class="p-2 border">Coimbatore</td>
+              <td class="p-2 border">Flow Regulator</td>
+              <td class="p-2 border">Pressure gauge not working</td>
+              <td class="p-2 border"><span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-semibold">Medium</span></td>
+              <td class="p-2 border">Manoj</td>
+              <td class="p-2 border">2025-08-28</td>
+              <td class="p-2 border due-date">-</td>
+              <td class="p-2 border">
+                <select class="repair-status border rounded px-2 py-1">
+                  <option selected>Pending</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </td>
+              </td>
+              <td class="p-2 border"><button class="assign-btn px-3 py-1 bg-blue-500 text-white rounded">Assign</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Bulk Assign -->
+        <button id="bulkAssignBtn" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded hidden">Assign Selected</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add Technician Modal -->
+  <div id="addTechModal" class="hidden fixed inset-0 flex justify-center items-center z-50">
+    <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeAddTechModal()"></div>
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+      <h3 class="text-lg font-bold mb-4">Add Technician</h3>
+      <form id="addTechForm" class="space-y-3">
+        <input type="text" id="newTechName" placeholder="Full Name" class="w-full border rounded px-3 py-2" required />
+        <input type="text" id="newTechContact" placeholder="Phone Number" class="w-full border rounded px-3 py-2" required />
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="closeAddTechModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Assign Modal -->
+  <div id="assignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded shadow w-96 relative">
+      <h3 class="text-lg font-bold mb-4">Assign Technician</h3>
+      <label class="block mb-2">Technician
+        <select id="techSelect" class="w-full border rounded px-2 py-1">
+          <option>Karthik</option>
+          <option>Manoj</option>
+          <option>Ashok</option>
+          <option>Gowtham</option>
+        </select>
+      </label>
+      <label class="block mb-4">Due Date
+        <input type="date" id="dueDateInput" class="w-full border rounded px-2 py-1">
+      </label>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeAssignModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+        <button id="saveAssignBtn" class="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Log Details Modal -->
+  <div id="logDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded shadow w-96 relative">
+      <h3 class="text-lg font-bold mb-4">Log Details</h3>
+      <div id="logDetailsContent" class="text-sm space-y-1"></div>
+      <button onclick="closeLogDetail()" class="mt-4 px-4 py-2 bg-gray-300 rounded">Close</button>
+    </div>
+  </div>
+
+  <script>
+lucide.createIcons();
+
+// Open/close Add Technician Modal
+function openAddTechModal(){ document.getElementById('addTechModal').classList.remove('hidden'); }
+function closeAddTechModal(){ document.getElementById('addTechModal').classList.add('hidden'); }
+
+    // Add technician
+document.getElementById('addTechForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('newTechName').value.trim();
+  if(!name){ alert('Enter name'); return; }
+  const select = document.getElementById('techSelect');
+  const option = document.createElement('option');
+  option.value = name; option.textContent = name;
+  select.appendChild(option);
+  closeAddTechModal();
+});
+
+    // Assign button click
+    let currentRow = null;
+    document.querySelectorAll('.assign-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentRow = btn.closest('tr');
+        document.getElementById('assignModal').classList.remove('hidden');
+      });
+    });
+
+    document.getElementById('saveAssignBtn').addEventListener('click', () => {
+      const tech = document.getElementById('techSelect').value;
+      const dueDate = document.getElementById('dueDateInput').value;
+      if(currentRow){
+        currentRow.querySelector('td:nth-child(7)').textContent = tech;
+        currentRow.querySelector('.due-date').textContent = dueDate || '-';
+      }
+      closeAssignModal();
+    });
+
+    function closeAssignModal(){
+      document.getElementById('assignModal').classList.add('hidden');
+    }
+
+    // Log ID click -> show details
+    document.querySelectorAll('.log-id').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const row = cell.closest('tr');
+        const details = {
+          "Log ID": row.children[0].textContent,
+          "Client Name": row.children[1].textContent,
+          "Location": row.children[2].textContent,
+          "Equipment": row.children[3].textContent,
+          "Issue Reported": row.children[4].textContent,
+          "Priority": row.children[5].textContent,
+          "Technician": row.children[6].textContent,
+          "Date Reported": row.children[7].textContent,
+          "Due Date": row.children[8].textContent,
+          "Repair Status": row.children[9].querySelector('select').value
+        };
+        let html = '';
+        for(const key in details){
+          html += `<p><strong>${key}:</strong> ${details[key]}</p>`;
+        }
+        document.getElementById('logDetailsContent').innerHTML = html;
+        document.getElementById('logDetailModal').classList.remove('hidden');
+      });
+    });
+
+    function closeLogDetail(){
+      document.getElementById('logDetailModal').classList.add('hidden');
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script>lucide.createIcons();</script>
+</body>
+</html>

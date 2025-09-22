@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveAir - Service & Repair</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="Orders.html" class="nav-link"><i data-lucide="package" class="w-5 h-5"></i><span>Orders</span></a>
+      <a href="Payments.html" class="nav-link"><i data-lucide="credit-card" class="w-5 h-5"></i><span>Payments</span></a>
+      <a href="Tracking.html" class="nav-link"><i data-lucide="map-pin" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service.html" class="nav-link nav-active"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <div>
+        <h1 class="font-bold text-lg">Service & Repair</h1>
+        <p class="text-sm text-gray-600">Manage service requests and equipment maintenance</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+          3 Active Tickets
+        </div>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" onclick="createServiceTicket()">
+          <i data-lucide="plus" class="w-4 h-4 mr-2 inline"></i>
+          New Service Request
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+        </button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">JD</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Service Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="filterTickets('open')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="alert-circle" class="w-6 h-6"></i>
+            </div>
+            <span class="text-orange-200 text-sm font-medium">Open</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">3</h3>
+          <p class="text-orange-100 text-sm">Open Tickets</p>
+          <div class="mt-3 flex items-center text-sm text-orange-200">
+            <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+            <span>2 urgent</span>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="filterTickets('in-progress')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="settings" class="w-6 h-6"></i>
+            </div>
+            <span class="text-blue-200 text-sm font-medium">Active</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">2</h3>
+          <p class="text-blue-100 text-sm">In Progress</p>
+          <div class="mt-3 flex items-center text-sm text-blue-200">
+            <i data-lucide="user" class="w-4 h-4 mr-1"></i>
+            <span>Assigned to you</span>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="filterTickets('completed')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="check-circle" class="w-6 h-6"></i>
+            </div>
+            <span class="text-green-200 text-sm font-medium">Completed</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">15</h3>
+          <p class="text-green-100 text-sm">This Month</p>
+          <div class="mt-3 flex items-center text-sm text-green-200">
+            <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+            <span>95% success rate</span>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1" onclick="showResponseTime()">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <i data-lucide="clock" class="w-6 h-6"></i>
+            </div>
+            <span class="text-purple-200 text-sm font-medium">Average</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-1">2.5h</h3>
+          <p class="text-purple-100 text-sm">Response Time</p>
+          <div class="mt-3 flex items-center text-sm text-purple-200">
+            <i data-lucide="target" class="w-4 h-4 mr-1"></i>
+            <span>Below 4h target</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex space-x-2 mb-6">
+        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium filter-btn" onclick="filterTickets('all')">All Tickets</button>
+        <button class="px-4 py-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 rounded-lg filter-btn" onclick="filterTickets('open')">Open</button>
+        <button class="px-4 py-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 rounded-lg filter-btn" onclick="filterTickets('in-progress')">In Progress</button>
+        <button class="px-4 py-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 rounded-lg filter-btn" onclick="filterTickets('completed')">Completed</button>
+      </div>
+
+      <!-- Service Tickets List -->
+      <div class="space-y-6" id="ticketsList">
+        <!-- Open Ticket 1 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ticket-card open" data-ticket="TKT-001">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">TKT-001</h3>
+                  <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full font-medium">URGENT</span>
+                  <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full font-medium">CYLINDER REPAIR</span>
+                </div>
+                <p class="text-gray-800 font-medium mb-2">Oxygen Cylinder Leakage</p>
+                <p class="text-gray-600 mb-3">Customer reports gas leaking from valve connection. Requires immediate attention for safety.</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Anita Sharma</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543213</span>
+                  <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i>Reported 2 hours ago</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
+                Open
+              </span>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-gray-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">C-789, Block A, Noida</p>
+                <p class="text-sm text-gray-600">Apartment Complex, Ground Floor</p>
+                <p class="text-xs text-gray-500 mt-1">Distance: 3.2 km • ETA: 20 mins</p>
+              </div>
+              <button onclick="openMaps('C-789, Block A, Noida')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 transition-colors">
+                <i data-lucide="navigation" class="w-4 h-4 mr-1 inline"></i>
+                Navigate
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="callCustomer('+91-9876543213')" class="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="phone" class="w-4 h-4 mr-1 inline"></i>
+                Call Customer
+              </button>
+              <button onclick="updateTicketStatus('TKT-001', 'in-progress')" class="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="play-circle" class="w-4 h-4 mr-1 inline"></i>
+                Start Service
+              </button>
+            </div>
+            <button onclick="viewTicketDetails('TKT-001')" class="px-6 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg font-medium transition-colors">
+              <i data-lucide="eye" class="w-4 h-4 mr-2 inline"></i>
+              View Details
+            </button>
+          </div>
+        </div>
+
+        <!-- In Progress Ticket -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ticket-card in-progress" data-ticket="TKT-002">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="settings" class="w-6 h-6 text-blue-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">TKT-002</h3>
+                  <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full font-medium">NORMAL</span>
+                  <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full font-medium">INSTALLATION</span>
+                </div>
+                <p class="text-gray-800 font-medium mb-2">Ventilator Installation & Setup</p>
+                <p class="text-gray-600 mb-3">New ventilator installation required. Include training for nursing staff on operation.</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="building-2" class="w-4 h-4 mr-1"></i>City Hospital</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543214</span>
+                  <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i>Started 1 hour ago</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <i data-lucide="settings" class="w-4 h-4 mr-1"></i>
+                In Progress
+              </span>
+            </div>
+          </div>
+
+          <div class="bg-blue-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="user" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-blue-800">Currently working on this ticket</p>
+                <p class="text-sm text-blue-700">Installation 60% complete • Training pending</p>
+                <p class="text-xs text-blue-600 mt-1">Expected completion: 2 hours</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="callCustomer('+91-9876543214')" class="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="phone" class="w-4 h-4 mr-1 inline"></i>
+                Call Customer
+              </button>
+              <button onclick="addServiceNote('TKT-002')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="file-text" class="w-4 h-4 mr-1 inline"></i>
+                Add Note
+              </button>
+            </div>
+            <button onclick="updateTicketStatus('TKT-002', 'completed')" class="px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg font-medium transition-colors">
+              <i data-lucide="check-circle" class="w-4 h-4 mr-2 inline"></i>
+              Complete Service
+            </button>
+          </div>
+        </div>
+
+        <!-- Open Ticket 2 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ticket-card open" data-ticket="TKT-003">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="wrench" class="w-6 h-6 text-orange-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">TKT-003</h3>
+                  <span class="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full font-medium">MEDIUM</span>
+                  <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full font-medium">REPLACEMENT</span>
+                </div>
+                <p class="text-gray-800 font-medium mb-2">Medical Bed Motor Replacement</p>
+                <p class="text-gray-600 mb-3">Electric bed motor not functioning. Patient unable to adjust bed position.</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Rajesh Gupta</span>
+                  <span class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-1"></i>+91-9876543215</span>
+                  <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i>Reported 4 hours ago</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
+                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                Open
+              </span>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-gray-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">D-456, Sector 18, Gurgaon</p>
+                <p class="text-sm text-gray-600">Residential Area, 2nd Floor</p>
+                <p class="text-xs text-gray-500 mt-1">Distance: 7.5 km • ETA: 35 mins</p>
+              </div>
+              <button onclick="openMaps('D-456, Sector 18, Gurgaon')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 transition-colors">
+                <i data-lucide="navigation" class="w-4 h-4 mr-1 inline"></i>
+                Navigate
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="callCustomer('+91-9876543215')" class="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="phone" class="w-4 h-4 mr-1 inline"></i>
+                Call Customer
+              </button>
+              <button onclick="scheduleService('TKT-003')" class="px-4 py-2 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="calendar" class="w-4 h-4 mr-1 inline"></i>
+                Schedule
+              </button>
+            </div>
+            <button onclick="updateTicketStatus('TKT-003', 'in-progress')" class="px-6 py-2 bg-orange-600 text-white hover:bg-orange-700 rounded-lg font-medium transition-colors">
+              <i data-lucide="play-circle" class="w-4 h-4 mr-2 inline"></i>
+              Start Service
+            </button>
+          </div>
+        </div>
+
+        <!-- Completed Ticket (Hidden by default) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ticket-card completed hidden" data-ticket="TKT-004">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">TKT-004</h3>
+                  <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full font-medium">MAINTENANCE</span>
+                </div>
+                <p class="text-gray-800 font-medium mb-2">Concentrator Filter Replacement</p>
+                <p class="text-gray-600 mb-3">Routine maintenance completed. Filter replaced and system tested successfully.</p>
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                  <span class="flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Priya Sharma</span>
+                  <span class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-1"></i>Completed today</span>
+                  <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i>Duration: 1.5 hours</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                Completed
+              </span>
+            </div>
+          </div>
+
+          <div class="bg-green-50 rounded-xl p-4 mb-4">
+            <div class="flex items-start space-x-3">
+              <i data-lucide="check" class="w-5 h-5 text-green-600 mt-0.5"></i>
+              <div class="flex-1">
+                <p class="font-medium text-green-800">Service completed successfully</p>
+                <p class="text-sm text-green-700">Customer satisfaction: Excellent • Next service: 6 months</p>
+                <p class="text-xs text-green-600 mt-1">Work completed at 3:30 PM</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button onclick="viewServiceReport('TKT-004')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="file-text" class="w-4 h-4 mr-1 inline"></i>
+                Service Report
+              </button>
+              <button onclick="downloadInvoice('TKT-004')" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                <i data-lucide="download" class="w-4 h-4 mr-1 inline"></i>
+                Invoice
+              </button>
+            </div>
+            <span class="text-sm text-gray-500">Completed today at 3:30 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="text-center py-12 hidden">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="wrench" class="w-12 h-12 text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No service tickets found</h3>
+        <p class="text-gray-600">No tickets match your current filter selection.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Service Note Modal -->
+  <div id="serviceNoteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md m-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-900">Add Service Note</h2>
+        <button class="text-gray-500 hover:text-gray-700" onclick="closeServiceNoteModal()">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Service Note</label>
+          <textarea id="serviceNoteText" rows="4" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter service details, progress updates, or observations..."></textarea>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Status Update</label>
+          <select id="serviceStatus" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">No status change</option>
+            <option value="in-progress">Mark as In Progress</option>
+            <option value="completed">Mark as Completed</option>
+            <option value="on-hold">Put On Hold</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="flex gap-3 mt-6">
+        <button onclick="saveServiceNote()" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+          <i data-lucide="save" class="w-4 h-4 mr-2 inline"></i>
+          Save Note
+        </button>
+        <button onclick="closeServiceNoteModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function filterTickets(type) {
+      const cards = document.querySelectorAll('.ticket-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+      const emptyState = document.getElementById('emptyState');
+      
+      // Reset button styles
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      });
+      
+      // Highlight active button
+      event.target.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+      event.target.classList.add('bg-blue-600', 'text-white');
+      
+      let visibleCount = 0;
+      cards.forEach(card => {
+        if (type === 'all' || card.classList.contains(type)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    function callCustomer(phoneNumber) {
+      if (confirm(`Call customer at ${phoneNumber}?\n\nThis will initiate a call to discuss the service request.`)) {
+        alert(`Calling ${phoneNumber}...\n\nSuggested conversation:\n"Hello, this is John from LiveAir service team. I'm calling regarding your service ticket. I'll be arriving shortly to address the issue."`);
+      }
+    }
+
+    function updateTicketStatus(ticketId, newStatus) {
+      const statusMap = {
+        'in-progress': { text: 'In Progress', color: 'blue', action: 'started' },
+        'completed': { text: 'Completed', color: 'green', action: 'completed' },
+        'on-hold': { text: 'On Hold', color: 'yellow', action: 'put on hold' }
+      };
+      
+      const status = statusMap[newStatus];
+      if (confirm(`Update ticket ${ticketId} status to "${status.text}"?`)) {
+        alert(`Ticket ${ticketId} ${status.action} successfully!\n\n• Status updated to: ${status.text}\n• Customer notified via SMS\n• Service log updated\n• Next action: ${newStatus === 'completed' ? 'Generate service report' : 'Continue monitoring'}`);
+        
+        // Update the ticket card visually
+        const ticketCard = document.querySelector(`[data-ticket="${ticketId}"]`);
+        if (ticketCard) {
+          ticketCard.className = `bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ticket-card ${newStatus}`;
+          
+          const statusBadge = ticketCard.querySelector('.rounded-full');
+          statusBadge.className = `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-${status.color}-100 text-${status.color}-800`;
+          statusBadge.innerHTML = `<i data-lucide="${newStatus === 'completed' ? 'check-circle' : 'settings'}" class="w-4 h-4 mr-1"></i>${status.text}`;
+          
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function viewTicketDetails(ticketId) {
+      const ticketDetails = {
+        'TKT-001': {
+          title: 'Oxygen Cylinder Leakage',
+          customer: 'Anita Sharma',
+          priority: 'URGENT',
+          description: 'Customer reports gas leaking from valve connection. Immediate safety concern.',
+          equipment: 'Oxygen Cylinder - Model OX-150',
+          serialNumber: 'OX150-2024-001',
+          purchaseDate: 'January 15, 2024',
+          warrantyStatus: 'Under Warranty',
+          previousService: 'None',
+          notes: 'Customer mentioned hissing sound near valve. Possible seal failure.'
+        }
+      };
+      
+      const details = ticketDetails[ticketId];
+      if (details) {
+        alert(`Service Ticket Details - ${ticketId}\n\n` +
+              `Title: ${details.title}\n` +
+              `Customer: ${details.customer}\n` +
+              `Priority: ${details.priority}\n` +
+              `Equipment: ${details.equipment}\n` +
+              `Serial Number: ${details.serialNumber}\n` +
+              `Purchase Date: ${details.purchaseDate}\n` +
+              `Warranty: ${details.warrantyStatus}\n` +
+              `Previous Service: ${details.previousService}\n\n` +
+              `Description: ${details.description}\n\n` +
+              `Notes: ${details.notes}`);
+      }
+    }
+
+    function addServiceNote(ticketId) {
+      document.getElementById('serviceNoteModal').classList.remove('hidden');
+      // Store current ticket ID for saving
+      document.getElementById('serviceNoteModal').dataset.ticketId = ticketId;
+    }
+
+    function closeServiceNoteModal() {
+      document.getElementById('serviceNoteModal').classList.add('hidden');
+      document.getElementById('serviceNoteText').value = '';
+      document.getElementById('serviceStatus').value = '';
+    }
+
+    function saveServiceNote() {
+      const ticketId = document.getElementById('serviceNoteModal').dataset.ticketId;
+      const noteText = document.getElementById('serviceNoteText').value;
+      const statusUpdate = document.getElementById('serviceStatus').value;
+      
+      if (!noteText.trim()) {
+        alert('Please enter a service note before saving.');
+        return;
+      }
+      
+      let message = `Service note added to ${ticketId}:\n\n"${noteText}"\n\nTimestamp: ${new Date().toLocaleString()}`;
+      
+      if (statusUpdate) {
+        message += `\nStatus updated to: ${statusUpdate}`;
+        updateTicketStatus(ticketId, statusUpdate);
+      }
+      
+      alert(message);
+      closeServiceNoteModal();
+    }
+
+    function scheduleService(ticketId) {
+      const timeSlots = [
+        'Tomorrow 9:00 AM - 11:00 AM',
+        'Tomorrow 2:00 PM - 4:00 PM', 
+        'Day after tomorrow 10:00 AM - 12:00 PM',
+        'Custom time slot'
+      ];
+      
+      const choice = prompt(`Schedule service for ${ticketId}\n\nSelect time slot:\n1. ${timeSlots[0]}\n2. ${timeSlots[1]}\n3. ${timeSlots[2]}\n4. ${timeSlots[3]}\n\nEnter choice (1-4):`);
+      
+      if (choice >= '1' && choice <= '3') {
+        alert(`Service scheduled for ${ticketId}\n\nTime: ${timeSlots[choice - 1]}\n\n• Customer will receive confirmation SMS\n• Calendar reminder set\n• Service kit will be prepared\n• Estimated duration: 2-3 hours`);
+      } else if (choice === '4') {
+        const customTime = prompt('Enter preferred date and time:\n(e.g., "Jan 15, 2025 3:00 PM")');
+        if (customTime) {
+          alert(`Custom schedule set for ${ticketId}\n\nTime: ${customTime}\n\nPending customer confirmation...`);
+        }
+      }
+    }
+
+    function openMaps(address) {
+      alert(`Opening navigation to:\n${address}\n\nThis would launch your preferred maps application with turn-by-turn directions for the service call.`);
+    }
+
+    function createServiceTicket() {
+      const ticketInfo = prompt(`Create New Service Ticket\n\nEnter details in format:\nCustomer Name | Phone | Issue Description | Address\n\nExample:\nJohn Smith | +91-9876543216 | AC not cooling | A-123, Delhi`);
+      
+      if (ticketInfo) {
+        const [customer, phone, issue, address] = ticketInfo.split('|').map(s => s.trim());
+        if (customer && phone && issue && address) {
+          const newTicketId = `TKT-${String(Date.now()).slice(-3)}`;
+          alert(`New Service Ticket Created!\n\nTicket ID: ${newTicketId}\nCustomer: ${customer}\nPhone: ${phone}\nIssue: ${issue}\nAddress: ${address}\n\nStatus: Open\nPriority: Normal\nAssigned to: You\n\nTicket has been added to your queue.`);
+        } else {
+          alert('Please provide all required information in the correct format.');
+        }
+      }
+    }
+
+    function viewServiceReport(ticketId) {
+      alert(`Service Report - ${ticketId}\n\n📋 Service Summary:\n• Service Type: Filter Replacement\n• Duration: 1.5 hours\n• Parts Used: HEPA Filter x1\n• Labor Cost: $50\n• Parts Cost: $25\n• Total: $75\n\n✅ Work Completed:\n• Old filter removed and disposed\n• New HEPA filter installed\n• System tested and calibrated\n• Customer training provided\n\n📝 Customer Feedback:\n"Excellent service, very professional"\nRating: 5/5 stars\n\n📅 Next Service:\nRecommended in 6 months\nReminder set for July 2025`);
+    }
+
+    function downloadInvoice(ticketId) {
+      alert(`Downloading invoice for ${ticketId}...\n\nInvoice Details:\n• Service: Filter Replacement\n• Labor: $50\n• Parts: $25\n• Tax: $7.50\n• Total: $82.50\n\nInvoice PDF will be downloaded to your device.`);
+    }
+
+    function showResponseTime() {
+      alert(`Service Response Time Analytics\n\n⏱️ Current Performance:\n• Average Response: 2.5 hours\n• Target: Under 4 hours\n• Performance: 38% better than target\n\n📊 This Month:\n• Fastest Response: 45 minutes\n• Slowest Response: 6 hours\n• 95% within SLA\n\n🎯 Goals:\n• Maintain sub-3 hour average\n• Achieve 98% SLA compliance`);
+    }
+
+    function showNotifications() {
+      alert('Service Notifications:\n• Urgent ticket TKT-001 requires immediate attention\n• Parts ordered for TKT-003 have arrived\n• Customer feedback received for TKT-004\n• Scheduled service reminder for tomorrow');
+    }
+
+    function showProfile() {
+      alert('Service Profile:\n• Technician: John Doe\n• Specialization: Respiratory Equipment\n• Success Rate: 98%\n• Active Tickets: 3\n• Completed This Month: 15\n• Average Rating: 4.8/5\n• Update Skills & Certifications');
+    }
+  </script>
+</body>
+</html>

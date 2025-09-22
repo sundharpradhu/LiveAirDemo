@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as Partner - LiveAi Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .gradient-accent {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.08;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            top: 70%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+        
+        .shape:nth-child(3) {
+            bottom: 15%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+        
+        .shape:nth-child(4) {
+            top: 40%;
+            right: 25%;
+            animation-delay: 1.5s;
+        }
+        
+        .shape:nth-child(5) {
+            top: 60%;
+            left: 60%;
+            animation-delay: 4.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+        
+        .signup-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea {
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            background: white;
+            padding: 0 10px;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-item.active .step-circle {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-item.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+        
+        .step-content {
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .business-type-card {
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .business-type-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        .business-type-card.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .floating-shapes {
+                display: none;
+            }
+            
+            .step-indicator {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .step-item {
+                flex: 1;
+                min-width: 80px;
+            }
+            
+            .step-circle {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-primary p-4">
+    
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape w-32 h-32 bg-white rounded-full"></div>
+        <div class="shape w-20 h-20 bg-blue-200 rounded-lg rotate-45"></div>
+        <div class="shape w-16 h-16 bg-purple-200 rounded-full"></div>
+        <div class="shape w-28 h-28 bg-pink-200 rounded-lg rotate-12"></div>
+        <div class="shape w-24 h-24 bg-yellow-200 rounded-full"></div>
+    </div>
+    
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center text-white mb-8">
+            <div class="flex items-center justify-center mb-6">
+                <div class="w-12 h-12 gradient-accent rounded-xl flex items-center justify-center mr-4">
+                    <i data-lucide="shopping-bag" class="w-7 h-7 text-white"></i>
+                </div>
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold">LiveAi Marketplace</h1>
+                    <p class="text-blue-200 text-sm">Partner Registration</p>
+                </div>
+            </div>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-2">Join Our Partner Network</h2>
+            <p class="text-blue-100">Start selling globally with our enterprise platform</p>
+        </div>
+        
+        <div class="signup-container rounded-2xl p-8 shadow-2xl">
+            
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-item active" id="step-indicator-1">
+                    <div class="step-circle">1</div>
+                    <span class="text-xs font-medium text-gray-600">Business Type</span>
+                </div>
+                <div class="step-item" id="step-indicator-2">
+                    <div class="step-circle">2</div>
+                    <span class="text-xs font-medium text-gray-600">Business Details</span>
+                </div>
+                <div class="step-item" id="step-indicator-3">
+                    <div class="step-circle">3</div>
+                    <span class="text-xs font-medium text-gray-600">Contact Info</span>
+                </div>
+                <div class="step-item" id="step-indicator-4">
+                    <div class="step-circle">4</div>
+                    <span class="text-xs font-medium text-gray-600">Verification</span>
+                </div>
+            </div>
+            
+            <form id="signupForm">
+                
+                <!-- Step 1: Business Type -->
+                <div class="step-content active" id="step1">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">What type of business are you?</h3>
+                        <p class="text-gray-600">Choose the option that best describes your business model</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="business-type-card rounded-xl p-6" data-type="marketplace">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mr-4">
+                                    <i data-lucide="store" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-800">Large Marketplace</h4>
+                            </div>
+                            <p class="text-gray-600 mb-4">Established marketplace like Amazon, Flipkart, or eBay with multiple sellers</p>
+                            <div class="space-y-2">
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Multi-vendor management</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Advanced analytics</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Custom integrations</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="business-type-card rounded-xl p-6" data-type="brand">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 gradient-secondary rounded-lg flex items-center justify-center mr-4">
+                                    <i data-lucide="building" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-800">Brand/Retailer</h4>
+                            </div>
+                            <p class="text-gray-600 mb-4">Direct-to-consumer brand or traditional retailer expanding online</p>
+                            <div class="space-y-2">
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Brand-focused features</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Inventory management</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-600 mr-3"></i>
+                                    <span class="text-sm text-gray-700">Marketing tools</span>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+
+                <!-- Step 2: Business Details -->
+                <div class="step-content" id="step2">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Tell us about your business</h3>
+                        <p class="text-gray-600">Provide some basic information to get started</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="input-group">
+                            <label for="businessName" class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
+                            <input type="text" id="businessName" name="businessName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="businessType" class="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
+                            <select id="businessType" name="businessType" class="w-full px- 4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <option value="" disabled selected>Select your business type</option>
+                                <option value="soleProprietorship">Sole Proprietorship</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="corporation">Corporation</option>
+                                <option value="llc">Limited Liability Company (LLC)</option>
+                                <option value="nonProfit">Non-Profit</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="businessDescription" class="block text-sm font-medium text-gray-700 mb-2">Business Description</label>
+                            <textarea id="businessDescription" name="businessDescription" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3: Contact Info -->
+                <div class="step-content" id="step3">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Your Contact Information</h3>
+                        <p class="text-gray-600">How can we reach you?</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="input-group">
+                            <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                </div>  
+                <!-- Step 4: Verification -->
+                <div class="step-content" id="step4">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Verify Your Information</h3>
+                        <p class="text-gray-600">Please review and confirm your details</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="input-group">
+                            <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                            <input type="text" id="verificationCode" name="verificationCode" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <p class="text-sm text-gray- 500 mt-2">Enter the code sent to your email or phone</p>
+                        </div>  
+                        <div class="input-group">
+                            <label for="terms" class="inline-flex items-center">
+                                <input type="checkbox" id="terms" name="terms" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
+                                <span class="ml-2 text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a> and <a href="#" class="text-blue-600 underline">Privacy Policy</a></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>  
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between mt-10">
+                    <button type="button" id="prevBtn" class="btn-primary text-white font-semibold px-6 py-3 rounded-lg shadow-lg disabled:opacity-50" disabled>Previous</button>
+                    <button type="button" id="nextBtn" class="btn-primary text-white font-semibold px-6 py-3 rounded-lg shadow-lg">Next</button>
+                    <button type="submit" id="submitBtn" class="btn-primary text-white font-semibold px-6 py-3 rounded-lg shadow-lg hidden">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>      
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = Array.from(document.querySelectorAll('.step-content'));
+            const stepIndicators = Array.from(document.querySelectorAll('.step-item'));
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('signupForm');
+            const notification = document.getElementById('notification');
+            let currentStep = 0;
+            let selectedBusinessType = null;
+            const businessTypeCards = document.querySelectorAll('.business-type-card');
+
+            function showStep(step) {
+                steps.forEach((s, index) => {
+                    s.classList.toggle('active', index === step);
+                });
+                stepIndicators.forEach((indicator, index) => {
+                    indicator.classList.remove('active', 'completed');
+                    if (index < step) {
+                        indicator.classList.add('completed');
+                    } else if (index === step) {
+                        indicator.classList.add('active');
+                    }
+                });
+                prevBtn.disabled = step === 0;
+                nextBtn.classList.toggle('hidden', step === steps.length - 1);
+                submitBtn.classList.toggle('hidden', step !== steps.length - 1);
+            }
+            function showNotification(message, type) {
+                notification.textContent = message;
+                notification.className = `notification ${type} show`;
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            nextBtn.addEventListener('click', () => {
+                if (currentStep === 0 && !selectedBusinessType) {
+                    showNotification('Please select a business type to proceed.', 'error');
+                    return;
+                }
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showNotification('Form submitted successfully!', 'success');
+                form.reset();
+                currentStep = 0;
+                selectedBusinessType = null;
+                businessTypeCards.forEach(card => card.classList.remove('selected'));
+                showStep(currentStep);
+            });     
+            businessTypeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    businessTypeCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedBusinessType = card.getAttribute('data-type');
+                });
+            });
+            showStep(currentStep);
+        });
+    </script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html> 

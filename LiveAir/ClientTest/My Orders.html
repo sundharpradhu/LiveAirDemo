@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders - LiveAir Client Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="p-4 gradient-bg text-white font-bold text-xl">LiveAir</div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="dashboard.html" class="nav-link"><i data-lucide="home" class="w-5 h-5"></i><span>Dashboard</span></a>
+      <a href="products.html" class="nav-link"><i data-lucide="package-2" class="w-5 h-5"></i><span>Products</span></a>
+            <details class="group">
+        <summary class="nav-link cursor-pointer"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>My Orders</span></summary>
+        <div class="pl-8 py-1 space-y-1">
+          <a href="My Orders.html" class="nav-link"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span>All Orders</span></a>
+          <a href="My Orders.html?filter=active" class="nav-link"><i data-lucide="clock" class="w-5 h-5"></i><span>Active Orders</span></a>
+          <a href="My Orders.html?filter=delivered" class="nav-link"><i data-lucide="check-circle" class="w-5 h-5"></i><span>Delivered</span></a>
+        </div>
+      </details>
+      <a href="tracking.html" class="nav-link"><i data-lucide="search" class="w-5 h-5"></i><span>Tracking</span></a>
+      <a href="Service& Repair.html" class="nav-link"><i data-lucide="wrench" class="w-5 h-5"></i><span>Service & Repair</span></a>
+      <a href="invoices.html" class="nav-link"><i data-lucide="file-text" class="w-5 h-5"></i><span>Invoices & Payments</span></a>
+      <a href="#" class="nav-link" onclick="showAlerts()"><i data-lucide="bell-ring" class="w-5 h-5"></i><span>Alerts</span></a>
+    </nav>
+    <div class="p-4 text-sm text-gray-500">© 2025 LiveAir</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">My Orders</h1>
+      <div class="flex items-center gap-3">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" onclick="navigateTo('products.html')">
+          <i data-lucide="plus" class="w-4 h-4 mr-2 inline"></i>
+          New Order
+        </button>
+        <button title="Language" class="bg-gray-100 px-3 py-1 rounded">🌐 EN</button>
+        <button title="Notifications" class="bg-gray-100 p-2 rounded" onclick="showNotifications()"><i data-lucide="bell" class="w-5 h-5"></i></button>
+        <div title="Profile" class="bg-blue-600 w-8 h-8 rounded-full text-white grid place-items-center cursor-pointer" onclick="showProfile()">C</div>
+      </div>
+    </header>
+
+    <!-- Quick Actions -->
+      <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="navigateTo('products.html')" class="flex items-center space-x-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
+            <i data-lucide="plus-circle" class="w-6 h-6 text-blue-600"></i>
+            <span class="font-medium text-gray-900">Place New Order</span>
+          </button>
+          <button onclick="navigateTo('tracking.html')" class="flex items-center space-x-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
+            <i data-lucide="search" class="w-6 h-6 text-green-600"></i>
+            <span class="font-medium text-gray-900">Track All Orders</span>
+          </button>
+          <button onclick="navigateTo('invoices.html')" class="flex items-center space-x-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
+            <i data-lucide="download" class="w-6 h-6 text-purple-600"></i>
+            <span class="font-medium text-gray-900">Download Invoices</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Filter Tabs -->
+      <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl mb-6 w-fit">
+  <button class="filter-btn px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg"
+          onclick="filterOrders('all', this)">All Orders</button>
+  <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg"
+          onclick="filterOrders('active', this)">Active</button>
+  <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg"
+          onclick="filterOrders('delivered', this)">Delivered</button>
+  <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg"
+          onclick="filterOrders('cancelled', this)">Cancelled</button>
+</div>
+
+
+
+      <!-- Orders List -->
+      <div class="space-y-6 flex flex-col" id="ordersList">
+        <!-- Order Card 1 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden order-card delivered w-full block" data-order="ORD-001">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-green-100 to-emerald-100 rounded-xl flex items-center justify-center">
+                  <i data-lucide="zap" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">Oxygen Cylinder</h3>
+                  <p class="text-sm text-gray-600">Order #ORD-001</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                  Delivered
+                </span>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <p class="text-sm text-gray-500">Order Date</p>
+                <p class="font-medium text-gray-900">Aug 20, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Delivered Date</p>
+                <p class="font-medium text-gray-900">Aug 23, 2024</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Amount</p>
+                <p class="font-bold text-gray-900">$120</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <i data-lucide="truck" class="w-4 h-4"></i>
+                <span>Delivered by LiveAir Express</span>
+              </div>
+              <div class="flex space-x-2">
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="viewOrderDetails('ORD-003')">
+                  View Details
+                </button>
+                <button class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" onclick="cancelOrder('ORD-003')">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Order Card 2 -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden order-card active w-full block" data-order="ORD-002">
+  <div class="p-6">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Ventilator</h3>
+          <p class="text-sm text-gray-600">Order #ORD-002</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+          <i data-lucide="truck" class="w-4 h-4 mr-1"></i>
+          On The Way
+        </span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div>
+        <p class="text-sm text-gray-500">Order Date</p>
+        <p class="font-medium text-gray-900">Aug 22, 2024</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Expected Delivery</p>
+        <p class="font-medium text-gray-900">Aug 26, 2024</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Amount</p>
+        <p class="font-bold text-gray-900">$1,500</p>
+      </div>
+    </div>
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-600">Delivery Progress</span>
+        <span class="text-sm text-blue-600">75%</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div class="flex items-center space-x-2 text-sm text-gray-600">
+        <i data-lucide="map-pin" class="w-4 h-4"></i>
+        <span>Last seen: Distribution Center</span>
+      </div>
+      <div class="flex space-x-2">
+        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="trackOrder('ORD-002')">
+          Track Order
+        </button>
+        <button class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" onclick="cancelOrder('ORD-002')">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Card 3 -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden order-card active w-full block" data-order="ORD-003">
+  <div class="p-6">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 bg-gradient-to-r from-purple-100 to-violet-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="bed" class="w-6 h-6 text-purple-600"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Medical Bed</h3>
+          <p class="text-sm text-gray-600">Order #ORD-003</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+          <i data-lucide="package" class="w-4 h-4 mr-1"></i>
+          Dispatched
+        </span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div>
+        <p class="text-sm text-gray-500">Order Date</p>
+        <p class="font-medium text-gray-900">Aug 23, 2024</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Expected Delivery</p>
+        <p class="font-medium text-gray-900">Aug 28, 2024</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Amount</p>
+        <p class="font-bold text-gray-900">$450</p>
+      </div>
+    </div>
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-600">Delivery Progress</span>
+        <span class="text-sm text-yellow-600">40%</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-yellow-600 h-2 rounded-full" style="width: 40%"></div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div class="flex items-center space-x-2 text-sm text-gray-600">
+        <i data-lucide="clock" class="w-4 h-4"></i>
+        <span>Preparing for shipment</span>
+      </div>
+      <div class="flex space-x-2">
+        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" onclick="viewOrderDetails('ORD-003')">
+          View Details
+        </button>
+        <button class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" onclick="cancelOrder('ORD-003')">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+  </main>
+
+  <script>
+  lucide.createIcons();
+
+  function navigateTo(url) {
+    window.location.href = url;
+  }
+
+  function filterOrders(filter, el) {
+  const cards = document.querySelectorAll('.order-card');
+  const buttons = document.querySelectorAll('.filter-btn');
+
+
+    // Reset button styles
+  buttons.forEach(btn => {
+    btn.classList.remove('bg-blue-600', 'text-white');
+    btn.classList.add('text-gray-600', 'hover:text-gray-900');
+  });
+
+    // Highlight active button
+    el.classList.remove('text-gray-600', 'hover:text-gray-900');
+    el.classList.add('bg-blue-600', 'text-white');
+
+    // Show/hide cards
+    cards.forEach(card => {
+      card.style.display = (filter === 'all' || card.classList.contains(filter)) ? 'block' : 'none';
+    });
+  }
+
+  function viewOrderDetails(orderId) {
+    alert(`Order Details for ${orderId}:\n\nOrder Information:\n• Order ID: ${orderId}\n• Status: Processing\n• Payment: Confirmed\n• Delivery Address: Main Hospital\n\nContact support for more details.`);
+  }
+
+  function trackOrder(orderId) {
+    navigateTo(`tracking.html?order=${orderId}`);
+  }
+
+  function reorderItem(orderId) {
+    if (confirm(`Reorder items from ${orderId}?`)) {
+      alert(`Reorder initiated for ${orderId}. You will be redirected to the product catalog.`);
+      navigateTo('products.html');
+    }
+  }
+
+  function cancelOrder(orderId) {
+    if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+      alert(`Order ${orderId} has been cancelled. You will receive a confirmation email shortly.`);
+      // In real implementation, make API call to cancel order
+    }
+  }
+
+  function showAlerts() {
+    alert('System Alerts:\n• Payment reminder: Invoice INV-002 due in 5 days\n• Delivery update: Order ORD-002 out for delivery\n• Service update: Ticket TKT-002 in progress');
+  }
+
+  function showNotifications() {
+    alert('Recent Notifications:\n• Order ORD-002 is out for delivery\n• Payment reminder for INV-002\n• Service ticket TKT-002 updated');
+  }
+
+  function showProfile() {
+    alert('Profile Options:\n• View Profile\n• Account Settings\n• Change Password\n• Logout');
+  }
+</script>
+</body>
+</html>
+
