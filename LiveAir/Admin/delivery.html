@@ -61,7 +61,7 @@
         <h2 class="text-xl font-bold">Delivery Assignment</h2>
         
         <div class="flex gap-3">
-          <button id="assignSelectedBtn" class="px-3 py-1 bg-green-500 text-white rounded hidden mb-3">
+          <button id="assignSelectedBtn" class="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-blue-700">
   Assign Selected
 </button>
           <button onclick="openModal()" class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
@@ -333,13 +333,13 @@ modal.classList.add("hidden");
     updatePendingMessage();
   </script>
 </script>
-<section class="p-6 overflow-y-auto flex-1">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Clients</h2>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="button" onclick="openUploadModal()">Import CSV</button>
-      </div>
+<!-- <section class="p-6 overflow-y-auto flex-1">
+      <div class="flex justify-between items-center mb-4"> -->
+        <!-- <h2 class="text-xl font-bold">Clients</h2>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" type="button" onclick="openUploadModal()">Import CSV</button> -->
+      <!-- </div> -->
 
-      <div class="bg-white p-4 rounded-xl shadow">
+      <!-- <div class="bg-white p-4 rounded-xl shadow">
         <form class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <input class="border p-2 rounded" placeholder="Organization Name" />
           <input class="border p-2 rounded" placeholder="Contact Person" />
@@ -349,15 +349,15 @@ modal.classList.add("hidden");
         class="bg-blue-600 text-white px-4 py-2 rounded md:col-span-2" 
         onclick="openClientModal()">
   Add Client
-</button>
+</button> -->
           <!-- Create Client Modal -->
-<div id="clientModal" class="modal-overlay">
+<!-- <div id="clientModal" class="modal-overlay">
   <div class="modal-container max-w-xl w-full">
     <div class="modal-header">
       <div class="modal-title">📝 Create Client</div>
       <button class="close-btn" onclick="closeClientModal()">×</button>
-    </div>
-    <div class="modal-body">
+    </div> -->
+    <!-- <div class="modal-body">
       <form id="clientForm" class="space-y-4">
         <input type="text" placeholder="Organization Name" class="w-full border p-2 rounded" required>
         <input type="text" placeholder="Contact Person" class="w-full border p-2 rounded" required>
@@ -375,13 +375,13 @@ modal.classList.add("hidden");
         <textarea placeholder="Notes" class="w-full border p-2 rounded"></textarea>
       </form>
     </div>
-    <div class="modal-footer">
-      <form id="clientForm" class="space-y-4">
+    <div class="modal-footer"> -->
+      <!-- <form id="clientForm" class="space-y-4"> -->
   <!-- form fields here -->
-  <div class="flex justify-end gap-3 pt-4">
+  <!-- <div class="flex justify-end gap-3 pt-4">
     <button class="btn btn-secondary" type="button" onclick="closeClientModal()">Cancel</button>
     <button class="btn btn-primary" type="submit">Save Client</button>
-  </div>
+  </div> -->
 </form>
     </div>
   </div>
