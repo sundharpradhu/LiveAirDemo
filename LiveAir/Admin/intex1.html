@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveAi Marketplace - Partner Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .gradient-accent {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            top: 50%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        .shape:nth-child(4) {
+            top: 30%;
+            right: 30%;
+            animation-delay: 1s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+        
+        .login-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input {
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .partner-logo {
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            filter: grayscale(100%);
+        }
+        
+        .partner-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            left: 50%;
+            top: 50%;
+            z-index: -1;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .floating-shapes {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-primary flex items-center justify-center p-4">
+    
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape w-20 h-20 bg-white rounded-full"></div>
+        <div class="shape w-16 h-16 bg-blue-200 rounded-lg rotate-45"></div>
+        <div class="shape w-12 h-12 bg-purple-200 rounded-full"></div>
+        <div class="shape w-24 h-24 bg-pink-200 rounded-lg rotate-12"></div>
+    </div>
+    
+    <div class="w-full max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Left Side - Branding & Info -->
+            <div class="text-white space-y-8">
+                
+                <!-- Logo & Branding -->
+                <div class="text-center lg:text-left">
+                    <div class="flex items-center justify-center lg:justify-start mb-6">
+                        <div class="w-12 h-12 gradient-accent rounded-xl flex items-center justify-center mr-4">
+                            <i data-lucide="shopping-bag" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold">LiveAi Marketplace</h1>
+                            <p class="text-blue-200 text-sm">Partner Success Platform</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-4xl lg:text-5xl font-bold leading-tight mb-4">
+                        Scale Your Business
+                        <span class="block gradient-secondary bg-clip-text text-transparent">Globally</span>
+                    </h2>
+                    
+                    <p class="text-lg text-blue-100 max-w-md mx-auto lg:mx-0">
+                        Join thousands of successful merchants who trust LiveAi to power their multi-channel commerce operations.
+                    </p>
+                </div>
+                
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="stats-card rounded-xl p-4 text-center">
+                        <div class="text-2xl font-bold">10K+</div>
+                        <div class="text-sm text-blue-200">Active Partners</div>
+                    </div>
+                    <div class="stats-card rounded-xl p-4 text-center">
+                        <div class="text-2xl font-bold">50M+</div>
+                        <div class="text-sm text-blue-200">Orders Processed</div>
+                    </div>
+                    <div class="stats-card rounded-xl p-4 text-center">
+                        <div class="text-2xl font-bold">99.9%</div>
+                        <div class="text-sm text-blue-200">Uptime</div>
+                    </div>
+                </div>
+                
+                <!-- Trusted Partners -->
+                <div class="hidden lg:block">
+                    <p class="text-blue-200 text-sm mb-4">Trusted by leading brands</p>
+                    <div class="flex items-center space-x-8">
+                        <div class="partner-logo w-16 h-8 bg-white bg-opacity-20 rounded flex items-center justify-center text-xs font-bold">
+                            AMAZON
+                        </div>
+                        <div class="partner-logo w-16 h-8 bg-white bg-opacity-20 rounded flex items-center justify-center text-xs font-bold">
+                            FLIPKART
+                        </div>
+                        <div class="partner-logo w-16 h-8 bg-white bg-opacity-20 rounded flex items-center justify-center text-xs font-bold">
+                            SHOPIFY
+                        </div>
+                        <div class="partner-logo w-16 h-8 bg-white bg-opacity-20 rounded flex items-center justify-center text-xs font-bold">
+                            MYNTRA
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Right Side - Login Form -->
+            <div class="w-full max-w-md mx-auto">
+                <div class="login-container rounded-2xl p-8 shadow-2xl">
+                    
+                    <!-- Form Header -->
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 gradient-primary rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="crown" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Partner Login</h3>
+                        <p class="text-gray-600">Access your merchant dashboard</p>
+                    </div>
+                    
+                    <!-- Login Type Selector -->
+                    <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+                        <button type="button" id="merchantTab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 text-white gradient-primary">
+                            Merchant
+                        </button>
+                        <button type="button" id="adminTab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 text-gray-600 hover:text-gray-800">
+                            Super Admin
+                        </button>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <form id="loginForm" class="space-y-6">
+                        
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                                <input 
+                                    type="email" 
+                                    id="email"
+                                    required 
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Enter your email"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <div class="relative">
+                                <i data-lucide="lock" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                                <input 
+                                    type="password" 
+                                    id="password"
+                                    required 
+                                    class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Enter your password"
+                                >
+                                <button 
+                                    type="button" 
+                                    id="togglePassword"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                >
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                            </label>
+                            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            class="w-full btn-primary text-white font-semibold py-3 px-6 rounded-lg ripple"
+                        >
+                            Sign In to Dashboard
+                        </button>
+                        
+                    </form>
+                    
+                    <!-- Divider -->
+                    <div class="mt-8 mb-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-white text-gray-500">New to LiveAi?</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sign Up Link -->
+                    <div class="text-center">
+                        <p class="text-gray-600 mb-4">Start selling with us today</p>
+                        <a 
+                            href="#" 
+                            class="inline-flex items-center justify-center w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                        >
+                            <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
+                            Create Partner Account
+                        </a>
+                    </div>
+                    
+                </div>
+                
+                <!-- Security Note -->
+                <div class="text-center mt-6">
+                    <div class="flex items-center justify-center text-white text-sm">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i>
+                        Your data is protected with enterprise-grade security
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        
+        let currentLoginType = 'merchant';
+        
+        // Tab switching functionality
+        const merchantTab = document.getElementById('merchantTab');
+        const adminTab = document.getElementById('adminTab');
+        
+        merchantTab.addEventListener('click', function() {
+            currentLoginType = 'merchant';
+            this.classList.add('text-white', 'gradient-primary');
+            this.classList.remove('text-gray-600');
+            adminTab.classList.remove('text-white', 'gradient-primary');
+            adminTab.classList.add('text-gray-600');
+        });
+        
+        adminTab.addEventListener('click', function() {
+            currentLoginType = 'admin';
+            this.classList.add('text-white', 'gradient-primary');
+            this.classList.remove('text-gray-600');
+            merchantTab.classList.remove('text-white', 'gradient-primary');
+            merchantTab.classList.add('text-gray-600');
+        });
+        
+        // Password toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const icon = this.querySelector('i');
+            if (type === 'password') {
+                icon.setAttribute('data-lucide', 'eye');
+            } else {
+                icon.setAttribute('data-lucide', 'eye-off');
+            }
+            
+            // Reinitialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+        
+        // Login form submission
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Simulate login process
+            showNotification('Logging in...', 'success');
+            
+            setTimeout(() => {
+                if (currentLoginType === 'admin') {
+                    // Redirect to admin dashboard (you would replace this with your actual dashboard URL)
+                    showNotification('Welcome to Super Admin Dashboard!', 'success');
+                    // window.location.href = 'dashboard.html';
+                } else {
+                    // Redirect to merchant dashboard
+                    showNotification('Welcome to Merchant Dashboard!', 'success');
+                    // window.location.href = 'merchant-dashboard.html';
+                }
+            }, 1500);
+        });
+        
+        // Notification system
+        function showNotification(message, type = 'success') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // Ripple effect for buttons
+        document.querySelectorAll('.ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                this.style.setProperty('--x', x + 'px');
+                this.style.setProperty('--y', y + 'px');
+                
+                const ripple = this.querySelector('::after');
+                this.classList.add('animate-ripple');
+                
+                setTimeout(() => {
+                    this.classList.remove('animate-ripple');
+                }, 600);
+            });
+        });
+        
+        // Demo credentials hint
+        setTimeout(() => {
+            showNotification('Demo: Use any email/password combination', 'success');
+        }, 2000);
+    </script>
+    
+</body>
+</html>
